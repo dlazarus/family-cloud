@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calendario familiar</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <!-- Interruptor de tema: por defecto sigue al sistema; el botón fuerza y recuerda -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">🌙</button>
+
+  <!-- ===== Pantalla pública: login / primera configuración ===== -->
+  <div id="gate" class="gate hidden">
+    <div class="gate-card">
+      <div class="gate-logo">🗓️</div>
+      <h1 id="gate-title">Calendario familiar</h1>
+      <p id="gate-sub" class="muted">Inicia sesión para ver los eventos de casa.</p>
+
+      <form id="setup-form" class="hidden">
+        <label>Usuario <input id="setup-user" value="admin" autocomplete="username" /></label>
+        <label>Contraseña <input id="setup-pass" type="password" autocomplete="new-password" /></label>
+        <label>Repite la contraseña <input id="setup-pass2" type="password" autocomplete="new-password" /></label>
+        <button type="submit" class="btn primary">Crear administrador</button>
+      </form>
+
+      <form id="login-form" class="hidden">
+        <label>Usuario <input id="login-user" autocomplete="username" /></label>
+        <label>Contraseña <input id="login-pass" type="password" autocomplete="current-password" /></label>
+        <button type="submit" class="btn primary">Entrar</button>
+      </form>
+
+      <p id="gate-error" class="error hidden"></p>
+    </div>
+  </div>
+
+  <!-- ===== Aplicación (autenticada) ===== -->
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <div class="brand">🗓️ <span>Calendario de casa</span></div>
+      <nav class="tabs">
+        <button id="tab-cal" class="tab active">Calendario</button>
+        <button id="tab-admin" class="tab hidden">Usuarios</button>
+      </nav>
+      <div class="userbox">
+        <span id="who" class="muted"></span>
+        <button id="btn-logout" class="btn ghost">Salir</button>
+      </div>
+    </header>
+
+    <!-- Vista calendario -->
+    <main id="view-cal">
+      <div class="cal-toolbar">
+        <button id="prev" class="btn ghost" aria-label="Anterior">‹</button>
+        <h2 id="cal-title"></h2>
+        <button id="next" class="btn ghost" aria-label="Siguiente">›</button>
+        <button id="today" class="btn ghost">Hoy</button>
+        <div id="filters" class="filters"></div>
+      </div>
+      <div class="cal-wrap">
+        <div class="cal-weekdays" id="weekdays"></div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+    </main>
+
+    <!-- Vista administración de usuarios -->
+    <main id="view-admin" class="hidden">
+      <section class="admin-card">
+        <h2>Nueva cuenta familiar</h2>
+        <form id="user-form" class="user-form">
+          <input id="nu-name" placeholder="Nombre (p. ej. laura)" autocomplete="off" />
+          <input id="nu-pass" type="password" placeholder="Contraseña inicial" />
+          <select id="nu-role">
+            <option value="member">miembro</option>
+            <option value="admin">admin</option>
+          </select>
+          <button type="submit" class="btn primary">Crear</button>
+        </form>
+      </section>
+      <section class="admin-card">
+        <h2>Cuentas</h2>
+        <table class="user-table">
+          <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="user-rows"></tbody>
+        </table>
+      </section>
+      <p id="admin-msg" class="muted"></p>
+    </main>
+  </div>
+
+  <!-- ===== Modal de evento ===== -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="modal-title"></h3>
+      <form id="event-form">
+        <div class="row">
+          <label>Título <input id="ev-title" maxlength="120" required /></label>
+        </div>
+        <div class="row">
+          <label>Desde <input id="ev-date" type="date" required /></label>
+          <label>Hasta <input id="ev-end" type="date" /></label>
+        </div>
+        <div class="row">
+          <label>Categoría
+            <select id="ev-cat">
+              <option value="cumple">🎂 Cumpleaños</option>
+              <option value="comida">🍝 Comida</option>
+              <option value="viaje">✈️ Viaje</option>
+              <option value="tarea">🔧 Tarea</option>
+              <option value="salud">🩺 Salud</option>
+              <option value="otro">📌 Otro</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <label>Notas <textarea id="ev-desc" rows="4" maxlength="2000"></textarea></label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="ev-delete" class="btn danger hidden">Eliminar</button>
+          <span class="spacer"></span>
+          <button type="button" id="ev-cancel" class="btn ghost">Cancelar</button>
+          <button type="submit" class="btn primary">Guardar</button>
+        </div>
+        <p id="modal-error" class="error hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
