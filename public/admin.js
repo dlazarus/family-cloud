@@ -49,27 +49,70 @@ $('#user-form').addEventListener('submit', async (e) => {
   } catch (err) { adminMsg(err.message); }
 });
 
+// ---------- dialogo de nueva contraseña ----------
+let pwTargetId = null;
+
+function openPwModal(id, username) {
+  pwTargetId = id;
+  $('#pw-title').textContent = `Nueva contraseña para “${username}”`;
+  $('#pw-input').value = '';
+  $('#pw-input').type = 'password';
+  $('#pw-eye').textContent = '👁';
+  $('#pw-error').classList.add('hidden');
+  $('#pw-modal').classList.remove('hidden');
+  $('#pw-input').focus();
+}
+function closePwModal() {
+  pwTargetId = null;
+  $('#pw-modal').classList.add('hidden');
+}
+
+$('#pw-eye').addEventListener('click', () => {
+  const inp = $('#pw-input');
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  $('#pw-eye').textContent = show ? '🙈' : '👁';
+  inp.focus();
+});
+
+$('#pw-cancel').addEventListener('click', closePwModal);
+$('#pw-modal').addEventListener('click', (e) => { if (e.target.id === 'pw-modal') closePwModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePwModal(); });
+
+$('#pw-save').addEventListener('click', async () => {
+  if (!pwTargetId) return;
+  const p = $('#pw-input').value;
+  if (!p || p.length < 8) { $('#pw-error').textContent = 'La contraseña debe tener al menos 8 caracteres.'; $('#pw-error').classList.remove('hidden'); return; }
+  try {
+    await api(`/users/${pwTargetId}`, { method: 'PUT', body: { password: p } });
+    closePwModal();
+    adminMsg('Contraseña actualizada ✓');
+    renderUsers();
+  } catch (err) {
+    $('#pw-error').textContent = err.message;
+    $('#pw-error').classList.remove('hidden');
+  }
+});
+
 $('#user-rows').addEventListener('click', async (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
-  const id = btn.closest('tr').dataset.id;
+  const row = btn.closest('tr');
+  const id = row.dataset.id;
   const act = btn.dataset.act;
   try {
     if (act === 'pass') {
-      const p = prompt('Nueva contraseña (mín. 8 caracteres):');
-      if (!p) return;
-      await api(`/users/${id}`, { method: 'PUT', body: { password: p } });
-      adminMsg('Contraseña actualizada ✓');
+      openPwModal(Number(id), row.children[0].textContent);
     } else if (act === 'toggle') {
-      const row = btn.closest('tr');
       await api(`/users/${id}`, { method: 'PUT', body: { active: row.children[2].textContent === 'desactivada' } });
       adminMsg('Estado actualizado ✓');
+      renderUsers();
     } else if (act === 'del') {
       if (!confirm('¿Eliminar esta cuenta?')) return;
       await api(`/users/${id}`, { method: 'DELETE' });
       adminMsg('Cuenta eliminada ✓');
+      renderUsers();
     }
-    renderUsers();
   } catch (err) { adminMsg(err.message); }
 });
 
