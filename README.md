@@ -99,6 +99,26 @@ página de inicio.
 Solo para administradores (la tarjeta no aparece para los miembros): crear cuentas
 nuevas, cambiar contraseñas, activar/desactivar y eliminar cuentas.
 
+Garantías de que el servicio nunca se queda sin administración:
+
+- La cuenta **`admin` es la cuenta del sistema**: no puede desactivarse, degradarse
+  ni eliminarse (ni siquiera por otro admin).
+- Ningún admin puede desactivarse, degradarse o eliminarse a sí mismo, y siempre
+  debe quedar al menos un administrador activo.
+- Si aun así se perdiera el acceso (p. ej. olvido de la contraseña del último admin),
+  hay rescate **por consola en el propio servidor** — solo accesible desde la máquina,
+  nunca de forma remota:
+
+  ```bash
+  node scripts/reset-password.js <usuario>   # pide la nueva contraseña dos veces (oculta)
+  ```
+
+### 👤 Mi cuenta
+
+Cualquier usuario (incluido `admin`) puede cambiar su contraseña desde la tarjeta
+«Mi cuenta» del hub: pide la contraseña actual y la nueva dos veces. La sesión en
+curso no se corta; el cambio surte efecto en el siguiente acceso.
+
 ## Seguridad
 
 - **En reposo**: títulos y descripciones de eventos cifrados con AES-256-GCM
@@ -121,7 +141,7 @@ src/users.js    gestión de cuentas (solo admin)
 src/events.js   API CRUD de eventos
 src/vault.js    API del gestor de contraseñas (aislada por usuario) + generador
 public/         HTML + CSS + JS vanilla (sin librerías): index (login+hub),
-                calendar, passwords, admin — comparten common.js
+                calendar, passwords, admin, account — comparten common.js
 scripts/gen-env.js  generador de .env
 scripts/install.sh  instalador completo (Node, .env, usuario, systemd, firewall)
 deploy/family-cloud.service  unidad systemd

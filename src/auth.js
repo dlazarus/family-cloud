@@ -69,6 +69,26 @@ authRouter.get('/me', (req, res) => {
   res.json(req.session.user);
 });
 
+// --- Cambio de propia contraseña (cualquier usuario, incluido admin) ---
+authRouter.put('/me/password', loginLimiter, (req, res) => {
+  if (!req.session?.user) return res.status(401).json({ error: 'No autenticado' });
+  const { current_password, new_password } = req.body || {};
+  const row = getDb().prepare('SELECT * FROM users WHERE id = ?').get(req.session.user.id);
+  if (!row || !row.active) return res.status(401).json({ error: 'No autenticado' });
+  if (!bcrypt.compareSync(String(current_password ?? ''), row.password_hash)) {
+    return res.status(400).json({ error: 'La contraseña actual no es correcta.' });
+  }
+  if (!new_password || String(new_password).length < 8) {
+    return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 8 caracteres.' });
+  }
+  if (String(new_password) === String(current_password)) {
+    return res.status(400).json({ error: 'La nueva contraseña debe ser distinta a la actual.' });
+  }
+  getDb().prepare('UPDATE users SET password_hash = ? WHERE id = ?')
+    .run(bcrypt.hashSync(String(new_password), 12), row.id);
+  res.json({ ok: true });
+});
+
 // --- Middlewares de protección ---
 export function requireAuth(req, res, next) {
   if (!req.session?.user) return res.status(401).json({ error: 'No autenticado' });

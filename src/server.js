@@ -83,6 +83,9 @@ app.get('/contrasenhas', (_req, res) => {
 app.get('/administracion', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'admin.html'));
 });
+app.get('/mi-cuenta', (_req, res) => {
+  res.sendFile(path.join(ROOT, 'public', 'account.html'));
+});
 
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';

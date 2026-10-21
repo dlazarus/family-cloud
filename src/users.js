@@ -6,6 +6,10 @@ import { requireAdmin } from './auth.js';
 export const usersRouter = Router();
 usersRouter.use(requireAdmin);
 
+// La cuenta "admin" es la cuenta del sistema: no puede desactivarse, cambiar de rol ni eliminarse.
+const SYSTEM_ADMIN = 'admin';
+const isSystemAdmin = (username) => String(username).toLowerCase() === SYSTEM_ADMIN;
+
 usersRouter.get('/', (_req, res) => {
   const rows = getDb()
     .prepare('SELECT id, username, role, active, created_at FROM users ORDER BY username')
@@ -51,11 +55,15 @@ usersRouter.put('/:id', (req, res) => {
   if (active !== undefined) {
     // No desactivarse a sí mismo
     if (id === req.session.user.id) return res.status(400).json({ error: 'No puedes desactivar tu propia cuenta.' });
+    if (isSystemAdmin(user.username)) return res.status(400).json({ error: 'La cuenta "admin" es la cuenta del sistema y no puede desactivarse.' });
     sets.push('active = ?');
     vals.push(active ? 1 : 0);
   }
   if (role !== undefined) {
     if (!['admin', 'member'].includes(role)) return res.status(400).json({ error: 'Rol no válido' });
+    if (isSystemAdmin(user.username) && role !== 'admin') {
+      return res.status(400).json({ error: 'La cuenta "admin" no puede dejar de ser administradora.' });
+    }
     if (id === req.session.user.id && role !== 'admin') {
       return res.status(400).json({ error: 'No puedes quitarte el rol de administrador a ti mismo.' });
     }
@@ -70,10 +78,14 @@ usersRouter.put('/:id', (req, res) => {
 usersRouter.delete('/:id', (req, res) => {
   const id = Number(req.params.id);
   if (id === req.session.user.id) return res.status(400).json({ error: 'No puedes eliminar tu propia cuenta.' });
-  const admins = getDb().prepare("SELECT COUNT(*) AS n FROM users WHERE role = 'admin'").get().n;
-  const target = getDb().prepare('SELECT role FROM users WHERE id = ?').get(id);
+  const target = getDb().prepare('SELECT role, username FROM users WHERE id = ?').get(id);
   if (!target) return res.status(404).json({ error: 'Usuario no encontrado' });
-  if (target.role === 'admin' && admins <= 1) return res.status(400).json({ error: 'Debe quedar al menos un administrador.' });
+  if (isSystemAdmin(target.username)) return res.status(400).json({ error: 'La cuenta "admin" es la cuenta del sistema y no puede eliminarse.' });
+  // Debe quedar siempre al menos un administrador ACTIVO
+  const activeAdmins = getDb().prepare("SELECT COUNT(*) AS n FROM users WHERE role = 'admin' AND active = 1").get().n;
+  if (target.role === 'admin' && target.active && activeAdmins <= 1) {
+    return res.status(400).json({ error: 'Debe quedar al menos un administrador activo.' });
+  }
   getDb().prepare('DELETE FROM users WHERE id = ?').run(id);
   res.json({ ok: true });
 });

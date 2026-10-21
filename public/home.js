@@ -5,6 +5,7 @@
 const SERVICES = [
   { icon: '🗓️', name: 'Calendario', desc: 'Eventos compartidos de toda la familia.', href: '/calendario' },
   { icon: '🔑', name: 'Contraseñas', desc: 'Tu gestor personal de contraseñas.', href: '/contrasenhas' },
+  { icon: '👤', name: 'Mi cuenta', desc: 'Cambia tu contraseña cuando quieras.', href: '/mi-cuenta' },
   { icon: '⚙️', name: 'Administración', desc: 'Gestión de cuentas de la familia.', href: '/administracion', adminOnly: true },
 ];
 

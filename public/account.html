@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi cuenta · Family Cloud</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <!-- Interruptor de tema: por defecto sigue al sistema; el botón fuerza y recuerda -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">🌙</button>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">☁️ <span>Family Cloud</span></div>
+      <nav class="tabs">
+        <a class="tab" href="/">🏠 Inicio</a>
+        <button class="tab active">👤 Mi cuenta</button>
+      </nav>
+      <div class="userbox">
+        <span id="who" class="muted"></span>
+        <button id="btn-logout" class="btn ghost">Salir</button>
+      </div>
+    </header>
+
+    <main id="view-account">
+      <section class="admin-card">
+        <h2>Cambiar mi contraseña</h2>
+        <form id="pass-form" class="user-form" autocomplete="off">
+          <input id="cur-pass" type="password" placeholder="Contraseña actual" autocomplete="new-password" required />
+          <input id="new-pass" type="password" placeholder="Nueva contraseña (mín. 8 caracteres)" autocomplete="new-password" required />
+          <input id="new-pass2" type="password" placeholder="Repite la nueva contraseña" autocomplete="new-password" required />
+          <button type="submit" class="btn primary">Cambiar</button>
+        </form>
+        <p id="account-msg" class="muted"></p>
+      </section>
+    </main>
+  </div>
+
+  <script src="/common.js"></script>
+  <script src="/account.js"></script>
+</body>
+</html>

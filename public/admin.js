@@ -3,26 +3,39 @@
 // ---------- administracion: gestion de cuentas de la familia (solo admin) ----------
 
 async function boot() {
-  const me = await requireUser();
+  me = await requireUser();
   if (!me) return;
   if (me.role !== 'admin') { location.replace('/'); return; } // los miembros no entran aqui
   initTopbar(me);
   await renderUsers();
 }
 
+let me = null;
+
 async function renderUsers() {
   const users = await api('/users');
   $('#user-rows').innerHTML = users
-    .map((u) => `<tr data-id="${u.id}">
-      <td>${escapeHtml(u.username)}</td>
-      <td>${u.role}</td>
-      <td>${u.active ? 'activa' : 'desactivada'}</td>
-      <td class="actions">
-        <button data-act="pass" class="btn ghost">Nueva contraseña</button>
-        <button data-act="toggle" class="btn ghost">${u.active ? 'Desactivar' : 'Activar'}</button>
-        <button data-act="del" class="btn danger">Eliminar</button>
-      </td>
-    </tr>`)
+    .map((u) => {
+      const self = u.id === me.id;
+      const system = u.username.toLowerCase() === 'admin';
+      let actions;
+      if (self) {
+        actions = '<span class="muted">tu cuenta</span>';
+      } else if (system) {
+        actions = `<button data-act="pass" class="btn ghost">Nueva contraseña</button>
+                   <span class="muted">cuenta del sistema</span>`;
+      } else {
+        actions = `<button data-act="pass" class="btn ghost">Nueva contraseña</button>
+                   <button data-act="toggle" class="btn ghost">${u.active ? 'Desactivar' : 'Activar'}</button>
+                   <button data-act="del" class="btn danger">Eliminar</button>`;
+      }
+      return `<tr data-id="${u.id}">
+        <td>${escapeHtml(u.username)}</td>
+        <td>${u.role}</td>
+        <td>${u.active ? 'activa' : 'desactivada'}</td>
+        <td class="actions">${actions}</td>
+      </tr>`;
+    })
     .join('');
 }
 
