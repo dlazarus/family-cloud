@@ -1,5 +1,8 @@
 # Calendario familiar
 
+> [!NOTE]
+> **Nota del autor:** no sé programar. Este proyecto está hecho íntegramente con *vibe coding* (lo escriben agentes de IA bajo mi dirección y yo lo pruebo). También soy novato total en GitHub: tenlo en cuenta al leer el código, y si abres un issue o un pull request y tardo en responder (o no sé qué hacer con él), no es desidia — es que literalmente estoy aprendiendo a usar GitHub. Aun así, mi intención es compartir: como amante del software libre, quiero que cualquiera pueda usarlo, clonarlo y probarlo aunque su autor sea un novato.
+
 Aplicación web local (100 % offline en tiempo de ejecución, sin CDN) para que la
 familia consulte y comparta eventos. Los datos del calendario se guardan
 **cifrados** en la base de datos; el acceso requiere usuario y contraseña.
