@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Instalador del Calendario familiar (Debian/Ubuntu).
+# Instalador de Family Cloud (nube familiar: calendario, contraseñas, ...) (Debian/Ubuntu).
 # Uso:  sudo ./scripts/install.sh          (instalación real)
 #       ./scripts/install.sh --dry-run     (ensayo: muestra sin ejecutar pasos privilegiados)
 set -u
@@ -8,8 +8,8 @@ DRY_RUN=0
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-UNIT_NAME="family-calendar"
-SVC_USER="familycal"
+UNIT_NAME="family-cloud"
+SVC_USER="familycloud"
 NODE_MAJOR_MIN=22
 NODE_MINOR_MIN=5
 CURRENT="?"
@@ -29,7 +29,7 @@ if [[ -f "$PROJECT_DIR/.env" ]]; then
   [[ -n "$p" ]] && PORT="$p"
 fi
 
-echo "Calendario familiar — instalador"
+echo "Family Cloud — instalador"
 echo "Proyecto: $PROJECT_DIR"
 [[ $DRY_RUN -eq 1 ]] && echo "(modo ensayo: no se ejecutan pasos privilegiados)"
 
@@ -96,7 +96,7 @@ if [[ $DRY_RUN -eq 1 ]]; then
   echo "   [dry-run] sed … > /etc/systemd/system/$UNIT_NAME.service && daemon-reload && enable --now"
 else
   # Adaptar la ruta de la unidad a la ubicación real del proyecto
-  sed "s|/srv/family-calendar|$PROJECT_DIR|g" "$UNIT_SRC" > "/etc/systemd/system/$UNIT_NAME.service" \
+  sed "s|/srv/family-cloud|$PROJECT_DIR|g" "$UNIT_SRC" > "/etc/systemd/system/$UNIT_NAME.service" \
     || fail "no se pudo escribir /etc/systemd/system/$UNIT_NAME.service"
   ok "unidad instalada (ruta adaptada a $PROJECT_DIR)"
   # ProtectHome oculta /home al servicio: si el proyecto vive ahí, desactivarlo
@@ -156,7 +156,7 @@ fi
 LAN_IP="${LAN_IP:-<IP_DEL_SERVIDOR>}"
 echo
 echo "Pasos finales (manuales):"
-echo "  1. En AdGuard Home: redireccionamiento DNS  calendario.lan -> $LAN_IP"
+echo "  1. En AdGuard Home: redireccionamiento DNS  cloud.lan -> $LAN_IP"
 echo "  2. Abre en el navegador  http://$LAN_IP:$PORT"
 echo "     (si aún no hay usuarios verás la pantalla para crear el administrador)"
 echo

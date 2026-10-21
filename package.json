@@ -1,7 +1,7 @@
 {
-  "name": "family-calendar",
+  "name": "family-cloud",
   "version": "1.0.0",
-  "description": "",
+  "description": "Nube familiar local: calendario compartido, gestor de contraseñas y más servicios para casa (100% offline en la LAN).",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

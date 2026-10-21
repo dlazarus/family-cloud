@@ -60,7 +60,7 @@ authRouter.post('/login', loginLimiter, (req, res) => {
 
 authRouter.post('/logout', (req, res) => {
   req.session.destroy(() => {});
-  res.clearCookie('familycal.sid');
+  res.clearCookie('familycloud.sid');
   res.json({ ok: true });
 });
 

@@ -47,7 +47,7 @@ app.use(express.json({ limit: '64kb' }));
 
 app.use(
   session({
-    name: 'familycal.sid',
+    name: 'familycloud.sid',
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -80,5 +80,5 @@ const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
-  console.log(`Calendario familiar en http://${HOST}:${PORT}`);
+  console.log(`Family Cloud en http://${HOST}:${PORT}`);
 });

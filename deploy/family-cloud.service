@@ -1,0 +1,20 @@
+[Unit]
+Description=Family Cloud (nube familiar: calendario, contraseñas, ...)
+After=network.target
+
+[Service]
+Type=simple
+User=familycloud
+Group=familycloud
+WorkingDirectory=/srv/family-cloud
+ExecStart=/usr/bin/node /srv/family-cloud/src/server.js
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/family-cloud/data
+
+[Install]
+WantedBy=multi-user.target
