@@ -19,6 +19,8 @@ async function boot() {
 
 async function load() {
   state.entries = await api('/vault');
+  // orden alfabetico por sitio (por defecto), ignorando mayuscululas y acentos
+  state.entries.sort((a, b) => a.site.localeCompare(b.site, 'es', { sensitivity: 'base' }));
   render();
 }
 
@@ -118,7 +120,7 @@ function vaultError(msg) {
 
 $('#v-cancel').addEventListener('click', closeModal);
 $('#vault-modal').addEventListener('click', (e) => { if (e.target.id === 'vault-modal') closeModal(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); sgClose(); } });
 
 $('#v-pass-eye').addEventListener('click', () => {
   const inp = $('#v-pass');
@@ -189,6 +191,62 @@ $('#gen-use').addEventListener('click', () => {
   $('#v-pass').value = genLast;
   $('#v-pass').type = 'text';
   hideGen();
+});
+
+// ---------- generador independiente (boton 🎲 en la barra) ----------
+let sgLast = '';
+
+function sgOptions() {
+  return {
+    length: Number($('#sg-len').value),
+    upper: $('#sg-upper').checked,
+    lower: $('#sg-lower').checked,
+    digits: $('#sg-digits').checked,
+    symbols: $('#sg-symbols').checked,
+    avoidAmbiguous: $('#sg-avoid').checked,
+  };
+}
+
+async function sgGenerate() {
+  try {
+    const { password } = await api('/vault/generate', { method: 'POST', body: sgOptions() });
+    sgLast = password;
+    $('#sg-preview').textContent = password;
+  } catch (err) {
+    sgLast = '';
+    $('#sg-preview').textContent = '';
+    const el = $('#gen-modal-error');
+    el.textContent = err.message;
+    el.classList.remove('hidden');
+  }
+}
+
+function sgClose() {
+  $('#gen-modal').classList.add('hidden');
+  $('#sg-preview').textContent = '';
+  sgLast = '';
+}
+
+$('#gen-open').addEventListener('click', () => {
+  $('#gen-modal-error').classList.add('hidden');
+  $('#gen-modal').classList.remove('hidden');
+  sgGenerate();
+});
+$('#sg-close').addEventListener('click', sgClose);
+$('#gen-modal').addEventListener('click', (e) => { if (e.target.id === 'gen-modal') sgClose(); });
+$('#sg-again').addEventListener('click', sgGenerate);
+$('#sg-len').addEventListener('input', (e) => { $('#sg-len-val').textContent = e.target.value; });
+['sg-upper', 'sg-lower', 'sg-digits', 'sg-symbols', 'sg-avoid'].forEach((id) =>
+  $('#' + id).addEventListener('change', sgGenerate)
+);
+$('#sg-copy').addEventListener('click', async () => {
+  if (!sgLast) return;
+  const btn = $('#sg-copy');
+  if (await copyText(sgLast)) {
+    const t = btn.textContent;
+    btn.textContent = '✓ Copiada';
+    setTimeout(() => { btn.textContent = t; }, 1200);
+  }
 });
 
 boot();
