@@ -21,7 +21,7 @@ npm start                   # o ./start.sh
 Por defecto escucha en **http://0.0.0.0:3000** (configurable en `.env`).
 
 > ⚠️ La frase maestra de `.env` cifra los datos (eventos y demás). Si se pierde, no se
-> pueden recuperar. Haz copias de `.env` y de `data/calendar.db` juntas.
+> pueden recuperar. Haz copias de `.env` y de `data/family-cloud.db` juntas.
 
 ## Primer acceso
 
@@ -151,8 +151,7 @@ deploy/family-cloud.service  unidad systemd
 
 - Las sesiones viven en memoria: al reiniciar el servicio hay que volver a
   iniciar sesión (nada importante se pierde).
-- Backup = copiar `data/calendar.db` + `.env`.
-- Deuda menor: el archivo de base de datos se llama `calendar.db` por herencia del
-  proyecto original (cuando era solo calendario). Más adelante se renombrará a
-  `cloud.db` con una migración automática al arrancar; mientras tanto el backup usa
-  el nombre antiguo.
+- Backup = copiar `data/family-cloud.db` + `.env`.
+- El archivo de base de datos se renombró de `calendar.db` (herencia del proyecto
+  original) a `family-cloud.db`: al arrancar, si existe el antiguo y no el nuevo,
+  el servidor lo renombra solo (migración de una sola vez, sin pérdida).

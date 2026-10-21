@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Rescate de acceso: cambia la contraseña de cualquier cuenta desde el propio servidor.
 //
-// Solo puede ejecutarse quien tenga acceso al servidor (lectura de .env + data/calendar.db):
+// Solo puede ejecutarse quien tenga acceso al servidor (lectura de .env + data/family-cloud.db):
 // esa es exactamente la garantía de seguridad — no hay forma remota de usar este script.
 //
 // Uso (en el servidor, como el usuario familycloud o con sudo):
@@ -29,7 +29,7 @@ if (!username) {
   process.exit(1);
 }
 
-const dbPath = process.env.DB_PATH || path.join(ROOT, 'data', 'calendar.db');
+const dbPath = process.env.DB_PATH || path.join(ROOT, 'data', 'family-cloud.db');
 const db = new DatabaseSync(dbPath);
 const user = db.prepare('SELECT id, username, active FROM users WHERE username = ?').get(username);
 if (!user) {

@@ -161,4 +161,4 @@ echo "  2. Abre en el navegador  http://$LAN_IP:$PORT"
 echo "     (si aún no hay usuarios verás la pantalla para crear el administrador)"
 echo
 echo "Recordatorio: la frase maestra de .env es la llave de tus eventos."
-echo "              Backup = copiar data/calendar.db + .env juntos."
+echo "              Backup = copiar data/family-cloud.db + .env juntos."

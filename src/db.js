@@ -1,10 +1,21 @@
 import { DatabaseSync } from 'node:sqlite';
+import fs from 'node:fs';
 import path from 'node:path';
 
 let db;
 
 export function initDb(dataDir) {
-  db = new DatabaseSync(path.join(dataDir, 'calendar.db'));
+  const dbPath = path.join(dataDir, 'family-cloud.db');
+  const legacy = path.join(dataDir, 'calendar.db');
+  // Migracion unica: renombrar la base heredada de family-calendar
+  if (!fs.existsSync(dbPath) && fs.existsSync(legacy)) {
+    fs.renameSync(legacy, dbPath);
+    for (const suffix of ['-wal', '-shm']) {
+      if (fs.existsSync(legacy + suffix)) fs.renameSync(legacy + suffix, dbPath + suffix);
+    }
+    console.log('[i] Base de datos renombrada: calendar.db -> family-cloud.db');
+  }
+  db = new DatabaseSync(dbPath);
   db.exec(`
     PRAGMA journal_mode = WAL;
     PRAGMA foreign_keys = ON;
