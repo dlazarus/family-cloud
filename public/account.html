@@ -25,16 +25,24 @@
     </header>
 
     <main id="view-account">
-      <section class="admin-card">
-        <h2>Cambiar mi contraseña</h2>
-        <form id="pass-form" class="user-form" autocomplete="off">
-          <input id="cur-pass" type="password" placeholder="Contraseña actual" autocomplete="new-password" required />
-          <input id="new-pass" type="password" placeholder="Nueva contraseña (mín. 8 caracteres)" autocomplete="new-password" required />
-          <input id="new-pass2" type="password" placeholder="Repite la nueva contraseña" autocomplete="new-password" required />
-          <button type="submit" class="btn primary">Cambiar</button>
-        </form>
-        <p id="account-msg" class="muted"></p>
-      </section>
+      <div class="account-wrap">
+        <section class="gate-card account-card">
+          <h2>Cambiar mi contraseña</h2>
+          <form id="pass-form" autocomplete="off">
+            <label>Contraseña actual
+              <span class="pw-wrap"><input id="cur-pass" type="password" autocomplete="current-password" required /><button type="button" class="pw-eye" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar">👁</button></span>
+            </label>
+            <label>Nueva contraseña (mín. 8 caracteres)
+              <span class="pw-wrap"><input id="new-pass" type="password" autocomplete="new-password" required /><button type="button" class="pw-eye" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar">👁</button></span>
+            </label>
+            <label>Repite la nueva contraseña
+              <span class="pw-wrap"><input id="new-pass2" type="password" autocomplete="new-password" required /><button type="button" class="pw-eye" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar">👁</button></span>
+            </label>
+            <button type="submit" class="btn primary">Cambiar</button>
+          </form>
+          <p id="account-msg" class="muted"></p>
+        </section>
+      </div>
     </main>
   </div>
 

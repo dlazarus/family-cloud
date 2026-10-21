@@ -239,6 +239,12 @@ input:focus, select:focus, textarea:focus {
 /* ====== admin ====== */
 #view-admin { padding: 22px 20px; max-width: 820px; margin: 0 auto; display: grid; gap: 18px; }
 .admin-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+
+/* ====== mi cuenta ====== */
+.account-wrap { display: flex; justify-content: center; padding-top: 28px; }
+.account-card h2 { margin: 0 0 16px; font-size: 1.2rem; }
+.account-card form { display: grid; gap: 14px; }
+.account-card .btn { margin-top: 4px; }
 .admin-card h2 { margin: 0 0 12px; font-size: 1.05rem; }
 .user-form { display: flex; gap: 10px; flex-wrap: wrap; }
 .user-form input { flex: 1; min-width: 160px; width: auto; }
