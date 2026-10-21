@@ -67,14 +67,6 @@ function closePwModal() {
   $('#pw-modal').classList.add('hidden');
 }
 
-$('#pw-eye').addEventListener('click', () => {
-  const inp = $('#pw-input');
-  const show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  $('#pw-eye').textContent = show ? '🙈' : '👁';
-  inp.focus();
-});
-
 $('#pw-cancel').addEventListener('click', closePwModal);
 $('#pw-modal').addEventListener('click', (e) => { if (e.target.id === 'pw-modal') closePwModal(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePwModal(); });

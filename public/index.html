@@ -20,14 +20,14 @@
 
       <form id="setup-form" class="hidden">
         <label>Usuario <input id="setup-user" value="admin" autocomplete="username" /></label>
-        <label>Contraseña <input id="setup-pass" type="password" autocomplete="new-password" /></label>
-        <label>Repite la contraseña <input id="setup-pass2" type="password" autocomplete="new-password" /></label>
+        <label>Contraseña <span class="pw-wrap"><input id="setup-pass" type="password" autocomplete="new-password" /><button type="button" class="pw-eye" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar">👁</button></span></label>
+        <label>Repite la contraseña <span class="pw-wrap"><input id="setup-pass2" type="password" autocomplete="new-password" /><button type="button" class="pw-eye" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar">👁</button></span></label>
         <button type="submit" class="btn primary">Crear administrador</button>
       </form>
 
       <form id="login-form" class="hidden" autocomplete="off">
         <label>Usuario <input id="login-user" autocomplete="off" /></label>
-        <label>Contraseña <input id="login-pass" type="password" autocomplete="new-password" /></label>
+        <label>Contraseña <span class="pw-wrap"><input id="login-pass" type="password" autocomplete="new-password" /><button type="button" class="pw-eye" aria-label="Mostrar u ocultar contraseña" title="Mostrar u ocultar">👁</button></span></label>
         <button type="submit" class="btn primary">Entrar</button>
       </form>
 

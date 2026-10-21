@@ -25,6 +25,18 @@ function escapeHtml(s) {
 
 // ---------- tema (sistema por defecto, alternable y persistente) ----------
 const mediaDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+// Boton ojo en campos de contrasena: alterna visible/oculto (delegado, vale para todas las paginas)
+document.addEventListener('click', (e) => {
+  const eye = e.target.closest('.pw-eye');
+  if (!eye) return;
+  const inp = eye.closest('.pw-wrap')?.querySelector('input');
+  if (!inp) return;
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  eye.textContent = show ? '🙈' : '👁';
+  inp.focus();
+});
 function effectiveTheme() {
   return localStorage.getItem('theme') || (mediaDark.matches ? 'dark' : 'light');
 }
