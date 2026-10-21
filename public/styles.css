@@ -330,8 +330,8 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
   padding: 12px 14px; display: grid; gap: 10px; background: var(--bg);
 }
 .gen-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.gen-len { display: flex; align-items: center; gap: 8px; }
-.gen-len input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); padding: 0; }
+.gen-len { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+.gen-len input[type=range] { flex: 0 1 240px; min-width: 140px; accent-color: var(--accent); padding: 0; }
 .gen-len span { min-width: 2ch; font-weight: 600; color: var(--ink); }
 .gen-flags label { display: inline-flex; }
 /* espacio extra: contrasena <-> longitud, y opciones <-> botones */
