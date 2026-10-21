@@ -321,7 +321,7 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
 
 /* ====== proximos eventos ====== */
 .upcoming {
-  margin-top: 22px;
+  margin-top: 46px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
