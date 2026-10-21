@@ -68,12 +68,12 @@ app.use('/api', authRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/users', usersRouter);
 
-// Frontend estático (sin CDN: todo servido desde aquí)
+// Frontend estático (sin CDN: servido desde aquí)
 app.use(express.static(path.join(ROOT, 'public')));
 
-// SPA: cualquier ruta desconocida -> index.html
-app.get(/^\/(?!api\/).*/, (_req, res) => {
-  res.sendFile(path.join(ROOT, 'public', 'index.html'));
+// Páginas de la aplicación
+app.get('/calendario', (_req, res) => {
+  res.sendFile(path.join(ROOT, 'public', 'calendar.html'));
 });
 
 const PORT = Number(process.env.PORT || 3000);

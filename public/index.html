@@ -35,98 +35,19 @@
     </div>
   </div>
 
-  <!-- ===== Aplicación (autenticada) ===== -->
+  <!-- ===== Hub de servicios (autenticado) ===== -->
   <div id="app" class="hidden">
     <header class="topbar">
-      <div class="brand">🗓️ <span>Calendario de casa</span></div>
-      <nav class="tabs">
-        <button id="tab-cal" class="tab active">Calendario</button>
-        <button id="tab-admin" class="tab hidden">Usuarios</button>
-      </nav>
+      <div class="brand">☁️ <span>Family Cloud</span></div>
       <div class="userbox">
         <span id="who" class="muted"></span>
         <button id="btn-logout" class="btn ghost">Salir</button>
       </div>
     </header>
-
-    <!-- Vista calendario -->
-    <main id="view-cal">
-      <div class="cal-toolbar">
-        <button id="prev" class="btn ghost" aria-label="Anterior">‹</button>
-        <h2 id="cal-title"></h2>
-        <button id="next" class="btn ghost" aria-label="Siguiente">›</button>
-        <button id="today" class="btn ghost">Hoy</button>
-        <div id="filters" class="filters"></div>
-      </div>
-      <div class="cal-wrap">
-        <div class="cal-weekdays" id="weekdays"></div>
-        <div class="cal-grid" id="cal-grid"></div>
-      </div>
-    </main>
-
-    <!-- Vista administración de usuarios -->
-    <main id="view-admin" class="hidden">
-      <section class="admin-card">
-        <h2>Nueva cuenta familiar</h2>
-        <form id="user-form" class="user-form">
-          <input id="nu-name" placeholder="Nombre (p. ej. laura)" autocomplete="off" />
-          <input id="nu-pass" type="password" placeholder="Contraseña inicial" />
-          <select id="nu-role">
-            <option value="member">miembro</option>
-            <option value="admin">admin</option>
-          </select>
-          <button type="submit" class="btn primary">Crear</button>
-        </form>
-      </section>
-      <section class="admin-card">
-        <h2>Cuentas</h2>
-        <table class="user-table">
-          <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
-          <tbody id="user-rows"></tbody>
-        </table>
-      </section>
-      <p id="admin-msg" class="muted"></p>
-    </main>
+    <main class="hub-grid" id="hub"></main>
   </div>
 
-  <!-- ===== Modal de evento ===== -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-card">
-      <h3 id="modal-title"></h3>
-      <form id="event-form">
-        <div class="row">
-          <label>Título <input id="ev-title" maxlength="120" required /></label>
-        </div>
-        <div class="row">
-          <label>Desde <input id="ev-date" type="date" required /></label>
-          <label>Hasta <input id="ev-end" type="date" /></label>
-        </div>
-        <div class="row">
-          <label>Categoría
-            <select id="ev-cat">
-              <option value="cumple">🎂 Cumpleaños</option>
-              <option value="comida">🍝 Comida</option>
-              <option value="viaje">✈️ Viaje</option>
-              <option value="tarea">🔧 Tarea</option>
-              <option value="salud">🩺 Salud</option>
-              <option value="otro">📌 Otro</option>
-            </select>
-          </label>
-        </div>
-        <div class="row">
-          <label>Notas <textarea id="ev-desc" rows="4" maxlength="2000"></textarea></label>
-        </div>
-        <div class="modal-actions">
-          <button type="button" id="ev-delete" class="btn danger hidden">Eliminar</button>
-          <span class="spacer"></span>
-          <button type="button" id="ev-cancel" class="btn ghost">Cancelar</button>
-          <button type="submit" class="btn primary">Guardar</button>
-        </div>
-        <p id="modal-error" class="error hidden"></p>
-      </form>
-    </div>
-  </div>
-
-  <script src="/app.js"></script>
+  <script src="/common.js"></script>
+  <script src="/home.js"></script>
 </body>
 </html>

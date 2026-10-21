@@ -233,6 +233,44 @@ input:focus, select:focus, textarea:focus {
 .user-table .actions { display: flex; gap: 6px; justify-content: flex-end; }
 .user-table .actions .btn { padding: 5px 10px; font-size: 0.78rem; }
 
+/* ====== hub de servicios ====== */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+  padding: 28px 20px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: transform 0.06s ease, box-shadow 0.15s ease;
+}
+.service-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(60, 50, 40, 0.14); }
+.service-card .icon { font-size: 2rem; }
+.service-card h3 { margin: 0; font-size: 1.05rem; }
+.service-card p { margin: 0; font-size: 0.85rem; }
+.service-card.disabled { opacity: 0.55; box-shadow: none; cursor: default; }
+.soon-badge {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+a.tab { text-decoration: none; display: inline-flex; align-items: center; }
+
 /* ====== responsive ====== */
 @media (max-width: 720px) {
   .cell { min-height: 64px; padding: 5px; }

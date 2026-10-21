@@ -1,9 +1,7 @@
 'use strict';
 
-// ---------- utilidades ----------
-const $ = (sel) => document.querySelector(sel);
-const pad = (n) => String(n).padStart(2, '0');
-const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+// ---------- calendario + administración de usuarios ----------
+
 const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const WEEKDAYS = ['lun','mar','mié','jue','vie','sáb','dom'];
 const CATS = {
@@ -15,18 +13,6 @@ const CATS = {
   otro:   { label: '📌', name: 'Otro' },
 };
 
-async function api(path, opts = {}) {
-  const res = await fetch('/api' + path, {
-    headers: { 'Content-Type': 'application/json' },
-    ...opts,
-    body: opts.body ? JSON.stringify(opts.body) : undefined,
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
-  return data;
-}
-
-// ---------- estado ----------
 const state = {
   me: null,
   view: new Date(),          // mes mostrado
@@ -35,90 +21,16 @@ const state = {
   editing: null,             // evento en edición (null = nuevo)
 };
 
-// ---------- tema (sistema por defecto, alternable y persistente) ----------
-const mediaDark = window.matchMedia('(prefers-color-scheme: dark)');
-function effectiveTheme() {
-  return localStorage.getItem('theme') || (mediaDark.matches ? 'dark' : 'light');
-}
-function applyTheme() {
-  const t = effectiveTheme();
-  document.documentElement.classList.toggle('dark', t === 'dark');
-  document.documentElement.classList.toggle('light', t === 'light');
-  $('#theme-toggle').textContent = t === 'dark' ? '☀️' : '🌙';
-}
-$('#theme-toggle').addEventListener('click', () => {
-  localStorage.setItem('theme', effectiveTheme() === 'dark' ? 'light' : 'dark');
-  applyTheme();
-});
-mediaDark.addEventListener('change', () => {
-  if (!localStorage.getItem('theme')) applyTheme(); // sin elección manual: seguir al sistema
-});
-applyTheme();
-
 // ---------- arranque ----------
 async function boot() {
-  try {
-    state.me = await api('/me');
-    await enterApp();
-  } catch {
-    const { needsSetup } = await api('/status');
-    showGate(needsSetup);
-  }
-}
-
-function showGate(needsSetup) {
-  $('#gate').classList.remove('hidden');
-  $('#app').classList.add('hidden');
-  if (needsSetup) {
-    $('#gate-title').textContent = 'Bienvenida a vuestro calendario';
-    $('#gate-sub').textContent = 'Es la primera vez: crea la cuenta de administrador (usuario "admin") con la contraseña que elijáis.';
-    $('#setup-form').classList.remove('hidden');
-    $('#login-form').classList.add('hidden');
-  } else {
-    $('#setup-form').classList.add('hidden');
-    $('#login-form').classList.remove('hidden');
-  }
-}
-
-async function enterApp() {
-  $('#gate').classList.add('hidden');
-  $('#app').classList.remove('hidden');
-  $('#who').textContent = state.me.username + (state.me.role === 'admin' ? ' · admin' : '');
+  state.me = await requireUser();
+  if (!state.me) return;
+  initTopbar(state.me);
   $('#tab-admin').classList.toggle('hidden', state.me.role !== 'admin');
   buildFilters();
   buildWeekdays();
   await loadMonth();
 }
-
-// ---------- gate: login / setup ----------
-$('#login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  try {
-    state.me = await api('/login', { method: 'POST', body: { username: $('#login-user').value, password: $('#login-pass').value } });
-    await enterApp();
-  } catch (err) { gateError(err); }
-});
-
-$('#setup-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const p = $('#setup-pass').value;
-  if (p !== $('#setup-pass2').value) return gateError(new Error('Las contraseñas no coinciden.'));
-  try {
-    state.me = await api('/setup', { method: 'POST', body: { username: $('#setup-user').value, password: p } });
-    await enterApp();
-  } catch (err) { gateError(err); }
-});
-
-function gateError(err) {
-  const el = $('#gate-error');
-  el.textContent = err.message;
-  el.classList.remove('hidden');
-}
-
-$('#btn-logout').addEventListener('click', async () => {
-  await api('/logout', { method: 'POST' });
-  location.reload();
-});
 
 // ---------- pestañas ----------
 $('#tab-cal').addEventListener('click', () => switchTab('cal'));
@@ -203,10 +115,6 @@ function renderGrid() {
     </div>`;
   }
   $('#cal-grid').innerHTML = html;
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 $('#cal-grid').addEventListener('click', (e) => {
