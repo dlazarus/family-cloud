@@ -77,6 +77,9 @@ app.use(express.static(path.join(ROOT, 'public')));
 app.get('/calendario', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'calendar.html'));
 });
+app.get('/contrasenhas', (_req, res) => {
+  res.sendFile(path.join(ROOT, 'public', 'passwords.html'));
+});
 
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';

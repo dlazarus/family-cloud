@@ -4,7 +4,7 @@
 
 const SERVICES = [
   { icon: '🗓️', name: 'Calendario', desc: 'Eventos compartidos de toda la familia.', href: '/calendario' },
-  { icon: '🔑', name: 'Contraseñas', desc: 'Tu gestor personal de contraseñas.', href: '/contrasenhas', soon: true },
+  { icon: '🔑', name: 'Contraseñas', desc: 'Tu gestor personal de contraseñas.', href: '/contrasenhas' },
 ];
 
 async function boot() {
