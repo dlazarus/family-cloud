@@ -5,6 +5,7 @@
 const SERVICES = [
   { icon: '🗓️', name: 'Calendario', desc: 'Eventos compartidos de toda la familia.', href: '/calendario' },
   { icon: '🔑', name: 'Contraseñas', desc: 'Tu gestor personal de contraseñas.', href: '/contrasenhas' },
+  { icon: '⚙️', name: 'Administración', desc: 'Gestión de cuentas de la familia.', href: '/administracion', adminOnly: true },
 ];
 
 async function boot() {
@@ -35,11 +36,13 @@ async function showHub(me) {
   $('#gate').classList.add('hidden');
   $('#app').classList.remove('hidden');
   initTopbar(me);
-  $('#hub').innerHTML = SERVICES.map((s) => {
+  $('#hub').innerHTML = SERVICES
+    .filter((s) => !s.adminOnly || me.role === 'admin')
+    .map((s) => {
     const inner = `<div class="icon">${s.icon}</div><h3>${s.name}</h3><p class="muted">${s.desc}</p>`;
     if (s.soon) return `<div class="service-card disabled">${inner}<span class="soon-badge">próximamente</span></div>`;
     return `<a class="service-card" href="${s.href}">${inner}</a>`;
-  }).join('');
+    }).join('');
 }
 
 // ---------- gate: login / setup ----------

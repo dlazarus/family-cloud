@@ -29,7 +29,7 @@ Al abrir la web por primera vez se pide crear la cuenta de administrador
 (usuario `admin` por defecto, contraseña la que elijas). Ese endpoint solo
 funciona mientras no exista ningún usuario.
 
-El admin entra en la pestaña **Usuarios** para crear las cuentas de la familia.
+El admin crea las cuentas de la familia desde la tarjeta **⚙️ Administración** del hub.
 
 ## Servicios incluidos
 
@@ -94,6 +94,11 @@ Ajusta el `PORT`/`HOST` del `.env` si cambia. Después crea el redireccionamient
 DNS `cloud.lan → <IP del servidor>` en AdGuard Home y enlázalo desde tu
 página de inicio.
 
+### ⚙️ Administración
+
+Solo para administradores (la tarjeta no aparece para los miembros): crear cuentas
+nuevas, cambiar contraseñas, activar/desactivar y eliminar cuentas.
+
 ## Seguridad
 
 - **En reposo**: títulos y descripciones de eventos cifrados con AES-256-GCM
@@ -116,7 +121,7 @@ src/users.js    gestión de cuentas (solo admin)
 src/events.js   API CRUD de eventos
 src/vault.js    API del gestor de contraseñas (aislada por usuario) + generador
 public/         HTML + CSS + JS vanilla (sin librerías): index (login+hub),
-                calendar, passwords — comparten common.js
+                calendar, passwords, admin — comparten common.js
 scripts/gen-env.js  generador de .env
 scripts/install.sh  instalador completo (Node, .env, usuario, systemd, firewall)
 deploy/family-cloud.service  unidad systemd

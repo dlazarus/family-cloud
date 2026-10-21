@@ -16,8 +16,7 @@
       <div class="brand">☁️ <span>Family Cloud</span></div>
       <nav class="tabs">
         <a class="tab" href="/">🏠 Inicio</a>
-        <button id="tab-cal" class="tab active">Calendario</button>
-        <button id="tab-admin" class="tab hidden">Usuarios</button>
+        <button class="tab active">🗓️ Calendario</button>
       </nav>
       <div class="userbox">
         <span id="who" class="muted"></span>
@@ -38,30 +37,6 @@
         <div class="cal-weekdays" id="weekdays"></div>
         <div class="cal-grid" id="cal-grid"></div>
       </div>
-    </main>
-
-    <!-- Vista administración de usuarios -->
-    <main id="view-admin" class="hidden">
-      <section class="admin-card">
-        <h2>Nueva cuenta familiar</h2>
-        <form id="user-form" class="user-form">
-          <input id="nu-name" placeholder="Nombre (p. ej. laura)" autocomplete="off" />
-          <input id="nu-pass" type="password" placeholder="Contraseña inicial" />
-          <select id="nu-role">
-            <option value="member">miembro</option>
-            <option value="admin">admin</option>
-          </select>
-          <button type="submit" class="btn primary">Crear</button>
-        </form>
-      </section>
-      <section class="admin-card">
-        <h2>Cuentas</h2>
-        <table class="user-table">
-          <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
-          <tbody id="user-rows"></tbody>
-        </table>
-      </section>
-      <p id="admin-msg" class="muted"></p>
     </main>
   </div>
 

@@ -80,6 +80,9 @@ app.get('/calendario', (_req, res) => {
 app.get('/contrasenhas', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'passwords.html'));
 });
+app.get('/administracion', (_req, res) => {
+  res.sendFile(path.join(ROOT, 'public', 'admin.html'));
+});
 
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';

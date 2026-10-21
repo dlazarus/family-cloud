@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administración · Family Cloud</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <!-- Interruptor de tema: por defecto sigue al sistema; el botón fuerza y recuerda -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">🌙</button>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">☁️ <span>Family Cloud</span></div>
+      <nav class="tabs">
+        <a class="tab" href="/">🏠 Inicio</a>
+        <button class="tab active">⚙️ Administración</button>
+      </nav>
+      <div class="userbox">
+        <span id="who" class="muted"></span>
+        <button id="btn-logout" class="btn ghost">Salir</button>
+      </div>
+    </header>
+
+    <main id="view-admin">
+      <section class="admin-card">
+        <h2>Nueva cuenta familiar</h2>
+        <form id="user-form" class="user-form">
+          <input id="nu-name" placeholder="Nombre (p. ej. laura)" autocomplete="off" />
+          <input id="nu-pass" type="password" placeholder="Contraseña inicial" />
+          <select id="nu-role">
+            <option value="member">miembro</option>
+            <option value="admin">admin</option>
+          </select>
+          <button type="submit" class="btn primary">Crear</button>
+        </form>
+      </section>
+      <section class="admin-card">
+        <h2>Cuentas</h2>
+        <table class="user-table">
+          <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="user-rows"></tbody>
+        </table>
+      </section>
+      <p id="admin-msg" class="muted"></p>
+    </main>
+  </div>
+
+  <script src="/common.js"></script>
+  <script src="/admin.js"></script>
+</body>
+</html>
