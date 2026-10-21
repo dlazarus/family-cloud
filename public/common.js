@@ -12,6 +12,9 @@ async function api(path, opts = {}) {
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
   const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && location.pathname !== '/') {
+    location.replace('/'); // sesion caducada en pagina protegida -> volver al login
+  }
   if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
   return data;
 }

@@ -31,6 +31,27 @@ funciona mientras no exista ningún usuario.
 
 El admin entra en la pestaña **Usuarios** para crear las cuentas de la familia.
 
+## Servicios incluidos
+
+Tras iniciar sesión se abre un **hub** con tarjetas de los servicios disponibles.
+
+### 🗓️ Calendario
+
+Eventos compartidos por toda la familia: crear, editar y eliminar eventos con fecha
+(opcionalmente rango), categoría y notas; filtros por categoría y vista mensual.
+Todos los usuarios autenticados pueden ver y editar los eventos.
+
+### 🔑 Gestor de contraseñas
+
+Cada usuario guarda sus propias contraseñas (sitio, nombre de acceso y contraseña)
+y **solo él** puede verlas y gestionarlas: el administrador no tiene acceso a las
+entradas de otros desde la web. Incluye buscador, mostrar/ocultar y copiar al
+portapapeles, y un **generador de contraseñas seguras** (longitud de 8 a 128,
+tipos de caracteres y opción de evitar caracteres ambiguos) disponible tanto al
+crear como al editar una entrada. Los tres campos se guardan cifrados (AES-256-GCM)
+con la frase maestra; el esquema de la base de datos está preparado para migrar en
+el futuro a una clave por usuario (cifrado que ni el servidor puede leer).
+
 ## Instalación en el servidor de casa (recomendada: script)
 
 Copia el directorio del proyecto al servidor (p. ej. a `/srv/family-cloud`)
@@ -93,7 +114,9 @@ src/crypto.js   cifrado AES-256-GCM campo a campo
 src/auth.js     setup de un solo uso, login/logout, middlewares de rol
 src/users.js    gestión de cuentas (solo admin)
 src/events.js   API CRUD de eventos
-public/         HTML + CSS + JS vanilla (calendario propio, sin librerías)
+src/vault.js    API del gestor de contraseñas (aislada por usuario) + generador
+public/         HTML + CSS + JS vanilla (sin librerías): index (login+hub),
+                calendar, passwords — comparten common.js
 scripts/gen-env.js  generador de .env
 scripts/install.sh  instalador completo (Node, .env, usuario, systemd, firewall)
 deploy/family-cloud.service  unidad systemd
