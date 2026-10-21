@@ -334,7 +334,9 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
 .gen-len input[type=range] { flex: 1; min-width: 140px; accent-color: var(--accent); padding: 0; }
 .gen-len span { min-width: 2ch; font-weight: 600; color: var(--ink); }
 .gen-flags label { display: inline-flex; }
-.gen-actions { justify-content: flex-end; }
+/* espacio extra: contrasena <-> longitud, y opciones <-> botones */
+.gen-panel .gen-row:first-child { margin-bottom: 10px; }
+.gen-actions { justify-content: space-between; margin-top: 10px; }
 .gen-preview {
   flex: 1; width: 100%; box-sizing: border-box;
   font-family: ui-monospace, monospace; font-size: 0.9rem; word-break: break-all;
