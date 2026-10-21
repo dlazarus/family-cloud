@@ -29,6 +29,18 @@ export function initDb(dataDir) {
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
     CREATE INDEX IF NOT EXISTS idx_events_date ON events(date);
+    CREATE TABLE IF NOT EXISTS vault_entries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      site_enc TEXT NOT NULL,            -- AES-256-GCM (cifrado campo a campo)
+      login_enc TEXT NOT NULL,
+      password_enc TEXT NOT NULL,
+      enc_ver TEXT NOT NULL DEFAULT 'master',  -- 'master' = clave maestra (opcion A); 'user' = clave por usuario (opcion B futura)
+      kdf_salt TEXT,                     -- NULL en opcion A; salt por usuario en la B
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_vault_user ON vault_entries(user_id);
   `);
   return db;
 }

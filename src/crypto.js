@@ -26,3 +26,20 @@ export function decryptField(blob) {
   d.setAuthTag(Buffer.from(tagB, 'base64'));
   return Buffer.concat([d.update(Buffer.from(ctB, 'base64')), d.final()]).toString('utf8');
 }
+
+// ---- Capa de cifrado del vault (gestor de contraseñas) ----
+// Unica puerta de cifrado/descifrado de las entradas del vault. Hoy (opcion A)
+// delega en la clave maestra; si se activa la opcion B (clave derivada de la
+// contraseña de cada usuario), solo cambia el interior de estas dos funciones:
+// enc_ver indica con que clave estaba cifrada cada fila y kdf_salt guarda el salt
+// por usuario. Las filas 'master' se recifran con scripts/reencrypt-vault.js.
+export function encryptForUser(user, plain) {
+  return encryptField(plain);
+}
+
+export function decryptForUser(user, blob, encVer = 'master') {
+  if (encVer !== 'master') {
+    throw new Error(`Version de cifrado de vault no soportada: ${encVer}`);
+  }
+  return decryptField(blob);
+}

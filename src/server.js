@@ -9,6 +9,7 @@ import { initCrypto } from './crypto.js';
 import { authRouter, statusRouter } from './auth.js';
 import { usersRouter } from './users.js';
 import { eventsRouter } from './events.js';
+import { vaultRouter } from './vault.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -67,6 +68,7 @@ app.use('/api', authRouter);
 // Rutas protegidas
 app.use('/api/events', eventsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/vault', vaultRouter);
 
 // Frontend estático (sin CDN: servido desde aquí)
 app.use(express.static(path.join(ROOT, 'public')));
