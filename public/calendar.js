@@ -17,6 +17,7 @@ const state = {
   me: null,
   view: new Date(),          // mes mostrado
   events: [],
+  upcoming: [],              // eventos de los proximos 3 meses
   filter: new Set(Object.keys(CATS)),
   editing: null,             // evento en edición (null = nuevo)
 };
@@ -28,7 +29,7 @@ async function boot() {
   initTopbar(state.me);
   buildFilters();
   buildWeekdays();
-  await loadMonth();
+  await Promise.all([loadMonth(), loadUpcoming()]);
 }
 
 // ---------- calendario ----------
@@ -45,6 +46,7 @@ function buildFilters() {
     if (!cat) return;
     e.target.checked ? state.filter.add(cat) : state.filter.delete(cat);
     renderGrid();
+    renderUpcoming();
   });
 }
 
@@ -59,6 +61,49 @@ async function loadMonth() {
   state.events = await api(`/events?from=${from}&to=${to}`);
   renderGrid();
 }
+
+// ---------- proximos eventos ----------
+const UPCOMING_DAYS = 92;   // horizonte: ~3 meses
+const UPCOMING_MAX = 12;    // maximo de eventos listados
+
+async function loadUpcoming() {
+  const now = new Date();
+  const from = ymd(now);
+  const to = ymd(new Date(now.getTime() + UPCOMING_DAYS * 86400000));
+  state.upcoming = await api(`/events?from=${from}&to=${to}`);
+  renderUpcoming();
+}
+
+function fmtDay(dateStr) {
+  return new Date(dateStr + 'T00:00:00')
+    .toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })
+    .replace(/\./g, '');
+}
+
+function renderUpcoming() {
+  const items = state.upcoming
+    .filter((ev) => state.filter.has(ev.category))
+    .sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id)
+    .slice(0, UPCOMING_MAX);
+  $('#upcoming-empty').classList.toggle('hidden', items.length > 0);
+  $('#upcoming-list').innerHTML = items.map((ev) => {
+    const isToday = ymd(new Date()) === ev.date;
+    const range = ev.end_date && ev.end_date > ev.date
+      ? `${fmtDay(ev.date)} → ${fmtDay(ev.end_date)}`
+      : fmtDay(ev.date);
+    return `<li class="upcoming-item cat-${ev.category}" data-id="${ev.id}">
+      <span class="upcoming-date${isToday ? ' today' : ''}">${range}${isToday ? ' · hoy' : ''}</span>
+      <span class="upcoming-title">${CATS[ev.category].label} ${escapeHtml(ev.title)}</span>
+    </li>`;
+  }).join('');
+}
+
+$('#upcoming-list').addEventListener('click', (e) => {
+  const li = e.target.closest('.upcoming-item');
+  if (!li) return;
+  const ev = state.upcoming.find((x) => x.id === Number(li.dataset.id));
+  if (ev) openModal(ev);
+});
 
 function renderGrid() {
   const y = state.view.getFullYear();
@@ -155,7 +200,7 @@ $('#event-form').addEventListener('submit', async (e) => {
   try {
     if (state.editing) await api(`/events/${state.editing.id}`, { method: 'PUT', body });
     else await api('/events', { method: 'POST', body });
-    await loadMonth();
+    await Promise.all([loadMonth(), loadUpcoming()]);
     closeModal();
   } catch (err) {
     const el = $('#modal-error');
@@ -167,7 +212,7 @@ $('#event-form').addEventListener('submit', async (e) => {
 $('#ev-delete').addEventListener('click', async () => {
   if (!state.editing || !confirm('¿Eliminar este evento?')) return;
   await api(`/events/${state.editing.id}`, { method: 'DELETE' });
-  await loadMonth();
+  await Promise.all([loadMonth(), loadUpcoming()]);
   closeModal();
 });
 
