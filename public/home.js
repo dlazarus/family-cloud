@@ -21,6 +21,10 @@ async function boot() {
 function showGate(needsSetup) {
   $('#gate').classList.remove('hidden');
   $('#app').classList.add('hidden');
+  // campos siempre limpios al llegar al login
+  $('#login-user').value = '';
+  $('#login-pass').value = '';
+  $('#gate-error').classList.add('hidden');
   if (needsSetup) {
     $('#gate-title').textContent = 'Bienvenida a Family Cloud';
     $('#gate-sub').textContent = 'Es la primera vez: crea la cuenta de administrador (usuario "admin") con la contraseña que elijáis.';
