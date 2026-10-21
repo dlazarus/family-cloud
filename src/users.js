@@ -49,6 +49,11 @@ usersRouter.put('/:id', (req, res) => {
   const vals = [];
   if (password) {
     if (String(password).length < 8) return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres.' });
+    // La contraseña de la cuenta "admin" solo la cambia el propio admin (via /me/password)
+    // o el script de consola en el propio servidor.
+    if (isSystemAdmin(user.username) && id !== req.session.user.id) {
+      return res.status(400).json({ error: 'La contraseña de la cuenta "admin" solo puede cambiarla el propio admin, o resetearse por consola en el servidor.' });
+    }
     sets.push('password_hash = ?');
     vals.push(bcrypt.hashSync(String(password), 12));
   }

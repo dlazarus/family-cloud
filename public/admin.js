@@ -22,8 +22,7 @@ async function renderUsers() {
       if (self) {
         actions = '<span class="muted">tu cuenta</span>';
       } else if (system) {
-        actions = `<button data-act="pass" class="btn ghost">Nueva contraseña</button>
-                   <span class="muted">cuenta del sistema</span>`;
+        actions = '<span class="muted">cuenta del sistema · solo ella cambia su contraseña</span>';
       } else {
         actions = `<button data-act="pass" class="btn ghost">Nueva contraseña</button>
                    <button data-act="toggle" class="btn ghost">${u.active ? 'Desactivar' : 'Activar'}</button>
