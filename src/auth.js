@@ -15,11 +15,13 @@ export function hasUsers() {
 }
 
 const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 15 * 1000 * 60,
   limit: 10,
+  // solo cuentan los intentos FALLIDOS: un uso normal nunca agota la cuota
+  skipSuccessfulRequests: true,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Demasiados intentos. Espera unos minutos.' },
+  message: { error: 'Demasiados intentos fallidos. Espera unos minutos.' },
 });
 
 // --- Estado de configuración (público) ---
