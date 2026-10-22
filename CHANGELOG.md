@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v1.0.0 — 2026-10-22
+## v0.1.0 — 2026-10-22
 
 El antiguo **family-calendar** se convierte en **family-cloud**: una nube familiar
 local con varios servicios detrás de un mismo login. Hereda del calendario todo lo
