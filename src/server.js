@@ -56,7 +56,7 @@ app.use(
       httpOnly: true,
       sameSite: 'lax',
       secure: false, // HTTP en LAN; cambiar a true si se activa HTTPS
-      maxAge: 30 * 24 * 3600 * 1000, // 30 días
+      maxAge: 14 * 24 * 3600 * 1000, // 14 dias
     },
   })
 );
