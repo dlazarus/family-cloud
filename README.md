@@ -4,10 +4,21 @@
 > **Nota del autor:** no sé programar. Este proyecto está hecho íntegramente con *vibe coding* (lo escriben agentes de IA bajo mi dirección y yo lo pruebo). También soy novato total en GitHub: tenlo en cuenta al leer el código, y si abres un issue o un pull request y tardo en responder (o no sé qué hacer con él), no es desidia — es que literalmente estoy aprendiendo a usar GitHub. Aun así, mi intención es compartir: como amante del software libre, quiero que cualquiera pueda usarlo, clonarlo y probarlo aunque su autor sea un novato.
 
 Nube familiar local (100 % offline en tiempo de ejecución, sin CDN): varios servicios
-para casa servidos desde un mismo servidor y detrás de un mismo login. El primer
-servicio es el **calendario familiar** (eventos compartidos); le seguirán más (gestor de
-contraseñas, notas, archivos…). Los datos se guardan **cifrados** en la base de datos;
-el acceso requiere usuario y contraseña.
+para casa servidos desde un mismo servidor y detrás de un mismo login. Los datos se
+guardan **cifrados** en la base de datos; el acceso requiere usuario y contraseña.
+
+Tras iniciar sesión se abre un **hub** con tarjetas de servicios:
+
+| Servicio | Qué es | Estado |
+| --- | --- | --- |
+| 🗓️ **Calendario** | Eventos compartidos de toda la familia | ✅ incluido |
+| 🔑 **Contraseñas** | Gestor personal de contraseñas, aislado por usuario | ✅ incluido |
+| 👤 **Mi cuenta** | Cambio de propia contraseña | ✅ incluido |
+| ⚙️ **Administración** | Gestión de cuentas (solo admins) | ✅ incluido |
+| 📝 Notas / post-its | Tableros de notas por usuario | 🔜 próximo |
+| 📁 Archivos | Nube de archivos familiar | 🔜 próximo |
+
+---
 
 ## Puesta en marcha (primera vez)
 
@@ -31,6 +42,8 @@ funciona mientras no exista ningún usuario.
 
 El admin crea las cuentas de la familia desde la tarjeta **⚙️ Administración** del hub.
 
+---
+
 ## Servicios incluidos
 
 Tras iniciar sesión se abre un **hub** con tarjetas de los servicios disponibles.
@@ -39,7 +52,8 @@ Tras iniciar sesión se abre un **hub** con tarjetas de los servicios disponible
 
 Eventos compartidos por toda la familia: crear, editar y eliminar eventos con fecha
 (opcionalmente rango), categoría y notas; filtros por categoría y vista mensual.
-Todos los usuarios autenticados pueden ver y editar los eventos.
+Todos los usuarios autenticados pueden ver y editar los eventos. Incluye una sección
+«Próximos eventos» bajo la vista mensual.
 
 ### 🔑 Gestor de contraseñas
 
@@ -48,9 +62,12 @@ y **solo él** puede verlas y gestionarlas: el administrador no tiene acceso a l
 entradas de otros desde la web. Incluye buscador, mostrar/ocultar y copiar al
 portapapeles, y un **generador de contraseñas seguras** (longitud de 8 a 128,
 tipos de caracteres y opción de evitar caracteres ambiguos) disponible tanto al
-crear como al editar una entrada. Los tres campos se guardan cifrados (AES-256-GCM)
-con la frase maestra; el esquema de la base de datos está preparado para migrar en
-el futuro a una clave por usuario (cifrado que ni el servidor puede leer).
+crear como al editar una entrada, también como generador independiente. Los tres
+campos se guardan cifrados (AES-256-GCM) con la frase maestra; el esquema de la
+base de datos está preparado para migrar en el futuro a una clave por usuario
+(cifrado que ni el servidor puede leer).
+
+---
 
 ## Instalación en el servidor de casa (recomendada: script)
 
@@ -119,6 +136,8 @@ Cualquier usuario (incluido `admin`) puede cambiar su contraseña desde la tarje
 «Mi cuenta» del hub: pide la contraseña actual y la nueva dos veces. La sesión en
 curso no se corta; el cambio surte efecto en el siguiente acceso.
 
+---
+
 ## Seguridad
 
 - **En reposo**: títulos y descripciones de eventos cifrados con AES-256-GCM
@@ -127,8 +146,11 @@ curso no se corta; el cambio surte efecto en el siguiente acceso.
 - **En tránsito**: HTTP en la LAN (suficiente para uso doméstico; migra a HTTPS
   cuando quieras — el código está preparado: certificado en `app.listen` y
   `cookie.secure = true`).
-- Sesiones en cookie `httpOnly` + `SameSite=Lax`, límite de intentos de login,
-  `helmet` con CSP estricta (`default-src 'self'`), sin recursos externos.
+- Sesiones en cookie `httpOnly` + `SameSite=Lax` (14 días), límite de intentos de login
+  (solo cuenta los fallidos), `helmet` con CSP estricta (`default-src 'self'`), sin
+  recursos externos.
+
+---
 
 ## Estructura
 
@@ -143,9 +165,12 @@ src/vault.js    API del gestor de contraseñas (aislada por usuario) + generador
 public/         HTML + CSS + JS vanilla (sin librerías): index (login+hub),
                 calendar, passwords, admin, account — comparten common.js
 scripts/gen-env.js  generador de .env
+scripts/reset-password.js  rescate de contraseña (solo por consola en el servidor)
 scripts/install.sh  instalador completo (Node, .env, usuario, systemd, firewall)
 deploy/family-cloud.service  unidad systemd
 ```
+
+---
 
 ## Notas
 
@@ -155,3 +180,13 @@ deploy/family-cloud.service  unidad systemd
 - El archivo de base de datos se renombró de `calendar.db` (herencia del proyecto
   original) a `family-cloud.db`: al arrancar, si existe el antiguo y no el nuevo,
   el servidor lo renombra solo (migración de una sola vez, sin pérdida).
+
+---
+
+## Licencia
+
+AGPL-3.0-only — Copyright (C) 2026 dlazarus.
+
+Este programa es software libre: puede redistribuirlo y/o modificarlo bajo los términos de la [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html) publicada por la Free Software Foundation (versión 3).
+
+Se distribuye sin garantía de ningún tipo. Los trabajos derivados que se expongan a usuarios por una red deben publicar también su código fuente.

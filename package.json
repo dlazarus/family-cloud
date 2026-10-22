@@ -1,6 +1,7 @@
 {
   "name": "family-cloud",
   "version": "1.0.0",
+  "license": "AGPL-3.0-only",
   "description": "Nube familiar local: calendario compartido, gestor de contraseñas y más servicios para casa (100% offline en la LAN).",
   "main": "index.js",
   "scripts": {
