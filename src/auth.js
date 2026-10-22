@@ -45,7 +45,7 @@ authRouter.post('/setup', loginLimiter, (req, res) => {
     .prepare('INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)')
     .run(uname, hash, 'admin');
   req.session.user = { id: Number(info.lastInsertRowid), username: uname, role: 'admin' };
-  res.json({ ok: true, username: uname });
+  res.json({ ok: true, username: uname, role: 'admin' });
 });
 
 // --- Login / logout ---
