@@ -14,7 +14,13 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
+# Con ProtectSystem=strict la app solo puede escribir en las rutas listadas.
+# El instalador (scripts/install.sh) inserta aqui, de forma idempotente, un
+# ReadWritePaths= por cada ruta absoluta resuelta: DATA_DIR (base de datos, en el
+# disco del servidor) y FILES_DIR (archivos cifrados, que puede estar en otro disco).
+# Si editas esta unidad a mano, declara las dos rutas.
 ReadWritePaths=/srv/family-cloud/data
+# ReadWritePaths=/mnt/datos/family-cloud-files
 
 [Install]
 WantedBy=multi-user.target

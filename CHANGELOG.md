@@ -1,5 +1,47 @@
 # CHANGELOG
 
+## v0.2.0 — 2026-10-23
+
+Nueva tarjeta **📁 Archivos**: nube de archivos familiar con cifrado individual por
+archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
+
+- **Archivos por cuenta**: subir (botón o arrastrar y soltar), crear carpetas,
+  renombrar, mover arrastrando una fila sobre otra carpeta, descargar, borrar en
+  cascade y descargar una carpeta entera como **ZIP** generado al vuelo
+  (`src/zip.js`, sin dependencias ni temporeros en disco).
+- **Cifrado en streaming**: cada archivo se cifra con AES-256-GCM al subir y se
+  descifra al bajar, por trozos — un archivo de 3 GB no necesita 3 GB de RAM. La
+  llave va ligada al id del archivo (AAD), así que copiar un blob a otra parte no
+  sirve. En la base de datos **los nombres también van cifrados** (`name_enc`).
+- **CARPETA-COMPARTIDA**: cada cuenta tiene una carpeta compartida claramente
+  diferenciada (borde de color, icono de familia y subtítulo) y una segunda vista
+  «👥 Lo que comparte la familia» con lo de los demás en **solo lectura** (no se
+  puede crear, subir ni borrar dentro de lo ajeno). El nombre lo cambia el admin de
+  un golpe y aplica a todas las cuentas; nadie puede crear un archivo con ese nombre.
+- **Cupos**: 4 GB por cuenta por defecto, editables por el admin en global o por
+  cuenta (0 = sin límite); se comprueban al empezar y al terminar la subida. Al
+  borrar una cuenta se borran también sus archivos del disco.
+- **Almacenamiento configurable**: `DATA_DIR` (base de datos, mejor siempre en el
+  ext4 del servidor) y `FILES_DIR` (archivos; puede vivir en un disco grande NTFS).
+  Utilidades nuevas: `scripts/storage-check.js` (rutas, sistema de archivos, espacio
+  y cupos; solo lectura) y `scripts/relocate-data.sh` (mover los datos a otro disco
+  sin borrar jamás el origen; admite `--dry-run`).
+- **Instalador**: elige las rutas de datos y archivos, muestra el disco real donde
+  caen (tipo de sistema de archivos y espacio libre), avisa en NTFS/vfat/FAT con el
+  snippet de montaje recomendado (**no monta ni formatea discos**: eso es del
+  sysadmin), añade `FILES_DIR` a los `ReadWritePaths` de systemd y termina probando
+  que el usuario del servicio **puede escribir** en las dos carpetas.
+- **Robustez**: si `FILES_DIR` apunta a un disco desmontado, el servicio arranca y
+  calendario y contraseñas siguen funcionando; la tarjeta de archivos avisa y las
+  subidas devuelven 503. No se crean rutas fantasma dentro de un montaje inexistente.
+- **Nombres seguros**: se rechazan `\ / : * ? " < > |`, los nombres que terminan en
+  punto o espacio y los reservados de Windows (`CON`, `PRN`, `AUX`, `NUL`, `COM1-9`,
+  `LPT1-9`, también con extensión: `CON.txt`), para que los ZIP se puedan extraer en
+  cualquier sistema operativo.
+- **API nueva**: `/api/files*` (lista, carpeta, subida, descarga, ZIP, mover,
+  renombrar, borrar) y `GET /api/users/usage` + `PUT /api/users/settings` para los
+  cupos y el nombre de la carpeta compartida.
+
 ## v0.1.0 — 2026-10-22
 
 El antiguo **family-calendar** se convierte en **family-cloud**: una nube familiar

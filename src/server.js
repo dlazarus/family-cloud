@@ -6,10 +6,12 @@ import { fileURLToPath } from 'node:url';
 
 import { initDb } from './db.js';
 import { initCrypto } from './crypto.js';
+import { resolveDirs, ensureDirs, describeStorage, storageStatus } from './storage.js';
 import { authRouter, statusRouter } from './auth.js';
 import { usersRouter } from './users.js';
 import { eventsRouter } from './events.js';
 import { vaultRouter } from './vault.js';
+import { filesRouter } from './files.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -23,7 +25,18 @@ try {
 }
 
 initCrypto();
-initDb(path.join(ROOT, 'data'));
+// Rutas de datos configurables (DATA_DIR para la base, FILES_DIR para los blobs
+// cifrados de archivos). Preparar el disco (formatearlo, montarlo, dar espacio) es
+// tarea del sysadmin: aqui solo se usa la ruta indicada.
+const { dataDir } = resolveDirs(ROOT);
+const dirWarning = ensureDirs();
+if (dirWarning) console.log(`[!] Almacenamiento de archivos: ${dirWarning}`);
+initDb(dataDir);
+console.log(`[i] ${describeStorage()}`);
+const bootStorage = storageStatus();
+if (bootStorage.ok && !bootStorage.posix_perms) {
+  console.log('[i] FILES_DIR esta en un sistema sin permisos POSIX (NTFS/vfat): la propiedad se fija en el montaje (uid=...); el aislamiento entre usuarios lo sigue dando la base de datos.');
+}
 
 const app = express();
 app.disable('x-powered-by');
@@ -69,6 +82,7 @@ app.use('/api', authRouter);
 app.use('/api/events', eventsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/vault', vaultRouter);
+app.use('/api/files', filesRouter);
 
 // Frontend estático (sin CDN: servido desde aquí)
 app.use(express.static(path.join(ROOT, 'public')));
@@ -82,6 +96,9 @@ app.get('/contrasenhas', (_req, res) => {
 });
 app.get('/administracion', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'admin.html'));
+});
+app.get('/archivos', (_req, res) => {
+  res.sendFile(path.join(ROOT, 'public', 'files.html'));
 });
 app.get('/mi-cuenta', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'account.html'));

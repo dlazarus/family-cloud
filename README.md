@@ -16,7 +16,7 @@ Tras iniciar sesión se abre un **hub** con tarjetas de servicios:
 | 👤 **Mi cuenta** | Cambio de propia contraseña | ✅ incluido |
 | ⚙️ **Administración** | Gestión de cuentas (solo admins) | ✅ incluido |
 | 📝 Notas / post-its | Tableros de notas por usuario | 🔜 próximo |
-| 📁 Archivos | Nube de archivos familiar | 🔜 próximo |
+| 📁 **Archivos** | Nube de archivos familiar, cifrada y con cupo por cuenta | ✅ incluido |
 
 ---
 
@@ -31,8 +31,9 @@ npm start                   # o ./start.sh
 
 Por defecto escucha en **http://0.0.0.0:3000** (configurable en `.env`).
 
-> ⚠️ La frase maestra de `.env` cifra los datos (eventos y demás). Si se pierde, no se
-> pueden recuperar. Haz copias de `.env` y de `data/family-cloud.db` juntas.
+> ⚠️ La frase maestra de `.env` cifra los datos (eventos, contraseñas y archivos). Si
+> se pierde, no se pueden recuperar. Haz copias de `.env`, de la base de datos y de la
+> carpeta de archivos juntas.
 
 ## Primer acceso
 
@@ -67,6 +68,66 @@ campos se guardan cifrados (AES-256-GCM) con la frase maestra; el esquema de la
 base de datos está preparado para migrar en el futuro a una clave por usuario
 (cifrado que ni el servidor puede leer).
 
+### 📁 Archivos
+
+Cada miembro tiene su espacio de archivos, como un Drive pequeño pero en tu casa:
+subir (botón o arrastrando), crear carpetas, renombrar, mover arrastrando una fila
+sobre otra carpeta, descargar, borrar (con todo su contenido) y descargar una
+carpeta entera como **ZIP** (se genera al vuelo, sin temporeros en disco).
+
+- **CARPETA-COMPARTIDA**: cada cuenta tiene una, marcada a propósito (borde de
+  color, icono de familia y subtítulo «compartida con la familia») para que no haya
+  duda de lo que ven los demás. Su nombre lo decide el admin en ⚙️ Administración y
+  aplica a todas las cuentas; nadie puede crear un archivo con ese nombre.
+- **👥 Lo que comparte la familia**: segunda vista con lo que compartieron los demás,
+  en **solo lectura** (se puede descargar y navegar, no modificar).
+- **Cupo**: 4 GB por cuenta por defecto, ajustables por el admin globalmente o
+  cuenta por cuenta (0 = sin límite), con la ocupación visible en la tarjeta.
+- **Cifrado**: cada archivo se cifra individualmente (AES-256-GCM) mientras sube y
+  mientras baja, en streaming: un archivo de 3 GB no necesita 3 GB de RAM. En el
+  disco solo hay blobs opacos; **hasta los nombres** van cifrados en la base de datos.
+- No hay vista previa de archivos (descarga y abre); está en el camino.
+
+### 🗄️ Dónde se guarda todo: `DATA_DIR` y `FILES_DIR`
+
+| Variable | Qué guarda | Dónde conviene |
+| --- | --- | --- |
+| `DATA_DIR` | La base de datos SQLite (cuentas, eventos, bóvedas y el árbol de nombres de archivos, todo cifrado) | **En el disco del servidor, siempre en ext4**: SQLite en modo WAL necesita bloqueos POSIX fiables |
+| `FILES_DIR` | Los archivos cifrados, una carpeta por cuenta | Aquí **sí** puede parar un disco grande, interno o externo |
+
+Las rutas admiten valores relativos (al proyecto) o absolutos, se eligen durante
+`scripts/install.sh` y se pueden editar a mano en `.env`. Preparar el disco
+(particionar, formatear, montar y tener sitio) **es tarea del administrador**: el
+instalador no formatea ni monta discos, solo te avisa si la ruta no existe o si el
+sistema de archivos no admite permisos POSIX.
+
+Con **NTFS**, monta la partición con el usuario del servicio como dueño (añade la
+línea a `/etc/fstab` con el UUID real; tras cambiar el dueño, `sudo blockdev
+--flushbufs /dev/sdXN1` y desmontar y volver a montar):
+
+```
+UUID=... /mnt/datos ntfs-3g defaults,uid=FAMILYCLOUD_UID,gid=FAMILYCLOUD_GID,fmask=0137,dmask=0137,nofail 0 0
+```
+
+y en `.env`: `FILES_DIR=/mnt/datos/family-cloud-files`. En FAT/exFAT no hay permisos
+POSIX: la seguridad son las llaves de cifrado y el acceso físico al disco.
+
+Para llevar la cuenta del disco:
+
+```bash
+node scripts/storage-check.js                     # rutas, sistema de archivos, espacio libre y cupos (solo lectura)
+scripts/relocate-data.sh --files=/mnt/datos/nube  # mover los archivos a otro disco
+scripts/relocate-data.sh --files=/mnt/datos/nube --dry-run   # ensayo sin tocar nada
+```
+
+`relocate-data.sh` copia los datos, actualiza `.env`, ajusta los `ReadWritePaths` de
+systemd y comprueba que el servicio arranca; **nunca borra el origen**: al final
+imprime el comando para que lo borres tú cuando lo veas claro.
+
+Si `FILES_DIR` apunta a un disco desmontado, el servicio **sigue funcionando**
+calendario y contraseñas: la tarjeta de archivos avisa («el disco de archivos no
+está disponible») y las subidas se rechazan; no se crean carpetas fantasma.
+
 ---
 
 ## Instalación en el servidor de casa (recomendada: script)
@@ -82,9 +143,17 @@ Qué hace:
 
 1. **Node 22 LTS** — lo detecta si ya está (exige ≥ 22.5 por `node:sqlite`) o lo instala desde NodeSource.
 2. **Configuración** — genera `.env` pidiendo la frase maestra (la respeta si ya existe).
-3. **Usuario de servicio y permisos** — crea `familycloud`, `data/` y aplica `chown`.
-4. **systemd** — instala la unidad **adaptando la ruta a donde esté el proyecto** (funciona en `/srv`, `/opt`, etc.; si está bajo `/home` desactiva `ProtectHome` en la unidad).
-5. **Verificación** — comprueba que el servicio está activo y que la API responde en el puerto del `.env` (con pista `journalctl -u family-cloud -n 20` si falla).
+3. **Usuario de servicio y permisos** — crea `familycloud`, `DATA_DIR` y `FILES_DIR`,
+   detecta el disco donde van (tipo de sistema de archivos y espacio libre) y aplica
+   `chown` (avisa con el snippet de montaje si el destino es NTFS/vfat/FAT).
+4. **systemd** — instala la unidad **adaptando la ruta a donde esté el proyecto**
+   (funciona en `/srv`, `/opt`, etc.; si está bajo `/home` desactiva `ProtectHome`
+   en la unidad) y añade a `ReadWritePaths` tanto la base de datos como la carpeta
+   de archivos.
+5. **Verificación** — deja el servicio activo y prueba que el usuario del servicio
+   **puede escribir** en `DATA_DIR` y en `FILES_DIR` (un disco mal montado se detecta
+   aquí, no a la tercera subida fallida) y que la API responde en el puerto del `.env`
+   (con pista `journalctl -u family-cloud -n 20` si falla).
 6. **Firewall** — si `ufw` está activo, pregunta si abre el puerto a la subred local.
 
 Es **idempotente** (re-ejecutarlo no duplica nada) y tiene modo ensayo sin efectos:
@@ -143,6 +212,9 @@ curso no se corta; el cambio surte efecto en el siguiente acceso.
 - **En reposo**: títulos y descripciones de eventos cifrados con AES-256-GCM
   (clave derivada con scrypt de la frase maestra). Contraseñas con bcrypt
   (coste 12). Fechas y categorías quedan en claro para poder indexar.
+- **Archivos**: cada archivo se cifra individualmente (AES-256-GCM, con el id del
+  archivo como dato asociado) y se guarda como un blob opaco; los nombres cifrados
+  viven en la base de datos. Sin la frase maestra, lo robado del disco es ilegible.
 - **En tránsito**: HTTP en la LAN (suficiente para uso doméstico; migra a HTTPS
   cuando quieras — el código está preparado: certificado en `app.listen` y
   `cookie.secure = true`).
@@ -162,10 +234,15 @@ src/auth.js     setup de un solo uso, login/logout, middlewares de rol
 src/users.js    gestión de cuentas (solo admin)
 src/events.js   API CRUD de eventos
 src/vault.js    API del gestor de contraseñas (aislada por usuario) + generador
+src/storage.js  DATA_DIR / FILES_DIR: resolución, estado del disco y avisos
+src/files.js    API de archivos (carpetas, subida y bajada cifradas, ZIP, cupos)
+src/zip.js      escritor de ZIP al vuelo, sin dependencias
 public/         HTML + CSS + JS vanilla (sin librerías): index (login+hub),
-                calendar, passwords, admin, account — comparten common.js
+                calendar, passwords, files, admin, account — comparten common.js
 scripts/gen-env.js  generador de .env
 scripts/reset-password.js  rescate de contraseña (solo por consola en el servidor)
+scripts/storage-check.js   informe de disco, espacio y cupos (solo lectura)
+scripts/relocate-data.sh   mover DATA_DIR / FILES_DIR a otro disco
 scripts/install.sh  instalador completo (Node, .env, usuario, systemd, firewall)
 deploy/family-cloud.service  unidad systemd
 ```
@@ -176,7 +253,9 @@ deploy/family-cloud.service  unidad systemd
 
 - Las sesiones viven en memoria: al reiniciar el servicio hay que volver a
   iniciar sesión (nada importante se pierde).
-- Backup = copiar `data/family-cloud.db` + `.env`.
+- Backup = copiar `DATA_DIR` (base de datos, incluyendo `-wal` y `-shm`) + `FILES_DIR`
+  + `.env`. Los tres juntos: sin las llaves del `.env`, los archivos cifrados no se
+  pueden descifrar.
 - El archivo de base de datos se renombró de `calendar.db` (herencia del proyecto
   original) a `family-cloud.db`: al arrancar, si existe el antiguo y no el nuevo,
   el servidor lo renombra solo (migración de una sola vez, sin pérdida).

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Archivos · Family Cloud</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">🌙</button>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">☁️ <span>Family Cloud</span></div>
+      <nav class="tabs">
+        <a class="tab" href="/">🏠 Inicio</a>
+        <button class="tab active">📁 Archivos</button>
+      </nav>
+      <div class="userbox">
+        <span id="who" class="muted"></span>
+        <button id="btn-logout" class="btn ghost">Salir</button>
+      </div>
+    </header>
+
+    <main class="files-main">
+      <div id="storage-warn" class="storage-warn hidden"></div>
+
+      <div class="files-toolbar">
+        <div class="seg">
+          <button id="view-mine" class="seg-btn active">🔒 Mis archivos</button>
+          <button id="view-family" class="seg-btn">👥 Lo que comparte la familia</button>
+        </div>
+        <div class="files-actions">
+          <button id="btn-mkdir" class="btn">📁 Nueva carpeta</button>
+          <button id="btn-upload" class="btn primary">⬆ Subir</button>
+        </div>
+      </div>
+
+      <div id="quota-bar" class="quota">
+        <div class="quota-text" id="quota-text"></div>
+        <div class="quota-track"><div id="quota-fill" class="quota-fill"></div></div>
+      </div>
+
+      <nav id="crumbs" class="crumbs"></nav>
+
+      <div id="dropzone" class="dropzone">
+        <div id="files-list" class="files-list"></div>
+        <p id="files-empty" class="muted hidden"></p>
+      </div>
+
+      <div id="upload-progress" class="upload-progress hidden">
+        <span id="upload-label"></span>
+        <div class="quota-track"><div id="upload-fill" class="quota-fill"></div></div>
+      </div>
+
+      <p class="muted files-note" id="files-note"></p>
+
+      <input type="file" id="file-picker" multiple class="hidden" />
+    </main>
+  </div>
+
+  <!-- modal renombrar / nueva carpeta -->
+  <div id="name-modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="name-modal-title"></h3>
+      <div class="row"><input id="name-input" maxlength="200" autocomplete="off" /></div>
+      <p id="name-error" class="error hidden"></p>
+      <div class="modal-actions">
+        <span class="spacer"></span>
+        <button type="button" id="name-cancel" class="btn ghost">Cancelar</button>
+        <button type="button" id="name-ok" class="btn primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal mover -->
+  <div id="move-modal" class="modal hidden">
+    <div class="modal-card">
+      <h3>📦 Mover a…</h3>
+      <div id="move-list" class="move-list"></div>
+      <p id="move-error" class="error hidden"></p>
+      <div class="modal-actions">
+        <span class="spacer"></span>
+        <button type="button" id="move-cancel" class="btn ghost">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ctx-menu" class="ctx-menu hidden"></div>
+
+  <script src="/common.js"></script>
+  <script src="/files.js"></script>
+</body>
+</html>

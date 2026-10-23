@@ -39,7 +39,32 @@ export function encryptForUser(user, plain) {
 
 export function decryptForUser(user, blob, encVer = 'master') {
   if (encVer !== 'master') {
-    throw new Error(`Version de cifrado de vault no soportada: ${encVer}`);
+    throw new Error(`Version de cifrado de vault/archivos no soportada: ${encVer}`);
   }
   return decryptField(blob);
+}
+
+// ---- Capa de cifrado de ARCHIVOS (streaming, para ficheros de cualquier tamano) ----
+// El blob en disco contiene SOLO el ciphertext; el IV y la etiqueta de autenticacion
+// viven en la base de datos (columnas blob_iv / blob_tag). El AAD incluye el id del
+// nodo, de modo que un blob no puede sustituir al de otro nodo ni a otro usuario.
+// AAD con el id exige conocer el id ANTES de cifrar: por eso files.js inserta primero
+// la fila y despues escribe el blob (si la subida falla, se revierte la fila).
+const FILE_AAD = (id) => Buffer.from(`familycloud-fs:${id}`, 'utf8');
+
+export function newFileCipher(nodeId) {
+  const iv = crypto.randomBytes(12);
+  const c = crypto.createCipheriv('aes-256-gcm', key, iv);
+  c.setAAD(FILE_AAD(nodeId));
+  return { cipher: c, iv };
+}
+
+export function newFileDecipher(node) {
+  if (node.enc_ver !== 'master') {
+    throw new Error(`Version de cifrado de archivos no soportada: ${node.enc_ver}`);
+  }
+  const d = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(node.blob_iv, 'base64'));
+  d.setAAD(FILE_AAD(node.id));
+  d.setAuthTag(Buffer.from(node.blob_tag, 'base64'));
+  return d;
 }

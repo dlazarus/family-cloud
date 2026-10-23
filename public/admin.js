@@ -8,6 +8,7 @@ async function boot() {
   if (me.role !== 'admin') { location.replace('/'); return; } // los miembros no entran aqui
   initTopbar(me);
   await renderUsers();
+  await renderUsage();
 }
 
 let me = null;
@@ -104,6 +105,52 @@ $('#user-rows').addEventListener('click', async (e) => {
       adminMsg('Cuenta eliminada ✓');
       renderUsers();
     }
+  } catch (err) { adminMsg(err.message); }
+});
+
+// ---------- ajustes de archivos (cupos y nombre de la carpeta compartida) ----------
+const fmtSize = (n) => {
+  const u = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let i = 0, v = Number(n) || 0;
+  while (v >= 1024 && i < u.length - 1) { v /= 1024; i++; }
+  return `${v >= 10 || i === 0 ? Math.round(v) : v.toFixed(1)} ${u[i]}`;
+};
+
+async function renderUsage() {
+  const info = await api('/users/usage');
+  $('#g-quota').value = info.global_quota_mb;
+  $('#g-shared').value = info.shared_folder_name;
+  $('#usage-rows').innerHTML = info.users
+    .map((u) => `<tr data-id="${u.id}">
+      <td>${escapeHtml(u.username)}</td>
+      <td>${fmtSize(u.used_bytes)}</td>
+      <td><input class="quota-input" type="number" min="0" step="1" value="${u.quota_mb ?? ''}" placeholder="(defecto)" /></td>
+      <td>${u.unlimited ? 'sin limite' : fmtSize(u.effective_mb * 1024 * 1024)}</td>
+      <td class="actions"><button data-act="quota" class="btn ghost">Guardar cupo</button></td>
+    </tr>`)
+    .join('');
+}
+
+$('#g-save').addEventListener('click', async () => {
+  try {
+    await api('/users/settings', {
+      method: 'PUT',
+      body: { file_quota_mb: Number($('#g-quota').value), shared_folder_name: $('#g-shared').value },
+    });
+    adminMsg('Ajustes de archivos guardados ✓');
+    renderUsage();
+  } catch (err) { adminMsg(err.message); }
+});
+
+$('#usage-rows').addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-act="quota"]');
+  if (!btn) return;
+  const tr = btn.closest('tr');
+  const raw = tr.querySelector('.quota-input').value.trim();
+  try {
+    await api(`/users/${tr.dataset.id}`, { method: 'PUT', body: { quota_mb: raw === '' ? null : Number(raw) } });
+    adminMsg('Cupo actualizado ✓');
+    renderUsage();
   } catch (err) { adminMsg(err.message); }
 });
 

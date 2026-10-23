@@ -13,19 +13,44 @@ if (fs.existsSync(envPath)) {
 
 const readline = await import('node:readline/promises');
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-console.log('Configuración del calendario familiar');
-console.log('La frase maestra cifra los eventos. Guárdala en un lugar seguro (gestor de contraseñas).');
+const ask = async (q, def) => {
+  const a = (await rl.question(def ? `${q} [${def}]: ` : `${q}: `)).trim();
+  return a || def;
+};
+
+console.log('Configuración de Family Cloud');
+console.log('La frase maestra cifra los eventos, las contraseñas y los nombres de archivo.');
+console.log('Guárdala en un lugar seguro (gestor de contraseñas).\n');
 const pass = await rl.question('Frase maestra: ');
 if (!pass || pass.length < 10) {
   console.error('La frase maestra debe tener al menos 10 caracteres.');
   process.exit(1);
 }
+
+console.log('\nDónde se guarda todo (ruta relativa al proyecto o absoluta):');
+const dataDir = await ask('  DATA_DIR (base de datos; mejor en el disco del sistema)', './data');
+const filesDir = await ask('  FILES_DIR (archivos cifrados; admite un disco externo)', './data/files');
+const quota = await ask('  Cupo por defecto por cuenta en MB (0 = sin límite)', '4096');
+const maxUpload = await ask('  Tope por archivo en MB (0 = sin tope, solo manda el cupo)', '0');
 rl.close();
 
 const hex = () => crypto.randomBytes(32).toString('hex');
 fs.writeFileSync(
   envPath,
-  `MASTER_PASSPHRASE=${JSON.stringify(pass)}\nMASTER_SALT=${hex()}\nSESSION_SECRET=${hex()}\nHOST=0.0.0.0\nPORT=3000\n`
+  [
+    `MASTER_PASSPHRASE=${JSON.stringify(pass)}`,
+    `MASTER_SALT=${hex()}`,
+    `SESSION_SECRET=${hex()}`,
+    `DATA_DIR=${dataDir}`,
+    `FILES_DIR=${filesDir}`,
+    `FILE_QUOTA_MB=${quota}`,
+    `FILE_MAX_UPLOAD_MB=${maxUpload}`,
+    'FILE_MIN_FREE_MB=2048',
+    'HOST=0.0.0.0',
+    'PORT=3000',
+    '',
+  ].join('\n')
 );
 fs.chmodSync(envPath, 0o600);
 console.log('Creado .env (permisos 600). Arranca con: npm start');
+console.log('Recordatorio: preparar el disco externo (formatear/montar) lo hace el sysadmin antes de instalar.');
