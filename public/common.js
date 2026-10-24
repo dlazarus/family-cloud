@@ -65,11 +65,11 @@ function setVariant(v) { // '' = seguir al sistema
 }
 
 // ---------- paletas de color ----------
-// El nombre va en <html data-palette="...">; 'default' = el tema de siempre
-// (sin atributo). Se guarda en localStorage: es una preferencia de este
-// navegador, no de la cuenta (asi no hace ninguna peticion antes de pintar).
+// El nombre va en <html data-palette="...">; 'default' = el tema clasico
+// (sin atributo). La paleta por defecto para quien no haya elegido ninguna es 'mar'.
+// Se guarda en localStorage: es una preferencia de este navegador, no de la cuenta.
 const PALETTES = [
-  { id: 'default', label: 'Predeterminado' },
+  { id: 'default', label: 'Clasico' },
   { id: 'rojo', label: 'Rojo' },
   { id: 'naranja', label: 'Naranja' },
   { id: 'amarillo', label: 'Amarillo' },
@@ -82,8 +82,8 @@ const PALETTES = [
   { id: 'sepia', label: 'Sepia' },
 ];
 function effectivePalette() {
-  const p = localStorage.getItem('palette') || 'default';
-  return PALETTES.some((x) => x.id === p) ? p : 'default';
+  const p = localStorage.getItem('palette') || 'mar';
+  return PALETTES.some((x) => x.id === p) ? p : 'mar';
 }
 function applyPalette() {
   const p = effectivePalette();
@@ -102,7 +102,7 @@ function applyPaletteWidgets() {
 }
 function setPalette(id) {
   if (!PALETTES.some((x) => x.id === id)) return;
-  if (id === 'default') localStorage.removeItem('palette');
+  if (id === 'mar') localStorage.removeItem('palette'); // mar = sin guardar (es el defecto)
   else localStorage.setItem('palette', id);
   applyPalette();
   applyPaletteWidgets();

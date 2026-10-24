@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.7)
+
+- **El tema por defecto ahora es 「Mar」**: quien entra sin haber elegido paleta (o
+  navegador nuevo) ve directamente el tema mar (verde+azul), en claro y oscuro. El tema
+  anterior sigue disponible en 「Mi cuenta」 renombrado como 「Clásico」; los que ya hubierais
+  elegido una paleta seguís con la vuestra.
+
 ## v0.2.7 — 2026-10-26
 
 - **Contraseñas — X en las tarjetas**: la tarjeta de nueva/edición de contraseña y el
