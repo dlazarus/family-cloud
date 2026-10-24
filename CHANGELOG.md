@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v0.2.4 — 2026-10-24
+
+- **FIX CRÍTICO — la tarjeta Archivos daba 500 siempre** (`GET /api/files/`, uso, y el
+  chequeo de cupo de las subidas): `quotaFor` esperaba el OBJETO usuario (`user.id`) pero
+  todos los sitios que lo llaman pasan el ID (`u.id`) desde su primer commit — al buscar
+  `.id` en un número sale `undefined` y SQLite rechaza el parámetro. Consecuencia visible:
+  lista de archivos vacía + «error 500» al crear carpetas (la carpeta SÍ se creaba en la
+  base de datos; lo que fallaba era el refresco posterior). Ahora `quotaFor(userId)`,
+  coherente con las 5 llamadas. Probado de punta a punta en local: setup, login, lista,
+  carpeta, subida, descarga y uso, todo 200/201.
+
 ## Sin publicar (sobre v0.2.3)
 
 - **BUG REAL del instalador — el disco de archivos quedaba de SOLO LECTURA para el

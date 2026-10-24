@@ -177,9 +177,11 @@ function subtree(rootId) {
 }
 
 // ---------------- cupo ----------------
-function quotaFor(user) {
+// OJO: recibe el ID de usuario (no el objeto): todos los sitios que lo llaman pasan
+// u.id. Estaba al reves (user / user.id) y GET / y el cupo de subida daban 500.
+function quotaFor(userId) {
   const c = cfg();
-  const own = getDb().prepare('SELECT quota_mb FROM users WHERE id = ?').get(user.id);
+  const own = getDb().prepare('SELECT quota_mb FROM users WHERE id = ?').get(userId);
   const q = own && own.quota_mb !== null && own.quota_mb !== undefined ? Number(own.quota_mb) : c.quotaMb;
   return q > 0 ? q * MB : Infinity;
 }
