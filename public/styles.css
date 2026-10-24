@@ -251,7 +251,13 @@ input:focus, select:focus, textarea:focus {
 .user-form select { width: auto; }
 .user-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .user-table th, .user-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
-.user-table .actions { display: flex; gap: 6px; justify-content: flex-end; }
+/* OJO: .actions es un <td>. No se le puede poner display:flex: la caja dejaria
+   de ser celda de tabla, no se estiraria a la altura de la fila y su borde
+   inferior (la linea separadora) se dibujaria 3-4 px mas alto que el del resto
+   de columnas: en cada linea de la tabla se veia un «escalón» justo antes de la
+   columna de botones. Los botones se alinean con text-align. */
+.user-table td.actions { text-align: right; white-space: nowrap; vertical-align: middle; }
+.user-table td.actions .btn + .btn { margin-left: 6px; }
 .user-table .actions .btn { padding: 5px 10px; font-size: 0.78rem; }
 
 /* ====== hub de servicios ====== */
@@ -372,7 +378,7 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
   .chip { font-size: 0.65rem; padding: 1px 5px; }
   .filters { width: 100%; margin-left: 0; }
   .cal-toolbar h2 { min-width: 0; }
-  .user-table .actions { flex-wrap: wrap; }
+  .user-table td.actions { white-space: normal; }
   .vault-item { flex-wrap: wrap; }
   .vault-pass { order: 3; max-width: 100%; flex-basis: 100%; }
   .vault-toolbar { flex-wrap: wrap; }

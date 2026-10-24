@@ -56,6 +56,22 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
   punto o espacio y los reservados de Windows (`CON`, `PRN`, `AUX`, `NUL`, `COM1-9`,
   `LPT1-9`, también con extensión: `CON.txt`), para que los ZIP se puedan extraer en
   cualquier sistema operativo.
+- **Arreglos del ZIP** (detectados probando con `unzip -t`, no solo con Python):
+  las banderas de los entradas estaban mal (`0x0800|0x8000` en vez de `0x0008|0x0800`,
+  así que faltaba el bit del data descriptor y el `0x8000` se leía como «cifrado»):
+  Info-ZIP fallaba al descomprimir. Tampoco se cerraba la respuesta HTTP y la
+  descarga se quedaba colgada hasta el timeout (ahora tarda ~30 ms), y descargar una
+  carpeta anidada generaba entradas `undefined…` dentro del zip.
+- **Líneas separadoras de las tablas de administración**: cada línea se cortaba y
+  subía 3-4 px justo antes de la columna de botones (un «escalón»; solo la primera
+  línea, la de la cabecera, estaba entera). La causa: `.user-table .actions` tenía
+  `display:flex` sobre un `<td>`, y una caja que no es `table-cell` no se estira a
+  la altura de la fila, así que su `border-bottom` se dibuja más arriba. La celda
+  vuelve a ser celda y los botones se alinean con `text-align`. Venía del primer
+  commit y también afectaba a la tabla de cuentas (las tres filas de botones).
+- **Mover una carpeta dentro de su propia hija** ya no es posible: `isDescendant()`
+  salía del bucle antes de comprobar el padre cuando este es una carpeta raíz, así
+  que no veía a los hijos directos y se podía romper el árbol (contenido huérfano).
 - **API nueva**: `/api/files*` (lista, carpeta, subida, descarga, ZIP de carpeta,
   ZIP de selección `GET /api/files/archive?ids=…`, mover, renombrar, borrar — mover
   admite cambiar el alcance privado↔compartido) y `GET /api/users/usage` +
