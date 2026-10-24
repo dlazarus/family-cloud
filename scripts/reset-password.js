@@ -10,6 +10,7 @@
 // Pide la nueva contraseña dos veces sin mostrarla. Si la entrada no es un terminal
 // (p. ej. tubería), lee dos líneas de stdin con un aviso de visibilidad.
 
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -29,7 +30,15 @@ if (!username) {
   process.exit(1);
 }
 
-const dbPath = process.env.DB_PATH || path.join(ROOT, 'data', 'family-cloud.db');
+// DATA_DIR (y DB_PATH) se resuelven igual que en la app: relative a este proyecto.
+const dataDirRaw = process.env.DATA_DIR || 'data';
+const dataDir = path.isAbsolute(dataDirRaw) ? dataDirRaw : path.join(ROOT, dataDirRaw);
+const dbPath = process.env.DB_PATH || path.join(dataDir, 'family-cloud.db');
+if (!fs.existsSync(dbPath)) {
+  console.error(`No hay base de datos en ${dbPath}`);
+  console.error('Revisa DATA_DIR en el .env de este proyecto (o ejecuta el script desde la copia correcta).');
+  process.exit(1);
+}
 const db = new DatabaseSync(dbPath);
 const user = db.prepare('SELECT id, username, active FROM users WHERE username = ?').get(username);
 if (!user) {
