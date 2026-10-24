@@ -18,8 +18,6 @@
   coherente con las 5 llamadas. Probado de punta a punta en local: setup, login, lista,
   carpeta, subida, descarga y uso, todo 200/201.
 
-## Sin publicar (sobre v0.2.3)
-
 - **BUG REAL del instalador — el disco de archivos quedaba de SOLO LECTURA para el
   servicio**: las dos lineas `ReadWritePaths` (DATA_DIR y FILES_DIR) se insertaban con un
   unico `sed` multilinea, y GNU sed insertaba SOLO la primera y descartaba la segunda EN
