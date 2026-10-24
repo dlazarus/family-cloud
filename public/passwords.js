@@ -35,7 +35,7 @@ function render() {
     <div class="vault-item" data-id="${e.id}">
       <div class="vault-main">
         <div class="vault-site">${escapeHtml(e.site)}</div>
-        <div class="vault-login muted">${escapeHtml(e.login)} <button data-act="copy-login" class="icon-btn mini" title="Copiar nombre de acceso">📋</button></div>
+        <div class="vault-login muted"><span class="login-text">${escapeHtml(e.login)}</span><button data-act="copy-login" class="icon-btn" title="Copiar nombre de acceso">📋</button></div>
       </div>
       <code class="vault-pass" data-pass="${escapeHtml(e.password)}">••••••••</code>
       <div class="vault-actions">
