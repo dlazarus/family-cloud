@@ -106,6 +106,16 @@ function migrateColumns() {
     db.exec('ALTER TABLE users ADD COLUMN quota_mb INTEGER');
     console.log('[i] users.quota_mb anadido (cupo de archivos por cuenta)');
   }
+  const evCols = db.prepare('PRAGMA table_info(events)').all().map((c) => c.name);
+  if (!evCols.includes('start_time')) {
+    // horas opcionales 'HH:MM' (en claro: no son datos sensibles y sirven para ordenar)
+    db.exec('ALTER TABLE events ADD COLUMN start_time TEXT');
+    console.log('[i] events.start_time anadido');
+  }
+  if (!evCols.includes('end_time')) {
+    db.exec('ALTER TABLE events ADD COLUMN end_time TEXT');
+    console.log('[i] events.end_time anadido');
+  }
 }
 
 function seedSettings() {

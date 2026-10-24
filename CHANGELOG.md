@@ -2,6 +2,15 @@
 
 ## Sin publicar (sobre v0.2.4)
 
+- **Calendario — horas opcionales en los eventos**: entre las fechas y la categoría hay
+  dos campos nuevos, «Hora inicio» y «Hora fin» (del mismo tamaño que los de fecha).
+  Son opcionales; la de fin exige la de inicio y no puede ser anterior. Cuando un evento
+  tiene hora, esta sale en el resumen «Próximos eventos» (p. ej. `vie 6 nov · 18:30–20:00`)
+  y en el tooltip al pasar el ratón por la celda del calendario; la lista de próximos
+  ordena también por hora. En la base de datos son columnas nuevas (`start_time`,
+  `end_time`, migración automática al arrancar) guardadas en claro: no son sensibles y
+  permiten ordenar/filtrar.
+
 - **Administración → cupos**: al lado de lo ocupado por cada cuenta sale ahora el
   porcentaje sobre su cupo en vigor, p. ej. `1,2 GB (31 %)`; con cuentas sin limite no
   se muestra porcentaje.

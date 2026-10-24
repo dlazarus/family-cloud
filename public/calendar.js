@@ -83,7 +83,7 @@ function fmtDay(dateStr) {
 function renderUpcoming() {
   const items = state.upcoming
     .filter((ev) => state.filter.has(ev.category))
-    .sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id)
+    .sort((a, b) => a.date.localeCompare(b.date) || (a.start_time || '').localeCompare(b.start_time || '') || a.id - b.id)
     .slice(0, UPCOMING_MAX);
   $('#upcoming-empty').classList.toggle('hidden', items.length > 0);
   $('#upcoming-list').innerHTML = items.map((ev) => {
@@ -91,8 +91,9 @@ function renderUpcoming() {
     const range = ev.end_date && ev.end_date > ev.date
       ? `${fmtDay(ev.date)} → ${fmtDay(ev.end_date)}`
       : fmtDay(ev.date);
+    const time = ev.start_time ? ` · ${ev.start_time}${ev.end_time ? '–' + ev.end_time : ''}` : '';
     return `<li class="upcoming-item cat-${ev.category}" data-id="${ev.id}">
-      <span class="upcoming-date${isToday ? ' today' : ''}">${range}${isToday ? ' · hoy' : ''}</span>
+      <span class="upcoming-date${isToday ? ' today' : ''}">${range}${time}${isToday ? ' · hoy' : ''}</span>
       <span class="upcoming-title">${CATS[ev.category].label} ${escapeHtml(ev.title)}</span>
     </li>`;
   }).join('');
@@ -139,7 +140,11 @@ function renderGrid() {
     const inMonth = date.getMonth() === m;
     const evs = byDate.get(key) || [];
     const chips = evs.slice(0, 3)
-      .map((ev) => `<button class="chip cat-${ev.category}" data-id="${ev.id}" title="${escapeHtml(ev.title)}">${CATS[ev.category].label} ${escapeHtml(ev.title)}</button>`)
+      .map((ev) => {
+        // el tooltip lleva el titulo y, si las hay, las horas
+        const tip = ev.title + (ev.start_time ? ` · ${ev.start_time}${ev.end_time ? '–' + ev.end_time : ''}` : '');
+        return `<button class="chip cat-${ev.category}" data-id="${ev.id}" title="${escapeHtml(tip)}">${CATS[ev.category].label} ${escapeHtml(ev.title)}</button>`;
+      })
       .join('');
     const more = evs.length > 3 ? `<span class="more">+${evs.length - 3}</span>` : '';
     html += `<div class="cell ${inMonth ? '' : 'dim'} ${key === today ? 'today' : ''}" data-date="${key}">
@@ -171,6 +176,8 @@ function openModal(ev, date) {
   $('#ev-title').value = ev?.title || '';
   $('#ev-date').value = ev?.date || date || ymd(new Date());
   $('#ev-end').value = ev?.end_date || '';
+  $('#ev-start').value = ev?.start_time || '';
+  $('#ev-end-time').value = ev?.end_time || '';
   $('#ev-cat').value = ev?.category || 'otro';
   $('#ev-desc').value = ev?.description || '';
   $('#ev-delete').classList.toggle('hidden', !ev);
@@ -194,6 +201,8 @@ $('#event-form').addEventListener('submit', async (e) => {
     title: $('#ev-title').value,
     date: $('#ev-date').value,
     end_date: $('#ev-end').value || null,
+    start_time: $('#ev-start').value || null,
+    end_time: $('#ev-end-time').value || null,
     category: $('#ev-cat').value,
     description: $('#ev-desc').value,
   };

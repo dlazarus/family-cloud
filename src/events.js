@@ -7,6 +7,7 @@ export const eventsRouter = Router();
 eventsRouter.use(requireAuth);
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;   // 'HH:MM' en claro (opcionales)
 const CATEGORIES = ['cumple', 'comida', 'viaje', 'tarea', 'salud', 'otro'];
 
 function toPublic(row) {
@@ -14,6 +15,8 @@ function toPublic(row) {
     id: row.id,
     date: row.date,
     end_date: row.end_date,
+    start_time: row.start_time || null,
+    end_time: row.end_time || null,
     category: row.category,
     title: decryptField(row.title_enc),
     description: decryptField(row.description_enc),
@@ -34,7 +37,15 @@ function validateBody(body) {
   const description = String(b.description || '').trim();
   if (description.length > 2000) return { error: 'La descripción es demasiado larga (máx. 2000).' };
   const category = CATEGORIES.includes(b.category) ? b.category : 'otro';
-  return { value: { date: b.date, end_date: b.end_date || null, title, description, category } };
+  // horas opcionales; la de fin solo tiene sentido con una de inicio
+  const cleanTime = (v) => (v == null || String(v).trim() === '' ? null : String(v).trim());
+  const start_time = cleanTime(b.start_time);
+  const end_time = cleanTime(b.end_time);
+  if (start_time && !TIME_RE.test(start_time)) return { error: 'Hora de inicio no valida (HH:MM).' };
+  if (end_time && !TIME_RE.test(end_time)) return { error: 'Hora de fin no valida (HH:MM).' };
+  if (end_time && !start_time) return { error: 'Pon tambien la hora de inicio si pones la de fin.' };
+  if (start_time && end_time && end_time < start_time) return { error: 'La hora de fin no puede ser anterior a la de inicio.' };
+  return { value: { date: b.date, end_date: b.end_date || null, start_time, end_time, title, description, category } };
 }
 
 // Lista de eventos en un rango (fechas en claro para filtrar; contenido se descifra al vuelo)
@@ -49,11 +60,11 @@ eventsRouter.get('/', (req, res) => {
 eventsRouter.post('/', (req, res) => {
   const v = validateBody(req.body);
   if (v.error) return res.status(400).json({ error: v.error });
-  const { date, end_date, title, description, category } = v.value;
+  const { date, end_date, start_time, end_time, title, description, category } = v.value;
   const info = getDb()
-    .prepare(`INSERT INTO events (date, end_date, category, title_enc, description_enc, created_by, updated_by)
-              VALUES (?, ?, ?, ?, ?, ?, ?)`)
-    .run(date, end_date, category, encryptField(title), encryptField(description), req.session.user.id, req.session.user.id);
+    .prepare(`INSERT INTO events (date, end_date, start_time, end_time, category, title_enc, description_enc, created_by, updated_by)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .run(date, end_date, start_time, end_time, category, encryptField(title), encryptField(description), req.session.user.id, req.session.user.id);
   const row = getDb().prepare('SELECT * FROM events WHERE id = ?').get(Number(info.lastInsertRowid));
   res.status(201).json(toPublic(row));
 });
@@ -64,11 +75,11 @@ eventsRouter.put('/:id', (req, res) => {
   if (!row) return res.status(404).json({ error: 'Evento no encontrado' });
   const v = validateBody(req.body);
   if (v.error) return res.status(400).json({ error: v.error });
-  const { date, end_date, title, description, category } = v.value;
+  const { date, end_date, start_time, end_time, title, description, category } = v.value;
   getDb()
-    .prepare(`UPDATE events SET date = ?, end_date = ?, category = ?, title_enc = ?, description_enc = ?,
+    .prepare(`UPDATE events SET date = ?, end_date = ?, start_time = ?, end_time = ?, category = ?, title_enc = ?, description_enc = ?,
               updated_by = ?, updated_at = datetime('now') WHERE id = ?`)
-    .run(date, end_date, category, encryptField(title), encryptField(description), req.session.user.id, id);
+    .run(date, end_date, start_time, end_time, category, encryptField(title), encryptField(description), req.session.user.id, id);
   res.json(toPublic(getDb().prepare('SELECT * FROM events WHERE id = ?').get(id)));
 });
 
