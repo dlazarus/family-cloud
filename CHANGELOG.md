@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.8)
+## v0.2.9 — 2026-10-26
 
 - **Administración — los cambios de cuentas se ven al instante en toda la página**: al
   crear, desactivar o eliminar una cuenta se refrescan también los cupos y el uso de
