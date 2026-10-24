@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.5)
+## v0.2.6 — 2026-10-25
 
 - **Administración — icono en 「Cuentas」**: el título ahora lleva el 👤 del hub
   («Mi cuenta」), a juego con el 📁 de 「Archivos de la familia」.
