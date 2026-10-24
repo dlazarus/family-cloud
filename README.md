@@ -162,8 +162,8 @@ sudo /srv/family-cloud/scripts/install.sh
 
 Qué hace:
 
-1. **Node 22 LTS** — lo detecta si ya está (exige ≥ 22.5 por `node:sqlite`) o lo instala desde NodeSource.
-2. **Configuración** — genera `.env` pidiendo la frase maestra (la respeta si ya existe).
+1. **Node 22 LTS** — lo detecta si ya está (exige ≥ 22.5 por `node:sqlite`) o lo instala desde NodeSource. Comprueba además que el proyecto tiene las dependencias (`node_modules`): si no, para y avisa de ejecutar `npm install` antes.
+2. **Configuración** — muestra los discos y puntos de montaje detectados (para elegir las rutas a la vista), genera `.env` pidiendo la frase maestra (la respeta si ya existe) y pregunta `DATA_DIR`, `FILES_DIR` y el cupo por defecto.
 3. **Usuario de servicio y permisos** — crea `familycloud`, `DATA_DIR` y `FILES_DIR`,
    detecta el disco donde van (tipo de sistema de archivos y espacio libre) y aplica
    `chown` (avisa con el snippet de montaje si el destino es NTFS/vfat/FAT).

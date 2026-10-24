@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.0)
+
+- **Instalador más claro al empezar**: ahora muestra los **discos y puntos de montaje
+  detectados ANTES de preguntar las rutas** de `DATA_DIR`/`FILES_DIR` (antes la tabla
+  `lsblk` salia despues, cuando las rutas ya estaban escritas) y **aborta con un mensaje
+  explicito si faltan las dependencias** (`node_modules`): sin ellas el servicio entraba
+  en bucle de reinicios con `ERR_MODULE_NOT_FOUND` y el unico modo de enterarse era el
+  `journalctl`.
+
 ## v0.2.0 — 2026-10-24
 
 Nueva tarjeta **📁 Archivos**: nube de archivos familiar con cifrado individual por

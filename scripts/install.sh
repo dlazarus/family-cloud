@@ -96,9 +96,22 @@ if (( need_node )); then
   command -v node >/dev/null 2>&1 || fail "tras instalar, 'node' sigue sin estar en el PATH"
   ok "Node $(node -v) instalado"
 fi
+# Sin dependencias el servicio entra en bucle de reinicios con ERR_MODULE_NOT_FOUND
+# (el error real sale en journalctl, lejos de la pantalla del instalador): mejor decirlo aqui.
+if [[ ! -d "$PROJECT_DIR/node_modules/express" ]]; then
+  fail "faltan las dependencias del proyecto (no hay node_modules). Ejecuta antes:  cd $PROJECT_DIR && npm install  y repite el instalador"
+fi
+ok "dependencias presentes (node_modules)"
 
 # ────────────────────────────────────────────────
 step "2. Generar configuración (frase maestra)"
+# Los discos a la vista ANTES de preguntar las rutas: asi se puede copiar el punto
+# de montaje del disco externo en vez de escribirlo de memoria.
+if command -v lsblk >/dev/null 2>&1; then
+  echo "   Discos y puntos de montaje detectados (para elegir las rutas de abajo):"
+  lsblk -o NAME,SIZE,FSTYPE,LABEL,MOUNTPOINTS 2>/dev/null | sed 's/^/     /' | head -20
+  echo "   (el instalador NO monta ni formatea: el disco debe estar montado ya)"
+fi
 if [[ -f "$PROJECT_DIR/.env" ]]; then
   ok ".env ya existe — se conserva (edítalo a mano si quieres cambiar valores)"
 elif [[ $DRY_RUN -eq 1 ]]; then
@@ -175,11 +188,7 @@ done
 ok "perfiles y permisos listos (la app escribe en DATA_DIR y FILES_DIR)"
 
 # ────────────────────────────────────────────────
-step "3 bis. Deteccion del almacenamiento (solo informa: no monta ni formatea)"
-if command -v lsblk >/dev/null 2>&1; then
-  echo "   Discos y puntos de montaje detectados:"
-  lsblk -o NAME,SIZE,FSTYPE,LABEL,MOUNTPOINTS 2>/dev/null | sed 's/^/     /' | head -20
-fi
+step "3 bis. Verificacion del almacenamiento elegido (solo informa: no monta ni formatea)"
 for d in "$DATA_DIR_ABS" "$FILES_DIR_ABS"; do
   target="$d"; [[ -d "$target" ]] || target="$(dirname "$d")"
   [[ -d "$target" ]] || continue
