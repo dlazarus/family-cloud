@@ -240,14 +240,23 @@ else
   # DATA_DIR como FILES_DIR (que puede estar en otro disco). Idempotente: se borran las
   # lineas ReadWritePaths antiguas y se vuelven a escribir con las rutas actuales.
   sed -i '/^ReadWritePaths=/d' "/etc/systemd/system/$UNIT_NAME.service"
-  RWP="ReadWritePaths=$DATA_DIR_ABS"
-  [[ "$FILES_DIR_ABS" != "$DATA_DIR_ABS" ]] && RWP="$RWP
-ReadWritePaths=$FILES_DIR_ABS"
-  # se insertan justo antes de [Install], que es donde acaban las secciones [Service]
-  sed -i "/^\[Install\]/i $RWP" "/etc/systemd/system/$UNIT_NAME.service"
+  # se insertan justo antes de [Install], que es donde acaban las secciones [Service].
+  # OJO: una por comando sed — GNU sed con un salto de linea dentro del `i` inserta SOLO
+  # la primera y DESCARTA la segunda en silencio (el FILES_DIR quedaba sin declarar y
+  # ProtectSystem=strict lo dejaba de solo lectura para el servicio).
+  sed -i "/^\[Install\]/i ReadWritePaths=$DATA_DIR_ABS" "/etc/systemd/system/$UNIT_NAME.service"
+  if [[ "$FILES_DIR_ABS" != "$DATA_DIR_ABS" ]]; then
+    sed -i "/^\[Install\]/i ReadWritePaths=$FILES_DIR_ABS" "/etc/systemd/system/$UNIT_NAME.service"
+  fi
   RWP_NOTE="$DATA_DIR_ABS"
   [[ "$FILES_DIR_ABS" != "$DATA_DIR_ABS" ]] && RWP_NOTE="$DATA_DIR_ABS y $FILES_DIR_ABS"
   ok "ReadWritePaths declarados: $RWP_NOTE"
+  # comprobacion explícita: si el sed de arriba perdiera una linea (ver nota), better
+  # say it HERE than to discover it with the disk "unavailable" weeks later
+  for p in "$DATA_DIR_ABS" "$FILES_DIR_ABS"; do
+    grep -qF "ReadWritePaths=$p" "/etc/systemd/system/$UNIT_NAME.service" \
+      || fail "la unidad no declara ReadWritePaths=$p (revisa /etc/systemd/system/$UNIT_NAME.service a mano)"
+  done
   # ProtectHome oculta /home al servicio: si el proyecto vive ahí, desactivarlo
   if [[ "$PROJECT_DIR" == /home/* ]]; then
     sed -i "s|^ProtectHome=true|ProtectHome=false|" "/etc/systemd/system/$UNIT_NAME.service"

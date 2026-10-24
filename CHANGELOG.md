@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.3)
+
+- **BUG REAL del instalador — el disco de archivos quedaba de SOLO LECTURA para el
+  servicio**: las dos lineas `ReadWritePaths` (DATA_DIR y FILES_DIR) se insertaban con un
+  unico `sed` multilinea, y GNU sed insertaba SOLO la primera y descartaba la segunda EN
+  SILENCIO (exit 0). Con `ProtectSystem=strict`, FILES_DIR quedaba no escribible: la
+  pagina de archivos avisaba «el almacenamiento de archivos no esta disponible» y las
+  subidas fallaban, aunque la prueba de escritura del propio instalador pasara (la hace
+  fuera de la caja de sandbox de systemd). Ahora cada linea se inserta con su propio sed,
+  y el instalador VERIFICA despues que la unidad declara efectivamente las dos rutas.
+
 ## v0.2.3 — 2026-10-24
 
 - **El instalador ya no pregunta dos veces las rutas y los cupos**: al crear el `.env`
