@@ -12,6 +12,7 @@ import { usersRouter } from './users.js';
 import { eventsRouter } from './events.js';
 import { vaultRouter } from './vault.js';
 import { filesRouter } from './files.js';
+import { notesRouter } from './notes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -83,6 +84,7 @@ app.use('/api/events', eventsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/vault', vaultRouter);
 app.use('/api/files', filesRouter);
+app.use('/api/notes', notesRouter);
 
 // Frontend estático (sin CDN: servido desde aquí)
 app.use(express.static(path.join(ROOT, 'public')));
@@ -99,6 +101,9 @@ app.get('/administracion', (_req, res) => {
 });
 app.get('/archivos', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'files.html'));
+});
+app.get('/notas', (_req, res) => {
+  res.sendFile(path.join(ROOT, 'public', 'notes.html'));
 });
 app.get('/mi-cuenta', (_req, res) => {
   res.sendFile(path.join(ROOT, 'public', 'account.html'));
