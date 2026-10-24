@@ -125,6 +125,8 @@ function vaultError(msg) {
 
 $('#v-cancel').addEventListener('click', closeModal);
 $('#vault-modal').addEventListener('click', (e) => { if (e.target.id === 'vault-modal') closeModal(); });
+$('#vault-modal-close').addEventListener('click', closeModal);
+$('#gen-modal-close').addEventListener('click', sgClose);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); sgClose(); } });
 
 $('#v-pass-eye').addEventListener('click', () => {

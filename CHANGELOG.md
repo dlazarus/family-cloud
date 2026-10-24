@@ -2,6 +2,10 @@
 
 ## Sin publicar (sobre v0.2.6)
 
+- **Contraseñas — X en las tarjetas**: la tarjeta de nueva/edición de contraseña y el
+  generador tienen ahora la misma ✕ en la esquina superior derecha que el calendario
+  (cerrar sin tocar nada).
+
 - **Contraseñas — copiar también el nombre de acceso**: junto al usuario de cada entrada
   hay ahora un 📋 mini que copia el nombre de acceso al portapapeles (se vuelve ✓ un
   instante), igual que el de la contraseña.
