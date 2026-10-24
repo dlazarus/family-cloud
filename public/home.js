@@ -6,7 +6,7 @@ const SERVICES = [
   { icon: '🗓️', name: 'Calendario', desc: 'Eventos compartidos de toda la familia.', href: '/calendario' },
   { icon: '🔑', name: 'Contraseñas', desc: 'Tu gestor personal de contraseñas.', href: '/contrasenhas' },
   { icon: '📁', name: 'Archivos', desc: 'Tus archivos cifrados y la CARPETA-COMPARTIDA con la familia.', href: '/archivos' },
-  { icon: '👤', name: 'Mi cuenta', desc: 'Cambia tu contraseña cuando quieras.', href: '/mi-cuenta' },
+  { icon: '👤', name: 'Mi cuenta', desc: 'Cambia tu contraseña y elige el tema de colores.', href: '/mi-cuenta' },
   { icon: '⚙️', name: 'Administración', desc: 'Gestión de cuentas de la familia.', href: '/administracion', adminOnly: true },
 ];
 

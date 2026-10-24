@@ -2,6 +2,14 @@
 
 ## Sin publicar (sobre v0.2.4)
 
+- **Hub — tarjeta «Mi cuenta»**: su descripción ya no habla solo de la contraseña:
+  ahora dice «Cambia tu contraseña y elige el tema de colores.», que es lo que hay
+  realmente en esa página.
+
+- **Administración → cupos en GB**: el cupo por defecto y los cupos propios se muestran
+  y editan ahora en **GB** (con decimales tipo 0,5), más legible que 4096 MB. Por dentro
+  todo sigue en MB (API y base de datos sin cambios); la conversión es solo de la interfaz.
+
 - **Calendario — horas opcionales en los eventos**: entre las fechas y la categoría hay
   dos campos nuevos, «Hora inicio» y «Hora fin» (del mismo tamaño que los de fecha).
   Son opcionales; la de fin exige la de inicio y no puede ser anterior. Cuando un evento
