@@ -64,7 +64,7 @@ class ZipWriter {
     const entryName = isDir && !clean.endsWith('/') ? `${clean}/` : clean;
     const nameBuf = Buffer.from(entryName, 'utf8');
     const { time, date } = dosDateTime(mtime ? new Date(mtime) : new Date());
-    const flags = 0x0800 | 0x8000; // data descriptor + nombres UTF-8
+    const flags = 0x0008 | 0x0800; // bit 3: data descriptor · bit 11: nombres UTF-8
     const method = isDir || !this.deflate ? 0 : 8;
 
     // cabecera local: tamanos y CRC a cero (van en el data descriptor)

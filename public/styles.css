@@ -442,6 +442,7 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 /* barra de seleccion multiple: flota abajo para NO desplazar la lista al seleccionar */
 .sel-bar {
   position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 55;
+  width: max-content; max-width: 94vw; /* sin esto, con left:50% la caja solo dispone de media pantalla y los botones se enrollan */
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
   background: color-mix(in srgb, var(--accent) 12%, var(--card));
   border: 1px solid var(--accent); border-radius: 999px;
@@ -449,6 +450,19 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 }
 .sel-bar .btn { padding: 5px 10px; font-size: 0.8rem; }
 .sel-count { font-size: 0.86rem; font-weight: 600; color: var(--accent-ink); margin-right: 4px; }
+/* en movil la barra flotante pasa a ser una barra de acciones ancha (si no,
+   con 4 botones se enrolla y queda una pastilla vertical rara) */
+@media (max-width: 560px) {
+  .sel-bar {
+    left: 8px; right: 8px; bottom: 8px; transform: none;
+    width: auto; max-width: none;
+    border-radius: 14px; justify-content: center; padding: 10px 12px;
+  }
+  .sel-bar .sel-count { width: 100%; text-align: center; margin: 0 0 2px; }
+  .sel-bar .btn { flex: 1 1 40%; text-align: center; }
+  main.files-main { padding-bottom: 26px; }
+  .files-list { padding-bottom: 132px; }
+}
 /* marco de seleccion al arrastrar el raton sobre el vacio */
 .marquee {
   position: fixed; z-index: 70; pointer-events: none;

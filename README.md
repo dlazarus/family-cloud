@@ -86,8 +86,13 @@ Cada miembro tiene su espacio de archivos, como un Drive pequeño pero en tu cas
   contenido); arrástralo fuera para dejar de compartirlo.
 - **Subir arrastrando**: casi toda la página es zona de soltado, con un aviso
   grande que dice a qué carpeta van los archivos.
-- Descargar una carpeta entera como **ZIP** (se genera al vuelo, sin temporeros en
-  disco), renombrar y borrar con todo su contenido desde el menú `⋯`.
+- **Descargar la selección**: un archivo suelto se baja directo; si hay varios
+  elementos o hay carpetas, se bajan en **un único .zip** (generado al vuelo, sin
+  temporeros en disco). Si dos elementos elegidos se llaman igual, dentro del .zip el
+  segundo pasa a «foto.jpg (2)» en vez de pisarse, y si eliges una carpeta y además
+  algo de su interior se descarga una sola vez.
+- Descargar una carpeta entera como **ZIP** desde el menú `⋯`, renombrar y borrar con
+  todo su contenido desde el menú `⋯`.
 
 - **CARPETA-COMPARTIDA**: cada cuenta tiene una, marcada a propósito (borde de
   color, icono de familia y subtítulo «tuya · la editas tu») para que no haya

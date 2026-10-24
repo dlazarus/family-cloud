@@ -396,6 +396,22 @@ function open(n) {
   }
 }
 
+// ---------- descargar una seleccion ----------
+// Un archivo suelto se baja directo; si hay varios elementos o hay carpetas,
+// se pide un unico .zip al servidor (lo genera al vuelo, sin temporeros).
+function downloadNodes(nodes) {
+  nodes = nodes.filter(Boolean);
+  if (!nodes.length) return;
+  if (nodes.length === 1 && nodes[0].kind === 'file') {
+    location.href = `/api/files/${nodes[0].id}/download`;
+    toast(`Descargando «${nodes[0].name}»…`);
+    return;
+  }
+  const ids = nodes.map((n) => n.id);
+  toast(`Preparando un .zip con ${ids.length} elemento${ids.length > 1 ? 's' : ''}…`);
+  location.href = `/api/files/archive?ids=${ids.join(',')}`;
+}
+
 let menuFor = null;
 function openMenu(btn, n) {
   const menu = $('#ctx-menu');
@@ -423,7 +439,10 @@ function openMenu(btn, n) {
   );
 }
 function closeMenu() { $('#ctx-menu').classList.add('hidden'); menuFor = null; }
-document.addEventListener('click', (e) => { if (!e.target.closest('#ctx-menu') && !e.target.closest('.fmenu')) closeMenu(); });
+document.addEventListener('click', (e) => {
+  const el = e.target instanceof Element ? e.target : null;
+  if (!el?.closest('#ctx-menu') && !el?.closest('.fmenu')) closeMenu();
+});
 
 // aviso breve abajo a la derecha (sin librerias)
 let toastTimer = null;
@@ -593,6 +612,7 @@ $('#file-picker').addEventListener('change', async (e) => {
 });
 $('#sel-clear').addEventListener('click', clearSel);
 $('#sel-del').addEventListener('click', () => remove([...state.sel].map(nodeById).filter(Boolean)));
+$('#sel-dl').addEventListener('click', () => downloadNodes([...state.sel].map(nodeById)));
 $('#sel-move').addEventListener('click', () => moveModal([...state.sel].map(nodeById).filter(Boolean)));
 
 // ENTER en el modal de nombre = guardar
@@ -603,8 +623,9 @@ $('#name-input').addEventListener('keydown', (e) => {
 
 // teclado: Esc limpia, Supr elimina, Ctrl+A selecciona todo lo visible
 document.addEventListener('keydown', (e) => {
-  if (!e.target.closest('input, textarea, select') && e.key === 'Escape') { closeMenu(); clearSel(); }
-  const inField = e.target.closest('input, textarea, select');
+  const el = e.target instanceof Element ? e.target : null; // el evento puede venir de document/window
+  const inField = !!el?.closest('input, textarea, select');
+  if (!inField && e.key === 'Escape') { closeMenu(); clearSel(); }
   if ((e.ctrlKey || e.metaKey) && (e.key === 'a' || e.key === 'A') && !inField) {
     e.preventDefault();
     state.sel = new Set(visibleItems().map((n) => n.id));

@@ -150,11 +150,14 @@ function depthOf(row) {
   return depth;
 }
 
+// ¿«nodeId» cuelga de «ancestorId» (o es el propio ancestorId)?
+// Ojo: hay que comprobar el nodo ANTES de salir del bucle cuando el padre es null,
+// si no, un hijo directo de una carpeta raiz nunca se detectaria.
 function isDescendant(ancestorId, nodeId) {
   let cur = findNode(nodeId);
-  while (cur && cur.parent_id !== null) {
+  while (cur) {
     if (cur.id === ancestorId) return true;
-    cur = findNode(cur.parent_id);
+    cur = cur.parent_id === null ? null : findNode(cur.parent_id);
   }
   return false;
 }
@@ -423,45 +426,106 @@ filesRouter.get('/:id/download', (req, res) => {
 
 // Carpeta entera en un .zip stremeado (los archivos se descifran al vuelo).
 // Limitacion honesta: sin Zip64 el total ha de quedar por debajo de 4 GB.
+// nombre de nivel superior sin colisiones: «foto.jpg» -> «foto.jpg (2)»
+function uniqueName(name, usados) {
+  let n = name;
+  let i = 2;
+  while (usados.has(n)) {
+    const m = n.match(/^(.*?)(\.[^.]+)?$/);
+    n = `${m[1]} (${i++})${m[2] || ''}`;
+  }
+  usados.add(n);
+  return n;
+}
+
+// Stremea N raices (archivos o carpetas mezclados) dentro de un unico .zip.
+// Las rutas visibles salen de rowToPublic y los nombres de raiz se uniquean
+// para que dos elementos homonimos de carpetas distintas no se pisen.
+async function streamZip(res, u, roots) {
+  const names = { shared: cfg().sharedName };
+  const grupos = [];
+  let total = 0;
+  for (const root of roots) {
+    const rows = subtree(root.id);
+    const items = rows.map((r) => ({ row: r, pub: rowToPublic(u, r, names) }));
+    const pathOf = new Map();
+    for (const it of items) {
+      // la raiz del grupo arranca la ruta (puede estar anidada: subtree() la trae primero)
+      if (it.row.id === root.id) { pathOf.set(it.row.id, it.pub.name); continue; }
+      const parent = pathOf.get(it.row.parent_id) ?? '';
+      pathOf.set(it.row.id, `${parent}${parent ? '/' : ''}${it.pub.name}`);
+    }
+    for (const it of items) total += it.pub.size || 0;
+    grupos.push({ root, items, pathOf });
+  }
+  if (total >= ZIP_32BIT_LIMIT) {
+    return res.status(400).json({ error: 'Supera los 4 GB de un .zip normal: descarga carpeta por carpeta.' });
+  }
+  const usados = new Set();
+  for (const g of grupos) {
+    const original = g.pathOf.get(g.root.id) || 'elemento';
+    g.renombrar = [original, uniqueName(original, usados)];
+  }
+  let base = roots.length === 1
+    ? (rowToPublic(u, roots[0], names).name || 'archivos')
+    : `seleccion-${roots.length}`;
+  base = base.replace(/[\\/:*?"<>|\x00-\x1f]+/g, '-').replace(/[.\s]+$/, '').slice(0, 100) || 'seleccion';
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', `attachment; filename="${base.replace(/[^\x20-\x7e]/g, '_')}.zip"; filename*=UTF-8''${encodeURIComponent(base)}.zip`);
+  res.setHeader('Cache-Control', 'no-store');
+
+  const zip = new ZipWriter(res);
+  try {
+    for (const g of grupos) {
+      const [de, a] = g.renombrar;
+      for (const it of g.items) {
+        let entry = g.pathOf.get(it.row.id) || 'elemento';
+        if (entry === de) entry = a;
+        else if (entry.startsWith(`${de}/`)) entry = a + entry.slice(de.length);
+        if (it.row.kind === 'folder') {
+          await zip.add({ name: `${entry}/`, isDir: true, mtime: it.row.updated_at });
+        } else {
+          const raw = fs.createReadStream(path.join(getFilesDir(), it.row.blob_rel));
+          await zip.add({ name: entry, mtime: it.row.updated_at, source: raw.pipe(newFileDecipher(it.row)) });
+        }
+      }
+    }
+    await zip.end();
+    if (!res.writableEnded) res.end(); // sin esto la descarga queda colgada hasta el timeout
+  } catch (e) {
+    if (!res.headersSent) res.status(500).json({ error: `Error al preparar el .zip: ${e.message}` });
+    else res.destroy();
+  }
+}
+
+// Varios elementos elegidos -> un solo .zip (archivos y carpetas mezclados).
+filesRouter.get('/archive', async (req, res) => {
+  const u = req.session.user;
+  const ids = [...new Set(String(req.query.ids || '').split(',')
+    .map((s) => Number(s.trim())).filter((n) => Number.isInteger(n) && n > 0))].slice(0, 500);
+  if (!ids.length) return res.status(400).json({ error: 'Indica al menos un elemento.' });
+  const roots = [];
+  for (const id of ids) {
+    const acc = requireNode(u, id);
+    if (acc.error) return res.status(acc.error.code).json({ error: acc.error.msg });
+    roots.push(acc.row);
+  }
+  // si una raiz elegida esta dentro de otra también elegida, sobra la de abajo
+  const deSobra = new Set();
+  for (const a of roots) {
+    for (const b of roots) if (a.id !== b.id && isDescendant(a.id, b.id)) deSobra.add(b.id);
+  }
+  const finales = roots.filter((r) => !deSobra.has(r.id));
+  if (!finales.length) return res.status(404).json({ error: 'Nada que descargar.' });
+  await streamZip(res, u, finales);
+});
+
 filesRouter.get('/:id/archive', async (req, res) => {
   const u = req.session.user;
   const acc = requireNode(u, req.params.id);
   if (acc.error) return res.status(acc.error.code).json({ error: acc.error.msg });
   if (acc.row.kind !== 'folder') return res.status(400).json({ error: 'Solo se pueden descargar en .zip las carpetas.' });
-  const rows = subtree(acc.row.id);
-  const names = { shared: cfg().sharedName };
-  const items = rows.map((r) => ({ row: r, pub: rowToPublic(u, r, names) }));
-  const total = items.reduce((s, i) => s + (i.pub.size || 0), 0);
-  if (total >= ZIP_32BIT_LIMIT) {
-    return res.status(400).json({ error: 'La carpeta supera 4 GB: descarga los archivos uno a uno.' });
-  }
-  // mapa id -> ruta visible
-  const pathOf = new Map();
-  for (const it of items) {
-    const parent = it.row.parent_id ? pathOf.get(it.row.parent_id) : '';
-    pathOf.set(it.row.id, `${parent}${parent ? '/' : ''}${it.pub.name}`);
-  }
-  const rootName = items[0].pub.name;
-  res.setHeader('Content-Type', 'application/zip');
-  res.setHeader('Content-Disposition', `attachment; filename="${rootName.replace(/[^\x20-\x7e]/g, '_')}.zip"; filename*=UTF-8''${encodeURIComponent(rootName)}.zip`);
-  res.setHeader('Cache-Control', 'no-store');
-  const zip = new ZipWriter(res);
-  try {
-    for (const it of items) {
-      // pathOf ya incluye el nombre de la raiz: la entrada del zip queda "Carpeta/sub/archivo"
-      const entry = `${pathOf.get(it.row.id)}${it.row.kind === 'folder' ? '/' : ''}`;
-      if (it.row.kind === 'folder') {
-        await zip.add({ name: entry, isDir: true, mtime: it.row.updated_at });
-      } else {
-        const raw = fs.createReadStream(path.join(getFilesDir(), it.row.blob_rel));
-        await zip.add({ name: entry, mtime: it.row.updated_at, source: raw.pipe(newFileDecipher(it.row)) });
-      }
-    }
-    await zip.end();
-  } catch (e) {
-    if (!res.headersSent) res.status(500).json({ error: `Error al preparar el .zip: ${e.message}` });
-    else res.destroy();
-  }
+  await streamZip(res, u, [acc.row]);
 });
 
 // ============================================================

@@ -8,12 +8,21 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
 - **Archivos por cuenta**: subir (botón o arrastrar casi sobre toda la página, con
   un aviso grande que dice a qué carpeta van), crear carpetas (ENTER guarda),
   renombrar, descargar, borrar en cascade y descargar una carpeta entera como **ZIP**
-  generado al vuelo (`src/zip.js`, sin dependencias ni temporeros en disco).
+  generado al vuelo (`src/zip.js`, sin dependencias ni temporeros en disco; sin Zip64
+  el tope son 4 GB, y se avisa en vez de generar un zip roto). Los .zip se comprueban
+  con `unzip -t`, `bsdtar` y `python zipfile`: bandera de data descriptor correcta
+  (bit 3), nombres UTF-8 y rutas de carpeta bien formadas.
 - **Manejo tipo Drive**: clic en un archivo lo selecciona (ya no lo descarga) y doble
   clic lo abre; selección múltiple con `Ctrl+clic`, `Shift+clic`, `Ctrl+A` o
-  arrastrando el ratón sobre el hueco libre; barra flotante con «Mover a…» y
-  «Eliminar»; y **mover arrastrando** una fila o la selección entera sobre otra
-  carpeta, sobre un tramo del camino o sobre el hueco libre (= carpeta actual).
+  arrastrando el ratón sobre el hueco libre; barra flotante con «⬇ Descargar», «Mover
+  a…» y «Eliminar» (en el móvil la barra pasa a ser una barra de acciones ancha); y
+  **mover arrastrando** una fila o la selección entera sobre otra carpeta, sobre un
+  tramo del camino o sobre el hueco libre (= carpeta actual).
+- **Descargar en lote**: un archivo suelto se baja tal cual; una selección mixta
+  (archivos y carpetas) se baja en **un único .zip** llamado como la carpeta o
+  «seleccion-N». Los homónimos se renombran dentro del .zip («foto.jpg (2)»), una
+  carpeta elegida junto a algo de su interior solo se descarga una vez, y una carpeta
+  anidada conserva su ruta relativa dentro del zip.
 - **Cifrado en streaming**: cada archivo se cifra con AES-256-GCM al subir y se
   descifra al bajar, por trozos — un archivo de 3 GB no necesita 3 GB de RAM. La
   llave va ligada al id del archivo (AAD), así que copiar un blob a otra parte no
@@ -47,10 +56,10 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
   punto o espacio y los reservados de Windows (`CON`, `PRN`, `AUX`, `NUL`, `COM1-9`,
   `LPT1-9`, también con extensión: `CON.txt`), para que los ZIP se puedan extraer en
   cualquier sistema operativo.
-- **API nueva**: `/api/files*` (lista, carpeta, subida, descarga, ZIP, mover,
-  renombrar, borrar — mover admite cambiar el alcance privado↔compartido) y
-  `GET /api/users/usage` + `PUT /api/users/settings` para los cupos y el nombre de
-  la carpeta compartida.
+- **API nueva**: `/api/files*` (lista, carpeta, subida, descarga, ZIP de carpeta,
+  ZIP de selección `GET /api/files/archive?ids=…`, mover, renombrar, borrar — mover
+  admite cambiar el alcance privado↔compartido) y `GET /api/users/usage` +
+  `PUT /api/users/settings` para los cupos y el nombre de la carpeta compartida.
 
 ## v0.1.0 — 2026-10-22
 
