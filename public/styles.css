@@ -259,6 +259,10 @@ input:focus, select:focus, textarea:focus {
 .user-table td.actions { text-align: right; white-space: nowrap; vertical-align: middle; }
 .user-table td.actions .btn + .btn { margin-left: 6px; }
 .user-table .actions .btn { padding: 5px 10px; font-size: 0.78rem; }
+/* fila de totales de la tabla de cupos: se apoya en la linea de la ultima fila
+   (con border-collapse las dos lineas colapsan en una sola) */
+.user-table tfoot td { font-weight: 600; padding-top: 10px; border-bottom: none; }
+.user-table tfoot .sum-note { color: var(--muted); font-weight: 400; font-size: 0.8rem; }
 
 /* ====== hub de servicios ====== */
 .hub-grid {

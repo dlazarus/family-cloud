@@ -129,6 +129,37 @@ async function renderUsage() {
       <td class="actions"><button data-act="quota" class="btn ghost">Guardar cupo</button></td>
     </tr>`)
     .join('');
+  renderUsageTotals(info.total);
+}
+
+// Resumen del servicio: lo que ocupa de verdad y lo que reservan los cupos.
+function renderUsageTotals(t) {
+  if (!t) return;
+  const reserved = t.quota_bytes === null ? 'sin limite' : fmtSize(t.quota_bytes);
+  $('#usage-foot').innerHTML = `<tr class="usage-sum">
+    <td>Total</td>
+    <td>${fmtSize(t.used_bytes)}</td>
+    <td class="sum-note">${t.own_count} de ${t.users} con cupo propio</td>
+    <td>${reserved}</td>
+    <td></td>
+  </tr>`;
+
+  const parts = [`Las cuentas suman ${fmtSize(t.used_bytes)} en disco`];
+  if (t.quota_bytes === null) {
+    parts.push(`el cupo total es sin limite (${t.unlimited} de ${t.users} cuenta${t.unlimited === 1 ? '' : 's'} sin tope)`);
+  } else {
+    const pct = t.quota_bytes > 0 ? Math.min(100, Math.round((t.used_bytes / t.quota_bytes) * 1000) / 10) : 0;
+    parts.push(`${fmtSize(t.quota_bytes)} reservados por cupos (se ha usado el ${pct} %)`);
+    if (t.disk_total_bytes && t.quota_bytes > t.disk_total_bytes) {
+      parts.push('ojo: lo reservado supera la capacidad del disco');
+    }
+  }
+  if (t.disk_free_bytes == null) {
+    parts.push(`el disco de archivos (${t.disk_path}) no esta accesible`);
+  } else {
+    parts.push(`en ${t.disk_path} quedan ${fmtSize(t.disk_free_bytes)} libres de ${fmtSize(t.disk_total_bytes)}`);
+  }
+  $('#usage-disk').textContent = parts.join(' · ') + '.';
 }
 
 $('#g-save').addEventListener('click', async () => {

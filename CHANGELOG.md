@@ -39,6 +39,15 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
 - **Cupos**: 4 GB por cuenta por defecto, editables por el admin en global o por
   cuenta (0 = sin límite); se comprueban al empezar y al terminar la subida. Al
   borrar una cuenta se borran también sus archivos del disco.
+- **Totales del servicio en Administración**: la tabla de cupos termina en una fila
+  **Total** (sumas de lo ocupado y de lo reservado por los cupos en vigor, y cuántas
+  cuentas tienen cupo propio) y debajo sale una frase con el tamaño del servicio y el
+  disco real: `Las cuentas suman 1,2 GB en disco · 24 GB reservados por cupos (se ha
+  usado el 5 %) · en /mnt/disco-grande/nube quedan 890 GB libres de 1,9 TB`. Con
+  alguna cuenta sin límite la reserva se muestra como «sin límite» (se dice cuántas),
+  y si lo reservado supera la capacidad del disco se avisa. Los datos los aporta
+  `/api/users/usage`, que ahora incluye `total` (usado, reserva, cuentas sin tope y
+  espacio libre/capacidad del `FILES_DIR`, leídos con `fs.statfsSync`).
 - **Almacenamiento configurable**: `DATA_DIR` (base de datos, mejor siempre en el
   ext4 del servidor) y `FILES_DIR` (archivos; puede vivir en un disco grande NTFS).
   Utilidades nuevas: `scripts/storage-check.js` (rutas, sistema de archivos, espacio

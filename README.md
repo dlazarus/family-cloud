@@ -206,6 +206,17 @@ página de inicio.
 Solo para administradores (la tarjeta no aparece para los miembros): crear cuentas
 nuevas, cambiar contraseñas, activar/desactivar y eliminar cuentas.
 
+En el bloque **📁 Archivos de la familia** se ajusta el cupo por defecto, el nombre de
+la carpeta compartida y el cupo de cada cuenta. La tabla termina en una fila
+**Total** (lo que ocupan las cuentas sumado y lo que reservan los cupos en vigor) y
+debajo sale una línea con el tamaño del servicio y el disco real donde vive:
+
+> Las cuentas suman 1,2 GB en disco · 24 GB reservados por cupos (se ha usado el 5 %) ·
+> en /mnt/disco-grande/nube quedan 890 GB libres de 1,9 TB.
+
+Si alguna cuenta está sin límite, la reserva se muestra como «sin límite» (y se dice
+cuántas cuentas son); si la suma de los cupos supera la capacidad del disco, avisa.
+
 Garantías de que el servicio nunca se queda sin administración:
 
 - La cuenta **`admin` es la cuenta del sistema**: no puede desactivarse, degradarse

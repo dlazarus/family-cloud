@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import fs from 'node:fs';
 import { getDb, getSetting, setSetting } from './db.js';
 import { requireAdmin } from './auth.js';
-import { filesDirFor } from './storage.js';
+import { filesDirFor, storageStatus } from './storage.js';
 import { renameSharedFolder } from './files.js';
 
 export const usersRouter = Router();
@@ -31,9 +31,30 @@ usersRouter.get('/usage', (_req, res) => {
     )
     .all();
   const globalMb = Number(getSetting('file_quota_mb', '4096'));
+  // Totales del servicio: lo ocupado de verdad y lo «reservado» por la suma de
+  // cupos en vigor. Si alguna cuenta esta sin limite, la suma no existe (null).
+  const disk = storageStatus();
+  const usedBytes = rows.reduce((s, r) => s + Number(r.used_bytes), 0);
+  const unlimited = rows.filter((r) => Number(r.quota_mb ?? globalMb) <= 0).length;
+  const ownCount = rows.filter((r) => r.quota_mb !== null && r.quota_mb !== undefined).length;
+  const quotaBytes = unlimited
+    ? null
+    : rows.reduce((s, r) => s + Math.round(Number(r.quota_mb ?? globalMb)) * 1024 * 1024, 0);
   res.json({
     global_quota_mb: globalMb,
     shared_folder_name: getSetting('shared_folder_name', 'CARPETA-COMPARTIDA'),
+    total: {
+      users: rows.length,
+      used_bytes: usedBytes,
+      quota_bytes: quotaBytes,
+      unlimited,
+      own_count: ownCount,
+      disk_path: disk.path,
+      disk_ok: disk.ok,
+      disk_fstype: disk.fstype,
+      disk_free_bytes: disk.free_bytes,
+      disk_total_bytes: disk.total_bytes,
+    },
     users: rows.map((r) => ({
       id: r.id,
       username: r.username,
