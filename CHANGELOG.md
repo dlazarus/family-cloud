@@ -6,8 +6,8 @@
   («Mi cuenta」), a juego con el 📁 de 「Archivos de la familia」.
 
 - **Archivos — la carpeta compartida del admin, opcionalmente invisible**: en
-  Administración → Archivos de la familia hay una casilla nueva, «Ocultar al resto la
-  carpeta compartida de la cuenta del sistema (admin)», **activa por defecto**: cuando un
+  Administración → Archivos de la familia hay una casilla nueva, «Ocultar al resto de
+  usuarios la carpeta compartida de la cuenta del sistema (admin)», **activa por defecto**: cuando un
   familiar abre «Lo que comparte la familia」」 solo ve las carpetas de los demás, no la del
   administrador. Al desactivarla vuelve a verse para todos. Es la cuenta del sistema
   (usuario `admin`) la que se oculta, no «las cuentas con rol admin」」: un familiar al que
