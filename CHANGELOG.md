@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.1)
+
+- **`start.sh` renombrado y movido**: el arranque manual de pruebas vive ahora en
+  `scripts/server-manual-test.sh` (antes `start.sh` en la raiz del proyecto, facil de
+  confundir con el script de instalacion; lo de produccion es `scripts/install.sh` +
+  systemd).
+
 ## v0.2.1 — 2026-10-24
 
 - **Instalador más claro al empezar**: ahora muestra los **discos y puntos de montaje

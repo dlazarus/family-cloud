@@ -26,7 +26,7 @@ Tras iniciar sesión se abre un **hub** con tarjetas de servicios:
 cd family-cloud
 npm install                 # solo la primera vez, requiere internet una vez
 node scripts/gen-env.js     # genera .env (pide la frase maestra; guárdala a salvo)
-npm start                   # o ./start.sh
+npm start                   # o ./scripts/server-manual-test.sh (pruebas: arranque en primer plano)
 ```
 
 Por defecto escucha en **http://0.0.0.0:3000** (configurable en `.env`).
