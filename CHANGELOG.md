@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.6)
+## v0.2.7 — 2026-10-26
 
 - **Contraseñas — X en las tarjetas**: la tarjeta de nueva/edición de contraseña y el
   generador tienen ahora la misma ✕ en la esquina superior derecha que el calendario
