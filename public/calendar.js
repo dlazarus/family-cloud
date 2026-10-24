@@ -10,6 +10,8 @@ const CATS = {
   viaje:  { label: '✈️', name: 'Viaje' },
   tarea:  { label: '🔧', name: 'Tarea' },
   salud:  { label: '🩺', name: 'Salud' },
+  ocio:   { label: '🎉', name: 'Ocio' },
+  cole:   { label: '🎒', name: 'Cole' },
   otro:   { label: '📌', name: 'Otro' },
 };
 

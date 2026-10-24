@@ -38,14 +38,17 @@
   :root:not(.light) {
     --c-cumple: #4a352c; --c-comida: #37422a; --c-viaje: #2b3f4d;
     --c-tarea: #463d27; --c-salud: #4a2e35; --c-otro: #3a3731;
+    --c-ocio: #3d3450; --c-cole: #2c423c;
   }
 }
 :root.dark {
   --c-cumple: #4a352c; --c-comida: #37422a; --c-viaje: #2b3f4d;
   --c-tarea: #463d27; --c-salud: #4a2e35; --c-otro: #3a3731;
+  --c-ocio: #3d3450; --c-cole: #2c423c;
 }
 :root { --c-cumple: #ffe5d9; --c-comida: #e8f5d8; --c-viaje: #d8ecf7;
-        --c-tarea: #f4e7c9; --c-salud: #fbdde3; --c-otro: #ece9e2; }
+        --c-tarea: #f4e7c9; --c-salud: #fbdde3; --c-otro: #ece9e2;
+        --c-ocio: #e6def7; --c-cole: #d9f0ea; }
 
 /* ==============================================================
    TEMAS DE COLOR
@@ -335,6 +338,8 @@ input:focus, select:focus, textarea:focus {
 .cat-viaje  { background: var(--c-viaje); }
 .cat-tarea  { background: var(--c-tarea); }
 .cat-salud  { background: var(--c-salud); }
+.cat-ocio   { background: var(--c-ocio); }
+.cat-cole   { background: var(--c-cole); }
 .cat-otro   { background: var(--c-otro); }
 
 /* ====== modal ====== */
