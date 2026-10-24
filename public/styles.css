@@ -695,9 +695,9 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .files-settings { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-bottom: 14px; }
 .files-settings label { display: grid; gap: 5px; font-size: 0.82rem; color: var(--muted); }
 .files-settings input { min-width: 150px; }
-/* casilla: checkbox + texto en la misma linea (el grid de arriba los apilaria) */
-.files-settings label.check { display: flex; flex-direction: row; align-items: center; gap: 8px; font-size: 0.85rem; }
-.files-settings label.check input { min-width: 0; width: auto; accent-color: var(--accent); }
+/* casilla de ocultar la compartida del admin: entre la tabla y las notas, con aire */
+.check-row { display: flex; flex-direction: row; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--muted); margin: 16px 0 12px; }
+.check-row input { width: auto; accent-color: var(--accent); }
 /* boton de guardar: boton normal, centrado, en su propia linea al final de la tarjeta */
 .save-row { display: flex; justify-content: center; margin-top: 18px; }
 .files-usage { margin-top: 6px; }

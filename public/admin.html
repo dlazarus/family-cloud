@@ -66,13 +66,13 @@
           <label>Nombre de la carpeta compartida
             <input id="g-shared" maxlength="80" autocomplete="off" />
           </label>
-          <label class="check"><input id="g-hide-admin" type="checkbox" /> Ocultar al resto la carpeta compartida de la cuenta del sistema (admin)</label>
         </div>
         <table class="user-table files-usage">
           <thead><tr><th>Usuario</th><th>Ocupado</th><th>Cupo propio (GB)</th><th>En vigor</th><th></th></tr></thead>
           <tbody id="usage-rows"></tbody>
           <tfoot id="usage-foot"></tfoot>
         </table>
+        <label class="check-row"><input id="g-hide-admin" type="checkbox" /> Ocultar al resto la carpeta compartida de la cuenta del sistema (admin)</label>
         <p id="usage-disk" class="muted small-note"></p>
         <p class="muted small-note">Si el cupo propio se deja vacio se usa el cupo por defecto; 0 significa sin limite. Cambiar el nombre de la carpeta compartida afecta a todas las cuentas y no toca ningun archivo.</p>
         <div class="save-row"><button id="g-save" class="btn primary">Guardar ajustes</button></div>
