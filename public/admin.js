@@ -45,7 +45,7 @@ $('#user-form').addEventListener('submit', async (e) => {
     await api('/users', { method: 'POST', body: { username: $('#nu-name').value, password: $('#nu-pass').value, role: $('#nu-role').value } });
     $('#nu-name').value = ''; $('#nu-pass').value = '';
     adminMsg('Cuenta creada ✓');
-    renderUsers();
+    refreshAdmin();
   } catch (err) { adminMsg(err.message); }
 });
 
@@ -98,12 +98,12 @@ $('#user-rows').addEventListener('click', async (e) => {
     } else if (act === 'toggle') {
       await api(`/users/${id}`, { method: 'PUT', body: { active: row.children[2].textContent === 'desactivada' } });
       adminMsg('Estado actualizado ✓');
-      renderUsers();
+      refreshAdmin();
     } else if (act === 'del') {
       if (!confirm('¿Eliminar esta cuenta?')) return;
       await api(`/users/${id}`, { method: 'DELETE' });
       adminMsg('Cuenta eliminada ✓');
-      renderUsers();
+      refreshAdmin();
     }
   } catch (err) { adminMsg(err.message); }
 });
@@ -197,5 +197,11 @@ $('#usage-rows').addEventListener('click', async (e) => {
 });
 
 function adminMsg(msg) { $('#admin-msg').textContent = msg; }
+// cualquier cambio en las cuentas afecta tambien a la tabla de cupos/uso:
+// refrescamos ambas, como si se recargara la pagina
+async function refreshAdmin() {
+  await renderUsers();
+  await renderUsage();
+}
 
 boot();

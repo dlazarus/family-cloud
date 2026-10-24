@@ -2,6 +2,10 @@
 
 ## Sin publicar (sobre v0.2.8)
 
+- **Administración — los cambios de cuentas se ven al instante en toda la página**: al
+  crear, desactivar o eliminar una cuenta se refrescan también los cupos y el uso de
+  「Archivos de la familia」: la cuenta nueva aparece en la lista sin recargar la página.
+
 - **Hub — tarjetas cuadradas**: las tarjetas de servicios ahora son cuadrados del mismo
   tamaño que las grandes de miweb.lan (grid de 900 px en 3 columnas de ~284 px), con
   el icono, el nombre y la descripción centrados.
