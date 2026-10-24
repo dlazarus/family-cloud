@@ -7,6 +7,9 @@
   no puede ser anterior a la de inicio」 aparecía aunque el horario fuese correcto. La
   comprobación de horas ahora solo aplica cuando el evento empieza y termina el mismo
   día (y el aviso aclara 「en el mismo día」).
+- **Calendario — autor visible de un vistazo**: el aviso (tooltip) al pasar el ratón por un
+  evento del mes muestra ahora el autor entre paréntesis (「Título · 10:00-06:00 (ana)」), y
+  la lista 「Próximos eventos」 añade el autor entre paréntesis tras el título, en tono tenue.
 
 ## v0.2.11 — 2026-10-25
 

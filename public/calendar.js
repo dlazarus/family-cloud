@@ -96,7 +96,7 @@ function renderUpcoming() {
     const time = ev.start_time ? ` · ${ev.start_time}${ev.end_time ? '–' + ev.end_time : ''}` : '';
     return `<li class="upcoming-item cat-${ev.category}" data-id="${ev.id}">
       <span class="upcoming-date${isToday ? ' today' : ''}">${range}${time}${isToday ? ' · hoy' : ''}</span>
-      <span class="upcoming-title">${CATS[ev.category].label} ${escapeHtml(ev.title)}</span>
+      <span class="upcoming-title">${CATS[ev.category].label} ${escapeHtml(ev.title)}${ev.author ? ` <span class="upcoming-author">(${escapeHtml(ev.author)})</span>` : ''}</span>
     </li>`;
   }).join('');
 }
@@ -143,8 +143,9 @@ function renderGrid() {
     const evs = byDate.get(key) || [];
     const chips = evs.slice(0, 3)
       .map((ev) => {
-        // el tooltip lleva el titulo y, si las hay, las horas
-        const tip = ev.title + (ev.start_time ? ` · ${ev.start_time}${ev.end_time ? '–' + ev.end_time : ''}` : '');
+        // el tooltip lleva el titulo, las horas (si las hay) y la autoría entre paréntesis
+        const tip = ev.title + (ev.start_time ? ` · ${ev.start_time}${ev.end_time ? '–' + ev.end_time : ''}` : '')
+          + (ev.author ? ` (${ev.author})` : '');
         return `<button class="chip cat-${ev.category}" data-id="${ev.id}" title="${escapeHtml(tip)}">${CATS[ev.category].label} ${escapeHtml(ev.title)}</button>`;
       })
       .join('');

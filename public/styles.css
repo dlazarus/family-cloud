@@ -581,6 +581,7 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
 }
 .upcoming-date.today { color: var(--accent-ink); }
 .upcoming-title { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.upcoming-author { color: var(--muted); font-size: 0.78rem; }
 
 /* ====== responsive ====== */
 @media (max-width: 720px) {
