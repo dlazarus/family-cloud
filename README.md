@@ -15,8 +15,8 @@ Tras iniciar sesión se abre un **hub** con tarjetas de servicios:
 | 🔑 **Contraseñas** | Gestor personal de contraseñas, aislado por usuario | ✅ incluido |
 | 👤 **Mi cuenta** | Cambio de propia contraseña | ✅ incluido |
 | ⚙️ **Administración** | Gestión de cuentas (solo admins) | ✅ incluido |
-| 📝 Notas / post-its | Tableros de notas por usuario | 🔜 próximo |
 | 📁 **Archivos** | Nube de archivos familiar, cifrada y con cupo por cuenta | ✅ incluido |
+| 📌 **Notas** | El corcho de la familia: post-its compartidos, con colores y firma | ✅ incluido |
 
 ---
 
@@ -127,6 +127,26 @@ Cada miembro tiene su espacio de archivos, como un Drive pequeño pero en tu cas
   mientras baja, en streaming: un archivo de 3 GB no necesita 3 GB de RAM. En el
   disco solo hay blobs opacos; **hasta los nombres** van cifrados en la base de datos.
 - No hay vista previa de archivos (descarga y abre); está en el camino.
+
+### 📌 Notas (el corcho)
+
+Un tablero compartido para toda la familia, como un corcho de cocina: recados, avisos
+y recordatorios en post-its de colores.
+
+- **Un solo corcho familiar**: todos ven todas las notas (es lo contrario del gestor de
+  contraseñas, que es íntimo de cada uno).
+- **Colores a elegir**: seis tonos de post-it (amarillo, rosa, azul, verde, naranja y
+  lavanda) con la letra siempre oscura, fácil de leer también en tema oscuro. Se elige
+  color al colgar la nota y **se puede cambiar cuando quieras** desde la propia nota;
+  si no eliges ninguno, el corcho lo sortea.
+- **Firma en la esquina**: cada nota muestra quién la escribió y cuándo; si se editó,
+  aparece también la pista «editada».
+- **Quién puede tocar qué**: solo el autor (y el admin) puede editar o borrar una nota;
+  a los no autores no se les muestra ni el botón «Eliminar». El borrado pide confirmación
+  a dos clics.
+- **Hasta 500 caracteres** por nota (es un post-it, no un ensayo).
+- **Ambiente**: corcho con marco de madera, chinches, rotaciones suaves y letra
+  manuscrita (*Patrick Hand*, servida localmente: sin CDNs ni dependencias externas).
 
 ### 🗄️ Dónde se guarda todo: `DATA_DIR` y `FILES_DIR`
 

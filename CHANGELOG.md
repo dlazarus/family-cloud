@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## v0.3.0 — 2026-10-25
+
+- **📌 Notas — el corcho de la familia (funcionalidad nueva)**: una página más en el hub,
+  un tablero estilo corcho donde toda la familia cuelga post-its (recados, avisos,
+  recordatorios). Es el último servicio del plan original.
+  - Un solo corcho familiar: todos ven todas las notas. El texto va cifrado en la base
+    de datos (AES-256-GCM) como el resto de datos personales.
+  - Seis colores de post-it (amarillo, rosa, azul, verde, naranja y lavanda) con letra
+    siempre oscura; se eligen al crear y se pueden cambiar cuantas veces se quiera.
+    Sin elección, el servidor sortea uno para que el corcho salga variado.
+  - Firma en la esquina inferior derecha: autor y fecha, con aviso «editada».
+  - Solo el autor (y el admin) puede editar o borrar; el borrado se confirma a dos clics.
+    Máximo 500 caracteres por nota.
+  - Ambiente: corcho con marco de madera, chinches, rotaciones suaves que se enderezan
+    al acercar el ratón, y letra manuscrita *Patrick Hand* (licencia OFL, servida local
+    — sin CDNs). El corcho conserva su aspecto de corcho también en tema oscuro.
+
 ## v0.2.12 — 2026-10-25
 
 - **Calendario — arreglado: eventos que cruzan la medianoche**: al crear o editar un
