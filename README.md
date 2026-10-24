@@ -314,6 +314,7 @@ src/zip.js      escritor de ZIP al vuelo, sin dependencias
 public/         HTML + CSS + JS vanilla (sin librerías): index (login+hub),
                 calendar, passwords, files, admin, account — comparten common.js
 scripts/gen-env.js  generador de .env
+scripts/server-manual-test.sh  arranque manual de pruebas (primer plano, sin systemd)
 scripts/reset-password.js  rescate de contraseña (solo por consola en el servidor)
 scripts/storage-check.js   informe de disco, espacio y cupos (solo lectura)
 scripts/relocate-data.sh   mover DATA_DIR / FILES_DIR a otro disco
