@@ -2,6 +2,9 @@
 
 ## Sin publicar (sobre v0.2.5)
 
+- **Administración — icono en 「Cuentas」**: el título ahora lleva el 👤 del hub
+  («Mi cuenta」), a juego con el 📁 de 「Archivos de la familia」.
+
 - **Archivos — la carpeta compartida del admin, opcionalmente invisible**: en
   Administración → Archivos de la familia hay una casilla nueva, «Ocultar al resto la
   carpeta compartida de la cuenta del sistema (admin)», **activa por defecto**: cuando un
