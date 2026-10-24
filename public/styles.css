@@ -760,3 +760,96 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 /* separacion entre la fila de totales de cupos y las notas de disco */
 .files-usage { margin-bottom: 8px; }
 #usage-disk { margin-top: 18px; }
+
+/* ====== corcho de notas ====== */
+/* el corcho es corcho: sus colores NO cambian con el tema ni con la paleta
+   (la letra de las notas siempre es negra sobre papel pastel, como un post-it
+   de verdad). En tema oscuro solo se oscurece un poco el tablero. */
+.board-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.board-toolbar h2 { margin: 0; }
+
+.corkboard {
+  columns: 3;
+  column-gap: 22px;
+  padding: 26px;
+  border-radius: var(--radius);
+  border: 8px solid #7a5230;            /* marco de madera */
+  box-shadow: var(--shadow), inset 0 0 40px rgba(60, 35, 15, 0.35);
+  background-color: #c19a6b;
+  /* grano del corcho: ruido SVG (data:, permitido por la CSP) + moteado */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.32 0 0 0 0 0.18 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 20% 30%, rgba(90, 60, 30, 0.25) 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 60%, rgba(90, 60, 30, 0.22) 0 2px, transparent 3px),
+    radial-gradient(circle at 45% 80%, rgba(255, 240, 210, 0.18) 0 2px, transparent 3px);
+  background-size: 180px 180px, 140px 120px, 110px 150px, 160px 130px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) .corkboard { filter: brightness(0.82); }
+}
+:root.dark .corkboard { filter: brightness(0.82); }
+
+.board-empty { text-align: center; font-size: 1.4rem; color: #f5e8d0; margin: 18px 4px 6px; text-shadow: 0 1px 3px rgba(0,0,0,.4); }
+
+.nota {
+  position: relative;
+  break-inside: avoid;
+  margin: 0 0 22px;
+  padding: 22px 16px 14px;
+  border-radius: 3px;
+  color: #221d10;                       /* siempre tinta oscura: es papel */
+  transform: rotate(var(--rot, 0deg));
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 2px 4px 8px rgba(40, 25, 10, 0.35);
+  cursor: default;
+}
+.nota[title] { cursor: pointer; }
+.nota:hover, .nota:focus-visible {
+  transform: rotate(0deg) scale(1.03);  /* se endereza al acercarse */
+  box-shadow: 4px 8px 16px rgba(40, 25, 10, 0.45);
+  z-index: 2;
+}
+/* papel: borde inferior con ligera sombra de esquina levantada */
+.nota::after {
+  content: ""; position: absolute; left: 8%; right: 8%; bottom: 4px; height: 10px;
+  z-index: -1; box-shadow: 0 8px 10px rgba(30, 18, 6, 0.35); transform: skewX(-4deg) rotate(1.2deg);
+}
+.nota-pin { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 1.15rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+.nota-text { margin: 0; font-size: 1.18rem; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; }
+.nota-sign {
+  display: block; text-align: right; margin-top: 12px;
+  font-size: 0.85rem; color: rgba(34, 29, 16, 0.72);
+}
+/* colores de post-it (los mismos nombres que valida src/notes.js) */
+.nota-amarillo { background: #fff3a1; }
+.nota-rosa     { background: #ffd6e0; }
+.nota-azul     { background: #cfe9f7; }
+.nota-verde    { background: #d8f0c8; }
+.nota-naranja  { background: #ffdcbb; }
+.nota-lavanda  { background: #e6d9ff; }
+
+/* modal de nota: el cuadro de texto parece papel, con la fuente manuscrita */
+.note-card-modal { max-width: 460px; }
+.note-text {
+  width: 100%; padding: 12px 14px; border-radius: 10px; resize: vertical;
+  border: 1px solid var(--line); background: #fff9e6; color: #221d10;
+  font-size: 1.2rem; line-height: 1.35;
+}
+.char-hint { margin: 4px 2px 0; font-size: 0.75rem; color: var(--muted); text-align: right; }
+.swatch-label { display: grid; gap: 8px; font-size: 0.85rem; color: var(--muted); }
+.swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.swatch {
+  width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer; padding: 0; transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.swatch:hover { transform: scale(1.12); }
+.swatch.active { box-shadow: 0 0 0 3px var(--accent); transform: scale(1.12); }
+.swatch-amarillo { background: #fff3a1; } .swatch-rosa { background: #ffd6e0; }
+.swatch-azul { background: #cfe9f7; }     .swatch-verde { background: #d8f0c8; }
+.swatch-naranja { background: #ffdcbb; }  .swatch-lavanda { background: #e6d9ff; }
+
+@media (max-width: 900px) { .corkboard { columns: 2; } }
+@media (max-width: 600px) {
+  .corkboard { columns: 1; padding: 16px; border-width: 6px; }
+  .board-toolbar { flex-direction: column; align-items: stretch; }
+}

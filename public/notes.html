@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notas · Family Cloud</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <script>
+    // Tema antes de pintar: evita el destello del tema por defecto al cargar.
+    // Lee lo mismo que common.js (localStorage 'theme' y 'palette').
+    (function () {
+      try {
+        var t = localStorage.getItem('theme') ||
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.add(t);
+        var p = localStorage.getItem('palette') || 'mar';
+        if (p !== 'default') document.documentElement.dataset.palette = p;
+      } catch (e) { /* sin localStorage: tema por defecto */ }
+    })();
+  </script>
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <!-- Interruptor de tema: por defecto sigue al sistema; el botón fuerza y recuerda -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema">🌙</button>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">☁️ <span>Family Cloud</span></div>
+      <nav class="tabs">
+        <a class="tab" href="/">🏠 Inicio</a>
+        <button class="tab active">📌 Notas</button>
+      </nav>
+      <div class="userbox">
+        <span id="who" class="muted"></span>
+        <button id="btn-logout" class="btn ghost">Salir</button>
+      </div>
+    </header>
+
+    <main id="board-wrap">
+      <div class="board-toolbar">
+        <h2>📌 El corcho de la familia</h2>
+        <button id="btn-new" class="btn primary">✏️ Nueva nota</button>
+      </div>
+      <div id="corkboard" class="corkboard"></div>
+      <p id="board-empty" class="board-empty hidden hand">El corcho está vacío… ¡cuelga la primera nota!</p>
+    </main>
+  </div>
+
+  <!-- ===== Modal de nota ===== -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card note-card-modal">
+      <button type="button" id="modal-close" class="modal-x" title="Cerrar" aria-label="Cerrar">✕</button>
+      <h3 id="modal-title"></h3>
+      <form id="note-form">
+        <div class="row">
+          <textarea id="note-text" class="note-text hand" rows="6" maxlength="500" required
+            placeholder="Escribe aquí tu nota…"></textarea>
+          <p class="char-hint"><span id="note-count">0</span>/500</p>
+        </div>
+        <div class="row">
+          <label class="swatch-label">Color
+            <span id="swatches" class="swatches"></span>
+          </label>
+        </div>
+        <p id="note-author" class="event-author hidden"></p>
+        <div class="modal-actions">
+          <button type="button" id="note-delete" class="btn danger hidden">Eliminar</button>
+          <span class="spacer"></span>
+          <button type="button" id="note-cancel" class="btn ghost">Cancelar</button>
+          <button type="submit" id="note-save" class="btn primary">Colgar</button>
+        </div>
+        <p id="modal-error" class="error hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="/common.js"></script>
+  <script src="/notes.js"></script>
+</body>
+</html>
