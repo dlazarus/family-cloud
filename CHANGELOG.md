@@ -34,6 +34,9 @@
   explicito si faltan las dependencias** (`node_modules`): sin ellas el servicio entraba
   en bucle de reinicios con `ERR_MODULE_NOT_FOUND` y el unico modo de enterarse era el
   `journalctl`.
+- **Aviso de `node_modules` con el `sudo` puesto**: el mensaje dice `sudo npm install`
+  (en un proyecto copiado a /srv como root, un `npm install` de usuario corriente deja
+  los ficheros sin permisos para el servicio).
 
 ## v0.2.0 — 2026-10-24
 

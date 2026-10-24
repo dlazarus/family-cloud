@@ -99,7 +99,7 @@ fi
 # Sin dependencias el servicio entra en bucle de reinicios con ERR_MODULE_NOT_FOUND
 # (el error real sale en journalctl, lejos de la pantalla del instalador): mejor decirlo aqui.
 if [[ ! -d "$PROJECT_DIR/node_modules/express" ]]; then
-  fail "faltan las dependencias del proyecto (no hay node_modules). Ejecuta antes:  cd $PROJECT_DIR && npm install  y repite el instalador"
+  fail "faltan las dependencias del proyecto (no hay node_modules). Ejecuta antes (como root, p. ej. con sudo):  cd $PROJECT_DIR && sudo npm install  y repite el instalador"
 fi
 ok "dependencias presentes (node_modules)"
 
