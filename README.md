@@ -237,6 +237,33 @@ Cualquier usuario (incluido `admin`) puede cambiar su contraseña desde la tarje
 «Mi cuenta» del hub: pide la contraseña actual y la nueva dos veces. La sesión en
 curso no se corta; el cambio surte efecto en el siguiente acceso.
 
+### 🎨 Temas de color
+
+En **Mi cuenta**, arriba del todo, está el apartado **Tema de colores**:
+
+- **11 temas**: el de siempre (*Predeterminado*, salmón/tierra), rojo, naranja,
+  amarillo, verde, azul, violeta, **mar** (verde + azul), **neón**, **blanco y
+  negro** y **sepia** (papel y tinta).
+- Cada tema tiene sus **dos variantes**, clara y oscura: se cambian con el botón
+  ☀️/🌙 de la barra superior o con el control **Variante** del propio apartado
+  («La del sistema» sigue lo que use el móvil/PC).
+- Cada tarjeta de muestra se pinta con los colores de SU tema, así que el
+  muestrario es una previsualización real; al tocarlo el tema se aplica al
+  instante en toda la página.
+- La elección **se guarda en el navegador** (`localStorage`), no en la cuenta:
+  cada aparato elige el suyo. Un script en el `<head>` la aplica antes de pintar,
+  así que no se ve ningún destello al cargar.
+- Cada tema define **dos colores**: el principal (botones, marca, selección) y un
+  **segundo color** con el que se marca **lo compartido con la familia** (la fila
+  de CARPETA-COMPARTIDA y la barra de espacio usado). En los temas de un solo
+  color el segundo es una variante del primero; en mar, neón y sepia son
+  combinaciones de dos colores.
+- Las 22 combinaciones (11 temas × claro/oscura) se comprueban de forma
+  automática para que todo se lea: contraste ≥ 4,5 del texto secundario y ≥ 7 del
+  texto normal sobre el fondo y las tarjetas. Única excepción conocida: el botón
+  salmón de siempre queda en 2,95 con el texto blanco (rozando el 3,0); se
+  mejoraría oscureciendo un pelín `--accent` del tema por defecto.
+
 ---
 
 ## Seguridad

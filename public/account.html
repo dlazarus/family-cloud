@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mi cuenta · Family Cloud</title>
   <link rel="stylesheet" href="/styles.css" />
+  <script>
+    // Tema antes de pintar: evita el destello del tema por defecto al cargar.
+    // Lee lo mismo que common.js (localStorage 'theme' y 'palette').
+    (function () {
+      try {
+        var t = localStorage.getItem('theme') ||
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.add(t);
+        var p = localStorage.getItem('palette');
+        if (p && p !== 'default') document.documentElement.dataset.palette = p;
+      } catch (e) { /* sin localStorage: tema por defecto */ }
+    })();
+  </script>
   <link rel="icon" href="data:," />
 </head>
 <body>
@@ -26,6 +39,19 @@
 
     <main id="view-account">
       <div class="account-wrap">
+        <section class="gate-card account-card theme-card">
+          <h2>🎨 Tema de colores</h2>
+          <p class="muted theme-note">Cada tema tiene su variante clara y oscura: el boton ☀️/🌙 de arriba (o «Variante» abajo) cambia la variante del tema que elijas. Se guarda en este navegador y se nota al instante en toda la pagina.</p>
+          <div class="pal-grid" id="pal-grid"></div>
+          <div class="variant-row">
+            <span class="muted">Variante:</span>
+            <div class="seg" id="variant-seg">
+              <button type="button" class="seg-btn" data-v="">🌗 La del sistema</button>
+              <button type="button" class="seg-btn" data-v="light">☀️ Clara</button>
+              <button type="button" class="seg-btn" data-v="dark">🌙 Oscura</button>
+            </div>
+          </div>
+        </section>
         <section class="gate-card account-card">
           <h2>Cambiar mi contraseña</h2>
           <form id="pass-form" autocomplete="off">

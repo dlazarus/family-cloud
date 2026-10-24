@@ -1,6 +1,16 @@
 'use strict';
 
-// ---------- mi cuenta: cambio de propia contraseña (cualquier usuario) ----------
+// ---------- mi cuenta: tema de colores + cambio de propia contraseña ----------
+
+// Los muestrarios se construyen con PALETTES (definida en common.js, que es la
+// misma lista que usa el CSS). Cada boton lleva data-palette, y el CSS pinta
+// cada boton con los colores de ESA paleta (selectores .pal[data-palette=...]).
+$('#pal-grid').innerHTML = PALETTES.map((p) => `
+  <button type="button" class="pal" data-palette="${p.id}" aria-pressed="false" title="Tema ${p.label}">
+    <span class="pal-demo"></span>
+    <span class="pal-name">${p.label}</span>
+  </button>`).join('');
+applyPaletteWidgets();
 
 async function boot() {
   const me = await requireUser();

@@ -46,17 +46,87 @@ function applyTheme() {
   document.documentElement.classList.toggle('light', t === 'light');
   const btn = $('#theme-toggle');
   if (btn) btn.textContent = t === 'dark' ? '☀️' : '🌙';
+  // el control de variante de «Mi cuenta» (si la pagina lo tiene)
+  const seg = $('#variant-seg');
+  if (seg) {
+    const stored = localStorage.getItem('theme') || '';
+    for (const b of seg.querySelectorAll('button')) {
+      const on = b.dataset.v === stored;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', String(on));
+    }
+  }
+  applyPaletteWidgets();
 }
+function setVariant(v) { // '' = seguir al sistema
+  if (v) localStorage.setItem('theme', v);
+  else localStorage.removeItem('theme');
+  applyTheme();
+}
+
+// ---------- paletas de color ----------
+// El nombre va en <html data-palette="...">; 'default' = el tema de siempre
+// (sin atributo). Se guarda en localStorage: es una preferencia de este
+// navegador, no de la cuenta (asi no hace ninguna peticion antes de pintar).
+const PALETTES = [
+  { id: 'default', label: 'Predeterminado' },
+  { id: 'rojo', label: 'Rojo' },
+  { id: 'naranja', label: 'Naranja' },
+  { id: 'amarillo', label: 'Amarillo' },
+  { id: 'verde', label: 'Verde' },
+  { id: 'azul', label: 'Azul' },
+  { id: 'violeta', label: 'Violeta' },
+  { id: 'mar', label: 'Mar (verde+azul)' },
+  { id: 'neon', label: 'Neon' },
+  { id: 'bw', label: 'Blanco y negro' },
+  { id: 'sepia', label: 'Sepia' },
+];
+function effectivePalette() {
+  const p = localStorage.getItem('palette') || 'default';
+  return PALETTES.some((x) => x.id === p) ? p : 'default';
+}
+function applyPalette() {
+  const p = effectivePalette();
+  if (p === 'default') delete document.documentElement.dataset.palette;
+  else document.documentElement.dataset.palette = p;
+}
+function applyPaletteWidgets() {
+  const grid = $('#pal-grid');
+  if (!grid) return;
+  const p = effectivePalette();
+  for (const b of grid.querySelectorAll('.pal')) {
+    const on = b.dataset.palette === p;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', String(on));
+  }
+}
+function setPalette(id) {
+  if (!PALETTES.some((x) => x.id === id)) return;
+  if (id === 'default') localStorage.removeItem('palette');
+  else localStorage.setItem('palette', id);
+  applyPalette();
+  applyPaletteWidgets();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const btn = $('#theme-toggle');
-  if (btn) btn.addEventListener('click', () => {
-    localStorage.setItem('theme', effectiveTheme() === 'dark' ? 'light' : 'dark');
-    applyTheme();
+  if (btn) btn.addEventListener('click', () => setVariant(effectiveTheme() === 'dark' ? 'light' : 'dark'));
+  const seg = $('#variant-seg');
+  if (seg) seg.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-v]');
+    if (b) setVariant(b.dataset.v);
   });
+  const grid = $('#pal-grid');
+  if (grid) grid.addEventListener('click', (e) => {
+    const b = e.target.closest('.pal');
+    if (b) setPalette(b.dataset.palette);
+  });
+  applyPaletteWidgets();
 });
 mediaDark.addEventListener('change', () => {
   if (!localStorage.getItem('theme')) applyTheme(); // sin elección manual: seguir al sistema
 });
+applyPalette();
 applyTheme();
 
 // ---------- páginas protegidas: sesión obligatoria ----------

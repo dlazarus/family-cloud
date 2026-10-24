@@ -3,7 +3,7 @@
   --bg: #faf7f2;
   --card: #ffffff;
   --ink: #3b3a36;
-  --muted: #8b877e;
+  --muted: #767066;
   --line: #ece7de;
   --accent: #e07a5f;
   --accent-ink: #b85c44;
@@ -47,6 +47,139 @@
 :root { --c-cumple: #ffe5d9; --c-comida: #e8f5d8; --c-viaje: #d8ecf7;
         --c-tarea: #f4e7c9; --c-salud: #fbdde3; --c-otro: #ece9e2; }
 
+/* ==============================================================
+   TEMAS DE COLOR
+   Cada tema define las mismas variables y se activa poniendo
+   data-palette="nombre" en <html> (lo hace common.js desde
+   localStorage, y un script en el <head> para no dar un destello
+   al cargar). La variante clara/oscuro sigue con .light/.dark, o
+   sea: el boton ☀/🌙 de arriba vale para TODOS los temas.
+
+   --accent      color principal (botones, marca, seleccion)
+   --accent-ink  texto en color de acento sobre tarjetas
+   --accent2     segundo color: lo compartido con la familia
+   --accent2-ink texto secundario (subtitulo de la compartida)
+   --btn-ink     texto de los botones primarios (negro cuando el
+                 acento es claro, para que se lea)
+
+   Los selectores llevan tambien .pal[data-palette=...]: asi los
+   muestrarios de «Mi cuenta» pueden pintar cada tema con sus
+   colores reales, independientemente del tema activo.
+   ==============================================================
+*/
+:root { --accent2: var(--accent); --accent2-ink: var(--accent-ink); --btn-ink: #fff; }
+
+/* --- rojo --- */
+:root[data-palette="rojo"], .pal[data-palette="rojo"] {
+  --bg: #fbf5f4; --card: #ffffff; --ink: #382f2d; --muted: #6d5f5a; --line: #ecdedb;
+  --accent: #b93a30; --accent-ink: #9c2f26; --accent2: #c9713f; --accent2-ink: #a85c2f;
+}
+:root.dark[data-palette="rojo"], .dark .pal[data-palette="rojo"] {
+  --bg: #1d1918; --card: #27211f; --ink: #ece3df; --muted: #9d8c85; --line: #3a302c;
+  --accent: #cf564a; --accent-ink: #ee897d; --accent2: #dd9260; --accent2-ink: #e8a97c;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- naranja --- */
+:root[data-palette="naranja"], .pal[data-palette="naranja"] {
+  --bg: #fdf6ef; --card: #ffffff; --ink: #3b332b; --muted: #6f6254; --line: #f0e2d3;
+  --accent: #bd631a; --accent-ink: #9c5114; --accent2: #2f7d8c; --accent2-ink: #276875;
+}
+:root.dark[data-palette="naranja"], .dark .pal[data-palette="naranja"] {
+  --bg: #1f1a15; --card: #2a231c; --ink: #ece1d3; --muted: #a2907c; --line: #3d342a;
+  --accent: #dc8738; --accent-ink: #eda85f; --accent2: #55b0c1; --accent2-ink: #7cc4d2;
+  --btn-ink: #241a10; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- amarillo (el dificil: hay que oscurecerlo para que se lea) --- */
+:root[data-palette="amarillo"], .pal[data-palette="amarillo"] {
+  --bg: #fdf7e6; --card: #ffffff; --ink: #3a3628; --muted: #6e6650; --line: #efe9d2;
+  --accent: #9c7307; --accent-ink: #7c5b03; --accent2: #2f7d6d; --accent2-ink: #26675a;
+}
+:root.dark[data-palette="amarillo"], .dark .pal[data-palette="amarillo"] {
+  --bg: #1e1c15; --card: #292619; --ink: #ece7d2; --muted: #a39a7c; --line: #3c3826;
+  --accent: #d4ae39; --accent-ink: #e9cd78; --accent2: #52b3a1; --accent2-ink: #7cc9ba;
+  --btn-ink: #221e10; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- verde --- */
+:root[data-palette="verde"], .pal[data-palette="verde"] {
+  --bg: #f5faf4; --card: #ffffff; --ink: #2f3a2e; --muted: #5e6b5a; --line: #dfeadb;
+  --accent: #2c7a4b; --accent-ink: #226039; --accent2: #b0702c; --accent2-ink: #955e24;
+}
+:root.dark[data-palette="verde"], .dark .pal[data-palette="verde"] {
+  --bg: #181f19; --card: #222a22; --ink: #e2eadd; --muted: #8f9c89; --line: #333d31;
+  --accent: #49ad71; --accent-ink: #7bd09a; --accent2: #d99f5d; --accent2-ink: #e3b682;
+  --btn-ink: #14200f; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- azul --- */
+:root[data-palette="azul"], .pal[data-palette="azul"] {
+  --bg: #f4f7fb; --card: #ffffff; --ink: #2c343d; --muted: #5a6570; --line: #dde5ee;
+  --accent: #2668b0; --accent-ink: #1e5590; --accent2: #bc762c; --accent2-ink: #9c6224;
+}
+:root.dark[data-palette="azul"], .dark .pal[data-palette="azul"] {
+  --bg: #171b20; --card: #212731; --ink: #e1e7ee; --muted: #8d99a6; --line: #303945;
+  --accent: #4c94da; --accent-ink: #8cbff0; --accent2: #dc9f59; --accent2-ink: #e6b67f;
+  --btn-ink: #101a26; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- violeta --- */
+:root[data-palette="violeta"], .pal[data-palette="violeta"] {
+  --bg: #f8f5fb; --card: #ffffff; --ink: #352e3d; --muted: #645c6c; --line: #e6dff0;
+  --accent: #6f43b0; --accent-ink: #593492; --accent2: #bc7c36; --accent2-ink: #9d662b;
+}
+:root.dark[data-palette="violeta"], .dark .pal[data-palette="violeta"] {
+  --bg: #1b1822; --card: #252130; --ink: #e6e1ee; --muted: #978ea6; --line: #37313f;
+  --accent: #9f74dd; --accent-ink: #c1a2f0; --accent2: #dc9f5c; --accent2-ink: #e6b580;
+  --btn-ink: #1a1226; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- mar: verde y azul a la vez --- */
+:root[data-palette="mar"], .pal[data-palette="mar"] {
+  --bg: #f2f8f8; --card: #ffffff; --ink: #22333a; --muted: #536669; --line: #d9e8e8;
+  --accent: #14778c; --accent-ink: #0f5f72; --accent2: #2c8452; --accent2-ink: #236b42;
+}
+:root.dark[data-palette="mar"], .dark .pal[data-palette="mar"] {
+  --bg: #121a1c; --card: #1b2528; --ink: #dce8e9; --muted: #86a0a3; --line: #2b3a3d;
+  --accent: #28a0b5; --accent-ink: #6bcde0; --accent2: #4fbd86; --accent2-ink: #7ed3a5;
+  --btn-ink: #0c1a1e; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* --- neon: negro profundo + verde electrico y cyan --- */
+:root[data-palette="neon"], .pal[data-palette="neon"] {
+  --bg: #e9fbf0; --card: #ffffff; --ink: #10302a; --muted: #4a7a6f; --line: #cfeee0;
+  --accent: #0c8349; --accent-ink: #0a6b3c; --accent2: #0c7ba1; --accent2-ink: #096384;
+}
+:root.dark[data-palette="neon"], .dark .pal[data-palette="neon"] {
+  --bg: #081110; --card: #0f1c19; --ink: #d5ffef; --muted: #6fa79a; --line: #1e3a33;
+  --accent: #12c46a; --accent-ink: #42e38c; --accent2: #20c0e6; --accent2-ink: #5ad3f0;
+  --btn-ink: #05231a; --shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* --- blanco y negro: sin color, todo contraste --- */
+:root[data-palette="bw"], .pal[data-palette="bw"] {
+  --bg: #f4f4f4; --card: #ffffff; --ink: #141414; --muted: #5c5c5c; --line: #dcdcdc;
+  --accent: #1f1f1f; --accent-ink: #111111; --accent2: #6a6a6a; --accent2-ink: #545454;
+}
+:root.dark[data-palette="bw"], .dark .pal[data-palette="bw"] {
+  --bg: #0e0e0e; --card: #191919; --ink: #f0f0f0; --muted: #9c9c9c; --line: #2f2f2f;
+  --accent: #eaeaea; --accent-ink: #e6e6e6; --accent2: #a8a8a8; --accent2-ink: #9a9a9a;
+  --btn-ink: #101010; --shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* --- sepia: papel y tinta (mi eleccion) --- */
+:root[data-palette="sepia"], .pal[data-palette="sepia"] {
+  --bg: #f7f0e3; --card: #fffbf2; --ink: #463524; --muted: #6f5c47; --line: #e6d9c3;
+  --accent: #8a5626; --accent-ink: #6d431c; --accent2: #5c7830; --accent2-ink: #4a6127;
+}
+:root.dark[data-palette="sepia"], .dark .pal[data-palette="sepia"] {
+  --bg: #1a150e; --card: #241d13; --ink: #ecdfc7; --muted: #a3927a; --line: #362c1c;
+  --accent: #c6874a; --accent-ink: #e0b27c; --accent2: #a6be73; --accent2-ink: #bcd091;
+  --btn-ink: #201810; --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
@@ -73,7 +206,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; }
 }
 .btn:hover { box-shadow: var(--shadow); }
 .btn:active { transform: scale(0.97); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--btn-ink, #fff); }
 .btn.primary:hover { background: var(--accent-ink); }
 .btn.ghost { background: transparent; }
 .btn.danger { color: #c0392b; border-color: #eccfc9; }
@@ -241,10 +374,52 @@ input:focus, select:focus, textarea:focus {
 .admin-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
 
 /* ====== mi cuenta ====== */
-.account-wrap { display: flex; justify-content: center; padding-top: 28px; }
+.account-wrap { display: grid; gap: 18px; justify-items: center; padding-top: 28px; }
 .account-card h2 { margin: 0 0 16px; font-size: 1.2rem; }
 .account-card form { display: grid; gap: 14px; }
 .account-card .btn { margin-top: 4px; }
+
+/* ---------- tema de colores (apartado de «Mi cuenta») ---------- */
+.theme-card { width: min(620px, 100%); text-align: left; }
+.theme-card h2 { margin: 0 0 6px; font-size: 1.2rem; }
+.theme-note { margin: 0 0 16px; font-size: 0.85rem; }
+.pal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.pal {
+  /* el muestrario se pinta con las variables del tema que representa (los
+     bloques .pal[data-palette=...] de arriba), no con las del tema activo */
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  color: var(--ink); font: inherit; padding: 8px; cursor: pointer; text-align: center;
+}
+.pal:hover { box-shadow: var(--shadow); }
+.pal:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pal.active { border-color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+.pal-demo {
+  display: block; height: 36px; border-radius: 8px; background: var(--bg);
+  border: 1px solid var(--line); position: relative; overflow: hidden; margin-bottom: 7px;
+}
+.pal-demo::before {
+  content: ""; position: absolute; left: 7px; top: 8px; width: 46%; height: 9px;
+  border-radius: 99px; background: var(--accent);
+}
+.pal-demo::after {
+  content: ""; position: absolute; left: 7px; bottom: 8px; width: 30%; height: 7px;
+  border-radius: 99px; background: var(--accent2);
+}
+.pal-name { font-size: 0.78rem; font-weight: 600; display: block; }
+.pal.active .pal-name::after { content: " ✓"; color: var(--accent); }
+.variant-row { display: flex; gap: 10px; align-items: center; margin-top: 18px; flex-wrap: wrap; }
+.variant-row .muted { font-size: 0.85rem; }
+/* el tema de siempre, para que su muestrario no herede el tema activo */
+.pal[data-palette="default"] {
+  --bg: #faf7f2; --card: #ffffff; --ink: #3b3a36; --muted: #767066; --line: #ece7de;
+  --accent: #e07a5f; --accent-ink: #b85c44; --accent2: #e07a5f; --accent2-ink: #b85c44;
+  --btn-ink: #fff;
+}
+.dark .pal[data-palette="default"] {
+  --bg: #1e1c19; --card: #2a2723; --ink: #e9e4da; --muted: #9b958a; --line: #3a362f;
+  --accent: #e07a5f; --accent-ink: #eb9a80; --accent2: #e07a5f; --accent2-ink: #eb9a80;
+}
+
 .admin-card h2 { margin: 0 0 12px; font-size: 1.05rem; }
 .user-form { display: flex; gap: 10px; flex-wrap: wrap; }
 .user-form input { flex: 1; min-width: 160px; width: auto; }
@@ -401,17 +576,17 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
   padding: 8px 13px; border-radius: var(--radius); cursor: pointer; font-size: 0.88rem;
 }
 .seg-btn:hover { box-shadow: var(--shadow); }
-.seg-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.seg-btn.active { background: var(--accent); border-color: var(--accent); color: var(--btn-ink, #fff); font-weight: 600; }
 .quota { display: grid; gap: 5px; margin-bottom: 14px; }
 .quota-text { font-size: 0.82rem; color: var(--muted); }
 .quota-track { height: 7px; background: var(--line); border-radius: 99px; overflow: hidden; }
-.quota-fill { height: 100%; width: 0%; min-width: 4px; background: var(--accent); border-radius: 99px; transition: width 0.25s; }
+.quota-fill { height: 100%; width: 0%; min-width: 4px; background: var(--accent2); border-radius: 99px; transition: width 0.25s; }
 .quota-fill.over { background: #c0392b; }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 1rem; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
 .crumb { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 4px 7px; border-radius: 8px; font-size: 1rem; }
 button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)); color: var(--ink); }
 .crumb.here { color: var(--ink); font-weight: 600; cursor: default; }
-.crumb.drop-crumb { background: var(--accent); color: #fff; }
+.crumb.drop-crumb { background: var(--accent); color: var(--btn-ink, #fff); }
 .crumb-sep { color: var(--muted); }
 .shared-crumb { color: var(--accent-ink); }
 .dropzone { border: 2px dashed transparent; border-radius: var(--radius); transition: border-color 0.15s, background 0.15s; }
@@ -434,13 +609,13 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .fdate { color: var(--muted); opacity: 0.8; }
 /* la carpeta compartida se ve claramente distinta del resto */
 .frow.shared-root {
-  border: 2px dashed var(--accent);
-  background: color-mix(in srgb, var(--accent) 9%, var(--card));
+  border: 2px dashed var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 9%, var(--card));
 }
 .frow.shared-root .ficon { font-size: 1.3rem; }
-.frow.shared-root .ftitle { color: var(--accent-ink); font-weight: 700; letter-spacing: 0.02em; }
-.frow.shared-root .fsub { color: var(--accent-ink); opacity: 0.85; font-style: italic; }
-.frow.foreign { border-left: 3px solid var(--accent); }
+.frow.shared-root .ftitle { color: var(--accent2-ink); font-weight: 700; letter-spacing: 0.02em; }
+.frow.shared-root .fsub { color: var(--accent2-ink); opacity: 0.85; font-style: italic; }
+.frow.foreign { border-left: 3px solid var(--accent2); }
 .files-note { margin-top: 16px; font-size: 0.8rem; }
 .upload-progress { display: grid; gap: 5px; margin-top: 12px; font-size: 0.82rem; color: var(--muted); }
 .storage-warn {

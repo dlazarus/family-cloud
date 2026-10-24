@@ -48,6 +48,25 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
   y si lo reservado supera la capacidad del disco se avisa. Los datos los aporta
   `/api/users/usage`, que ahora incluye `total` (usado, reserva, cuentas sin tope y
   espacio libre/capacidad del `FILES_DIR`, leídos con `fs.statfsSync`).
+- **Temas de color en «Mi cuenta»** (cada uno con su variante clara y oscura):
+  - 11 temas: el de siempre (*Predeterminado*), rojo, naranja, amarillo, verde,
+    azul, violeta, mar (verde+azul), neón, blanco y negro y sepia. Se eligen en un
+    muestrario que se pinta con los colores reales de cada tema.
+  - La variante clara/oscura es la de siempre (botón ☀/🌙 o «la del sistema»), pero
+    ahora tiene un control explícito en «Mi cuenta» (sistema / clara / oscura) que
+    se sincroniza con ese botón.
+  - Cada tema define además un **segundo color** (`--accent2`) con el que se marca
+    lo compartido con la familia: la fila de CARPETA-COMPARTIDA, el borde de las
+    filas ajenas y la barra de espacio usado. En los monocolor es una variante del
+    principal; en mar, neón y sepia son dos colores distintos.
+  - La preferencia vive en `localStorage` (por navegador, no por cuenta) y un script
+    en el `<head>` de cada página la aplica antes de pintar: se acabó el destello del
+    tema por defecto al cargar, y el claro/oscuro deja de estar duplicado en un
+    `@media`.
+  - Contraste comprobado en las 22 combinaciones: texto normal ≥ 7, secundario ≥ 4,5
+    y etiquetas de botón ≥ 3. Para ello se oscureció el gris del texto apagado en los
+    temas claros (en el de siempre sube de 3,4 a 4,9). Excepción documentada: el
+    botón salmón de siempre queda en 2,95 con texto blanco.
 - **Almacenamiento configurable**: `DATA_DIR` (base de datos, mejor siempre en el
   ext4 del servidor) y `FILES_DIR` (archivos; puede vivir en un disco grande NTFS).
   Utilidades nuevas: `scripts/storage-check.js` (rutas, sistema de archivos, espacio

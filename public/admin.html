@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Administración · Family Cloud</title>
   <link rel="stylesheet" href="/styles.css" />
+  <script>
+    // Tema antes de pintar: evita el destello del tema por defecto al cargar.
+    // Lee lo mismo que common.js (localStorage 'theme' y 'palette').
+    (function () {
+      try {
+        var t = localStorage.getItem('theme') ||
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.add(t);
+        var p = localStorage.getItem('palette');
+        if (p && p !== 'default') document.documentElement.dataset.palette = p;
+      } catch (e) { /* sin localStorage: tema por defecto */ }
+    })();
+  </script>
   <link rel="icon" href="data:," />
 </head>
 <body>
