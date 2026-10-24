@@ -187,7 +187,7 @@ function openModal(ev, date) {
   const authorEl = $('#ev-author');
   if (ev?.author) { authorEl.textContent = `autoría: ${ev.author}`; authorEl.classList.remove('hidden'); }
   else authorEl.classList.add('hidden');
-  const mine = !ev || ev.created_by == null || ev.created_by === state.me.id;
+  const mine = !ev || ev.created_by == null || ev.created_by === state.me.id || state.me.role === 'admin';
   state.canEdit = mine;
   const saveBtn = $('#ev-save');
   saveBtn.classList.toggle('off', !!ev && !mine);

@@ -19,7 +19,8 @@
   「autoría: <usuario>」 (informativa, no editable); a los no autores se les oculta el botón
   「Eliminar」, se les apaga 「Guardar」 y al pulsarlo aparece el aviso 「Solo el autor de un
   evento puede modificarlo o borrarlo」. Los eventos sin autor registrado (de antes de
-  esta versión) siguen editables por cualquiera.
+  esta versión) siguen editables por cualquiera. Los 「admin」 sí pueden editar o borrar
+  cualquier evento, sea de quien sea.
 
 ## v0.2.10 — 2026-10-25
 

@@ -32,9 +32,10 @@ function toPublic(row) {
 const SEL = `SELECT e.*, au.username AS author FROM events e
              LEFT JOIN users au ON au.id = e.created_by`;
 
-// solo quien creo el evento puede modificarlo (los heredados sin autor, cualquiera)
+// solo quien creo el evento puede modificarlo; los admin pueden con cualquiera
+// (los heredados sin autor, cualquiera)
 function ownedBy(row, user) {
-  return row.created_by == null || row.created_by === user.id;
+  return user.role === 'admin' || row.created_by == null || row.created_by === user.id;
 }
 
 function validateBody(body) {
