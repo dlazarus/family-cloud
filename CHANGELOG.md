@@ -14,6 +14,11 @@
   instalacion al estar los primeros. La secuencia manual se queda como subapartado
   explicito «Probar sin instalar (desarrollo o ensayo)».
 
+- **Adios a la pista de AdGuard Home**: el instalador y el README ya no dan por hecho
+  que la LAN usa AdGuard Home ni un nombre `cloud.lan`. Los pasos finales solo dicen la
+  URL con la IP; el nombre bonito es opcional y cosa del servidor DNS que cada uno use
+  (AdGuard, Pi-hole, el router…) o de usar la IP directamente.
+
 ## v0.2.2 — 2026-10-24
 
 - **`start.sh` renombrado y movido**: el arranque manual de pruebas vive ahora en

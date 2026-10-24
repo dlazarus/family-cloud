@@ -198,8 +198,10 @@ Es **idempotente** (re-ejecutarlo no duplica nada) y tiene modo ensayo sin efect
 ./scripts/install.sh --dry-run
 ```
 
-Al terminar recuerda los dos pasos manuales que imprime: el redireccionamiento
-DNS `cloud.lan → <IP>` en AdGuard Home y el enlace desde tu página de inicio.
+Al terminar, abre `http://<IP del servidor>:<puerto>` desde cualquier aparato de la
+red. Si prefieres un nombre (p. ej. `cloud.lan`) en vez de la IP, añade la entrada en
+el servidor DNS que uses (AdGuard Home, Pi-hole, el router…): el instalador no toca
+el DNS de la red.
 
 ### Instalación manual (alternativa al script)
 
@@ -212,9 +214,9 @@ sudo cp deploy/family-cloud.service /etc/systemd/system/
 sudo systemctl daemon-reload && sudo systemctl enable --now family-cloud
 ```
 
-Ajusta el `PORT`/`HOST` del `.env` si cambia. Después crea el redireccionamiento
-DNS `cloud.lan → <IP del servidor>` en AdGuard Home y enlázalo desde tu
-página de inicio.
+Ajusta el `PORT`/`HOST` del `.env` si cambia. Después abre
+`http://<IP del servidor>:<puerto>`; si quieres un nombre en vez de la IP, añade la
+entrada DNS en el servidor que uses.
 
 ### ⚙️ Administración
 

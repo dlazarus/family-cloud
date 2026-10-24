@@ -320,9 +320,10 @@ fi
 LAN_IP="${LAN_IP:-<IP_DEL_SERVIDOR>}"
 echo
 echo "Pasos finales (manuales):"
-echo "  1. En AdGuard Home: redireccionamiento DNS  cloud.lan -> $LAN_IP"
-echo "  2. Abre en el navegador  http://$LAN_IP:$PORT"
+echo "  1. Abre en el navegador  http://$LAN_IP:$PORT"
 echo "     (si aún no hay usuarios verás la pantalla para crear el administrador)"
+echo "     (opcional: para usar un nombre en vez de la IP, añade la entrada DNS"
+echo "      correspondiente en TU servidor DNS de la LAN; el instalador no toca DNS)"
 echo
 echo "Comandos útiles:"
 echo "  node scripts/storage-check.js     # dónde están los datos, espacio libre y cupos"
