@@ -118,7 +118,7 @@ const fmtSize = (n) => {
 
 async function renderUsage() {
   const info = await api('/users/usage');
-  $('#g-quota').value = info.global_quota_mb;
+  $('#g-quota').value = mb2gb(info.global_quota_mb);
   $('#g-shared').value = info.shared_folder_name;
   $('#usage-rows').innerHTML = info.users
     .map((u) => {
@@ -129,7 +129,7 @@ async function renderUsage() {
       return `<tr data-id="${u.id}">
       <td>${escapeHtml(u.username)}</td>
       <td>${fmtSize(u.used_bytes)}${pct}</td>
-      <td><input class="quota-input" type="number" min="0" step="1" value="${u.quota_mb ?? ''}" placeholder="(defecto)" /></td>
+      <td><input class="quota-input" type="number" min="0" step="0.5" value="${u.quota_mb == null ? '' : mb2gb(u.quota_mb)}" placeholder="(defecto)" /></td>
       <td>${u.unlimited ? 'sin limite' : fmtSize(u.effective_mb * 1024 * 1024)}</td>
       <td class="actions"><button data-act="quota" class="btn ghost">Guardar cupo</button></td>
     </tr>`;
@@ -137,6 +137,10 @@ async function renderUsage() {
     .join('');
   renderUsageTotals(info.total);
 }
+
+// los cupos viajan en MB por la API pero se muestran y editan en GB
+ const mb2gb = (mb) => { const g = Number(mb) / 1024; return Number.isInteger(g) ? g : Math.round(g * 100) / 100; };
+const gb2mb = (gb) => Math.max(0, Math.round(Number(gb) * 1024));
 
 // Resumen del servicio: lo que ocupa de verdad y lo que reservan los cupos.
 function renderUsageTotals(t) {
@@ -172,7 +176,7 @@ $('#g-save').addEventListener('click', async () => {
   try {
     await api('/users/settings', {
       method: 'PUT',
-      body: { file_quota_mb: Number($('#g-quota').value), shared_folder_name: $('#g-shared').value },
+      body: { file_quota_mb: gb2mb($('#g-quota').value), shared_folder_name: $('#g-shared').value },
     });
     adminMsg('Ajustes de archivos guardados ✓');
     renderUsage();
@@ -185,7 +189,7 @@ $('#usage-rows').addEventListener('click', async (e) => {
   const tr = btn.closest('tr');
   const raw = tr.querySelector('.quota-input').value.trim();
   try {
-    await api(`/users/${tr.dataset.id}`, { method: 'PUT', body: { quota_mb: raw === '' ? null : Number(raw) } });
+    await api(`/users/${tr.dataset.id}`, { method: 'PUT', body: { quota_mb: raw === '' ? null : gb2mb(raw) } });
     adminMsg('Cupo actualizado ✓');
     renderUsage();
   } catch (err) { adminMsg(err.message); }
