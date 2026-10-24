@@ -2,6 +2,11 @@
 
 ## Sin publicar (sobre v0.2.4)
 
+- **Archivos — carpetas vacías ajenas**: en una carpeta compartida de OTRO usuario que
+  esté vacía ya no sale el mensaje invitando a «Usa ⬆ Subir o arrastra archivos aquí»
+  (no se puede escribir ahí); sale solo «Esta carpeta esta vacia.». La invitación a
+  subir se mantiene en las carpetas propias.
+
 - **Administración → cupos**: el espacio libre del disco de archivos ahora sale TAMBIEN
   en la fila de totales, al lado del cupo total y con el mismo tamaño de letra
   («💽 167 GB libres en disco») — la nota pequeña seguía siendo demasiado discreta. Y se

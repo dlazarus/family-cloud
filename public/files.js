@@ -219,9 +219,14 @@ function renderList() {
 
   if (!items.length) {
     empty.classList.remove('hidden');
-    empty.textContent = state.view === 'family' && state.cwd === null
-      ? 'Nadie ha compartido nada todavia. Sube algo a tu CARPETA-COMPARTIDA para que la familia lo vea.'
-      : 'Esta carpeta esta vacia. Usa «⬆ Subir» o arrastra archivos aqui.';
+    if (state.view === 'family' && state.cwd === null) {
+      empty.textContent = 'Nadie ha compartido nada todavia. Sube algo a tu CARPETA-COMPARTIDA para que la familia lo vea.';
+    } else if (!currentFolderWritable()) {
+      // carpeta ajena (solo lectura): no tiene sentido invitar a subir aqui
+      empty.textContent = 'Esta carpeta esta vacia.';
+    } else {
+      empty.textContent = 'Esta carpeta esta vacia. Usa «⬆ Subir» o arrastra archivos aqui.';
+    }
     return;
   }
   empty.classList.add('hidden');
