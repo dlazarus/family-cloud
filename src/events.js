@@ -54,7 +54,11 @@ function validateBody(body) {
   if (start_time && !TIME_RE.test(start_time)) return { error: 'Hora de inicio no valida (HH:MM).' };
   if (end_time && !TIME_RE.test(end_time)) return { error: 'Hora de fin no valida (HH:MM).' };
   if (end_time && !start_time) return { error: 'Pon tambien la hora de inicio si pones la de fin.' };
-  if (start_time && end_time && end_time < start_time) return { error: 'La hora de fin no puede ser anterior a la de inicio.' };
+  // la hora de fin solo debe ser posterior a la de inicio si el evento termina el mismo dia;
+  // en un rango de varias fechas es legitimo (p. ej. 10:00 de hoy hasta 06:00 de manana)
+  if (start_time && end_time && (!b.end_date || b.end_date === b.date) && end_time < start_time) {
+    return { error: 'La hora de fin no puede ser anterior a la de inicio (en el mismo dia).' };
+  }
   return { value: { date: b.date, end_date: b.end_date || null, start_time, end_time, title, description, category } };
 }
 

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.2.12 — 2026-10-25
+
+- **Calendario — arreglado: eventos que cruzan la medianoche**: al crear o editar un
+  evento de varios días (p. ej. de hoy 10:00 a mañana 06:00), el aviso 「La hora de fin
+  no puede ser anterior a la de inicio」 aparecía aunque el horario fuese correcto. La
+  comprobación de horas ahora solo aplica cuando el evento empieza y termina el mismo
+  día (y el aviso aclara 「en el mismo día」).
+
 ## v0.2.11 — 2026-10-25
 
 - **Calendario — solo el autor puede editar o borrar sus eventos**: cada evento guarda
