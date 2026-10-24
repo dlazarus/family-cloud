@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.2)
+## v0.2.3 — 2026-10-24
 
 - **El instalador ya no pregunta dos veces las rutas y los cupos**: al crear el `.env`
   de cero, `gen-env.js` ya pregunta `DATA_DIR`, `FILES_DIR`, cupo y tope; la ronda de
