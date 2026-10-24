@@ -187,8 +187,9 @@ function openModal(ev, date) {
   if (ev?.author) { authorEl.textContent = `autoría: ${ev.author}`; authorEl.classList.remove('hidden'); }
   else authorEl.classList.add('hidden');
   const mine = !ev || ev.created_by == null || ev.created_by === state.me.id;
+  state.canEdit = mine;
   const saveBtn = $('#ev-save');
-  saveBtn.disabled = !!ev && !mine;
+  saveBtn.classList.toggle('off', !!ev && !mine);
   saveBtn.title = mine ? '' : 'Solo quien creo este evento puede editarlo';
   $('#ev-delete').classList.toggle('hidden', !ev || !mine);
   $('#modal-error').classList.add('hidden');
@@ -208,6 +209,12 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
 $('#event-form').addEventListener('submit', async (e) => {
   e.preventDefault();
+  if (state.editing && !state.canEdit) {
+    const el = $('#modal-error');
+    el.textContent = 'Solo el autor de un evento puede modificarlo o borrarlo.';
+    el.classList.remove('hidden');
+    return;
+  }
   const body = {
     title: $('#ev-title').value,
     date: $('#ev-date').value,
