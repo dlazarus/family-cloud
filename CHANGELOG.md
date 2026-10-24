@@ -76,7 +76,10 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
   caen (tipo de sistema de archivos y espacio libre), avisa en NTFS/vfat/FAT con el
   snippet de montaje recomendado (**no monta ni formatea discos**: eso es del
   sysadmin), añade `FILES_DIR` a los `ReadWritePaths` de systemd y termina probando
-  que el usuario del servicio **puede escribir** en las dos carpetas.
+  que el usuario del servicio **puede escribir** en las dos carpetas. **No toca un
+  `.env` que ya exista** (las claves no se regeneran solas). Sin terminal
+  (`printf ... | node scripts/gen-env.js`) también funciona: lee las respuestas de
+  stdin y usa los valores por defecto donde la linea esta vacia.
 - **Robustez**: si `FILES_DIR` apunta a un disco desmontado, el servicio arranca y
   calendario y contraseñas siguen funcionando; la tarjeta de archivos avisa y las
   subidas devuelven 503. No se crean rutas fantasma dentro de un montaje inexistente.
