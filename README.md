@@ -68,7 +68,9 @@ Tras iniciar sesión se abre un **hub** con tarjetas de los servicios disponible
 
 Eventos compartidos por toda la familia: crear, editar y eliminar eventos con fecha
 (opcionalmente rango), categoría y notas; filtros por categoría y vista mensual.
-Todos los usuarios autenticados pueden ver y editar los eventos. Incluye una sección
+Las categorías son 🎂 Cumpleaños, 🍝 Comida, ✈️ Viaje, 🔧 Tarea, 🩺 Salud, 🎉 Ocio
+(quedadas, cine, conciertos…), 🎓 Cole y 📌 Otro, cada una con su color. Todos los
+usuarios autenticados pueden ver y editar los eventos. Incluye una sección
 «Próximos eventos» bajo la vista mensual.
 
 ### 🔑 Gestor de contraseñas

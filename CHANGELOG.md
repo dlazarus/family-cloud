@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v0.2.10 — 2026-10-24
+## v0.2.10 — 2026-10-25
 
 - **Calendario — dos categorías nuevas**: 「Ocio」 (🎉 quedadas con amigos, cine, conciertos…)
   y 「Cole」 (🎓 todo lo relacionado con los estudios). Disponibles al crear y editar
