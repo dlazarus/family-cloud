@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.0)
+## v0.2.1 — 2026-10-24
 
 - **Instalador más claro al empezar**: ahora muestra los **discos y puntos de montaje
   detectados ANTES de preguntar las rutas** de `DATA_DIR`/`FILES_DIR` (antes la tabla
