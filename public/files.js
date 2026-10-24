@@ -101,6 +101,7 @@ async function boot() {
   state.me = await requireUser();
   if (!state.me) return;
   initTopbar(state.me);
+  history.replaceState({ view: state.view, cwd: state.cwd }, ''); // punto de partida del «atras»
   await load();
 }
 
@@ -153,6 +154,27 @@ function render() {
     : '🔒 Tus archivos se guardan cifrados. Clic en un archivo para seleccionarlo, doble clic para abrirlo. Ctrl+clic o arrastra en el vacio para elegir varios.';
 }
 
+// ---------- navegacion con el historial del navegador ----------
+// El boton «atras» del raton debe llevar a la carpeta anterior, no salir del servicio.
+// Cada cambio de vista/carpeta apila un estado; popstate lo reactiva.
+function go(view, cwd) {
+  if (state.view === view && (state.cwd || null) === (cwd || null)) return;
+  state.view = view;
+  state.cwd = cwd ?? null;
+  state.sel.clear();
+  syncSeg();
+  render();
+  history.pushState({ view, cwd: cwd ?? null }, '');
+}
+window.addEventListener('popstate', (e) => {
+  const s = e.state || { view: 'mine', cwd: null };
+  state.view = s.view;
+  state.cwd = s.cwd ?? null;
+  state.sel.clear();
+  syncSeg();
+  render();
+});
+
 function renderCrumbs() {
   const el = $('#crumbs');
   const path = pathTo(state.cwd);
@@ -177,11 +199,9 @@ function renderCrumbs() {
   el.querySelectorAll('[data-go]').forEach((b) =>
     b.addEventListener('click', () => {
       const v = b.dataset.go;
-      if (v === '__root__') { state.view = 'mine'; state.cwd = null; }
-      else if (v === '__family__') { state.view = 'family'; state.cwd = null; syncSeg(); }
-      else state.cwd = Number(v);
-      state.sel.clear();
-      render();
+      if (v === '__root__') go('mine', null);
+      else if (v === '__family__') go('family', null);
+      else go(state.view, Number(v));
     })
   );
   // soltar encima de un tramo del camino = mover alli (util para subir un nivel)
@@ -393,7 +413,7 @@ async function moveIds(ids, destId) {
 
 // ---------- abrir / menu ----------
 function open(n) {
-  if (n.kind === 'folder') { state.cwd = n.id; state.sel.clear(); render(); return; }
+  if (n.kind === 'folder') { go(state.view, n.id); return; }
   if (n.mime && /^(image|text|application\/pdf)/.test(n.mime)) {
     window.open(`/api/files/${n.id}/download?inline=1`, '_blank');
   } else {
@@ -602,8 +622,8 @@ async function uploadFiles(files, parentId = state.cwd) {
 }
 
 // ---------- eventos ----------
-$('#view-mine').addEventListener('click', () => { state.view = 'mine'; state.cwd = null; state.sel.clear(); syncSeg(); render(); });
-$('#view-family').addEventListener('click', () => { state.view = 'family'; state.cwd = null; state.sel.clear(); syncSeg(); render(); });
+$('#view-mine').addEventListener('click', () => go('mine', null));
+$('#view-family').addEventListener('click', () => go('family', null));
 function syncSeg() {
   $('#view-mine').classList.toggle('active', state.view === 'mine');
   $('#view-family').classList.toggle('active', state.view === 'family');

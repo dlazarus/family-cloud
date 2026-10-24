@@ -2,6 +2,12 @@
 
 ## Sin publicar (sobre v0.2.4)
 
+- **Archivos — el «atrás» del ratón no expulsa del servicio**: al entrar en carpetas y
+  pulsar el botón atrás (o Alt+flecha) del navegador, ahora se retrocede por la ruta de
+  carpetas/vistas que ibas viendo (y «adelante» la recorre de nuevo) en vez de salir al
+  hub. La navegación empuja estados al historial (`pushState`/`popstate`); el primer «atrás»
+  desde la raíz de «Mis archivos» sigue saliendo de la página, que es lo lógico.
+
 - **Hub — tarjeta «Mi cuenta»**: su descripción ya no habla solo de la contraseña:
   ahora dice «Cambia tu contraseña y elige el tema de colores.», que es lo que hay
   realmente en esa página.
