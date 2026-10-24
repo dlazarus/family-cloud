@@ -10,6 +10,8 @@
 - **Calendario — autor visible de un vistazo**: el aviso (tooltip) al pasar el ratón por un
   evento del mes muestra ahora el autor entre paréntesis (「Título · 10:00-06:00 (ana)」), y
   la lista 「Próximos eventos」 añade el autor entre paréntesis tras el título, en tono tenue.
+- **Calendario — los administradores pueden con todo**: los 「admin」 pueden editar o borrar
+  cualquier evento, sea de quien sea (los demás usuarios siguen limitados a los suyos).
 
 ## v0.2.11 — 2026-10-25
 
@@ -19,8 +21,7 @@
   「autoría: <usuario>」 (informativa, no editable); a los no autores se les oculta el botón
   「Eliminar」, se les apaga 「Guardar」 y al pulsarlo aparece el aviso 「Solo el autor de un
   evento puede modificarlo o borrarlo」. Los eventos sin autor registrado (de antes de
-  esta versión) siguen editables por cualquiera. Los 「admin」 sí pueden editar o borrar
-  cualquier evento, sea de quien sea.
+  esta versión) siguen editables por cualquiera.
 
 ## v0.2.10 — 2026-10-25
 
