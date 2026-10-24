@@ -121,13 +121,19 @@ async function renderUsage() {
   $('#g-quota').value = info.global_quota_mb;
   $('#g-shared').value = info.shared_folder_name;
   $('#usage-rows').innerHTML = info.users
-    .map((u) => `<tr data-id="${u.id}">
+    .map((u) => {
+      // porcentaje sobre el cupo EN VIGOR (el propio o el defecto); sin limite no hay %
+      const pct = u.unlimited || u.effective_mb <= 0
+        ? ''
+        : ` <span class="muted small-note">(${Math.round((u.used_bytes / (u.effective_mb * 1024 * 1024)) * 100)} %)</span>`;
+      return `<tr data-id="${u.id}">
       <td>${escapeHtml(u.username)}</td>
-      <td>${fmtSize(u.used_bytes)}</td>
+      <td>${fmtSize(u.used_bytes)}${pct}</td>
       <td><input class="quota-input" type="number" min="0" step="1" value="${u.quota_mb ?? ''}" placeholder="(defecto)" /></td>
       <td>${u.unlimited ? 'sin limite' : fmtSize(u.effective_mb * 1024 * 1024)}</td>
       <td class="actions"><button data-act="quota" class="btn ghost">Guardar cupo</button></td>
-    </tr>`)
+    </tr>`;
+    })
     .join('');
   renderUsageTotals(info.total);
 }

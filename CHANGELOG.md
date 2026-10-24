@@ -2,6 +2,10 @@
 
 ## Sin publicar (sobre v0.2.4)
 
+- **Administración → cupos**: al lado de lo ocupado por cada cuenta sale ahora el
+  porcentaje sobre su cupo en vigor, p. ej. `1,2 GB (31 %)`; con cuentas sin limite no
+  se muestra porcentaje.
+
 - **Archivos — carpetas vacías ajenas**: en una carpeta compartida de OTRO usuario que
   esté vacía ya no sale el mensaje invitando a «Usa ⬆ Subir o arrastra archivos aquí»
   (no se puede escribir ahí); sale solo «Esta carpeta esta vacia.». La invitación a
