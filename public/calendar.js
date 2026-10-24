@@ -11,7 +11,7 @@ const CATS = {
   tarea:  { label: '🔧', name: 'Tarea' },
   salud:  { label: '🩺', name: 'Salud' },
   ocio:   { label: '🎉', name: 'Ocio' },
-  cole:   { label: '📚', name: 'Cole' },
+  cole:   { label: '🎓', name: 'Cole' },
   otro:   { label: '📌', name: 'Otro' },
 };
 

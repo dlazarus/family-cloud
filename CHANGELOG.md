@@ -3,8 +3,12 @@
 ## v0.2.10 — 2026-10-24
 
 - **Calendario — dos categorías nuevas**: 「Ocio」 (🎉 quedadas con amigos, cine, conciertos…)
-  y 「Cole」 (📚 todo lo relacionado con los estudios). Disponibles al crear y editar
+  y 「Cole」 (🎓 todo lo relacionado con los estudios). Disponibles al crear y editar
   eventos, en los filtros y con su color propio en claro y oscuro.
+- **Calendario — colores de categoría más diferenciados**: los ocho tonos pastel se
+  reparten ahora por el círculo cromático (cumple rosa, salud coral, comida mantequilla,
+  tarea azul acero, viaje aqua, cole verde hoja, ocio violeta, otro gris), bien
+  distinguibles entre sí sin perder la suavidad, tanto en claro como en oscuro.
 
 ## v0.2.9 — 2026-10-26
 

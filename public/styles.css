@@ -36,19 +36,19 @@
 /* chips de categoría en versión tenue para tema oscuro */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --c-cumple: #4a352c; --c-comida: #37422a; --c-viaje: #2b3f4d;
-    --c-tarea: #463d27; --c-salud: #4a2e35; --c-otro: #3a3731;
-    --c-ocio: #3d3450; --c-cole: #2c423c;
+    --c-cumple: #4a3540; --c-comida: #45402a; --c-viaje: #2c4442;
+    --c-tarea: #333d4d; --c-salud: #4a3531; --c-otro: #3a3731;
+    --c-ocio: #3b3450; --c-cole: #35452e;
   }
 }
 :root.dark {
-  --c-cumple: #4a352c; --c-comida: #37422a; --c-viaje: #2b3f4d;
-  --c-tarea: #463d27; --c-salud: #4a2e35; --c-otro: #3a3731;
-  --c-ocio: #3d3450; --c-cole: #2c423c;
+  --c-cumple: #4a3540; --c-comida: #45402a; --c-viaje: #2c4442;
+  --c-tarea: #333d4d; --c-salud: #4a3531; --c-otro: #3a3731;
+  --c-ocio: #3b3450; --c-cole: #35452e;
 }
-:root { --c-cumple: #ffe5d9; --c-comida: #e8f5d8; --c-viaje: #d8ecf7;
-        --c-tarea: #f4e7c9; --c-salud: #fbdde3; --c-otro: #ece9e2;
-        --c-ocio: #e6def7; --c-cole: #d9f0ea; }
+:root { --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
+        --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
+        --c-ocio: #ded7f2; --c-cole: #d8eccf; }
 
 /* ==============================================================
    TEMAS DE COLOR
