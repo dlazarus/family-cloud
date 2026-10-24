@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.4)
+
+- **Administración → cupos**: el espacio libre del disco de archivos ahora sale TAMBIEN
+  en la fila de totales, al lado del cupo total y con el mismo tamaño de letra
+  («💽 167 GB libres en disco») — la nota pequeña seguía siendo demasiado discreta. Y se
+  añade respiro entre esa fila y las notas explicativas.
+
 ## v0.2.4 — 2026-10-24
 
 - **FIX CRÍTICO — la tarjeta Archivos daba 500 siempre** (`GET /api/files/`, uso, y el

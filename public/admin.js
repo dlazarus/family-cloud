@@ -141,7 +141,7 @@ function renderUsageTotals(t) {
     <td>${fmtSize(t.used_bytes)}</td>
     <td class="sum-note">${t.own_count} de ${t.users} con cupo propio</td>
     <td>${reserved}</td>
-    <td></td>
+    <td>${t.disk_free_bytes == null ? '' : `💽 ${fmtSize(t.disk_free_bytes)} libres en disco`}</td>
   </tr>`;
 
   const parts = [`Las cuentas suman ${fmtSize(t.used_bytes)} en disco`];

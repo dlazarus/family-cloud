@@ -698,3 +698,6 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .files-usage { margin-top: 6px; }
 .quota-input { width: 110px; padding: 6px 8px; }
 .small-note { font-size: 0.78rem; margin-top: 10px; }
+/* separacion entre la fila de totales de cupos y las notas de disco */
+.files-usage { margin-bottom: 8px; }
+#usage-disk { margin-top: 18px; }
