@@ -112,16 +112,22 @@ if command -v lsblk >/dev/null 2>&1; then
   lsblk -o NAME,SIZE,FSTYPE,LABEL,MOUNTPOINTS 2>/dev/null | sed 's/^/     /' | head -20
   echo "   (el instalador NO monta ni formatea: el disco debe estar montado ya)"
 fi
+# ASK_PATHS: la ronda de rutas/cupo del instalador solo tiene sentido para RE-ajustar
+# un .env que ya existia. Si acabamos de lanzar gen-env.js de forma interactiva, ese ya
+# pregunto DATA_DIR, FILES_DIR y cupos: no hay que preguntar dos veces en la misma pasada.
 if [[ -f "$PROJECT_DIR/.env" ]]; then
   ok ".env ya existe — se conserva (edítalo a mano si quieres cambiar valores)"
+  ASK_PATHS=1
 elif [[ $DRY_RUN -eq 1 ]]; then
-  echo "   [dry-run] node scripts/gen-env.js (pediría la frase maestra)"
+  echo "   [dry-run] node scripts/gen-env.js (pediría la frase maestra y las rutas)"
+  ASK_PATHS=1
 else
   echo "   La frase maestra cifra los eventos: guárdala en un lugar seguro."
   node "$PROJECT_DIR/scripts/gen-env.js" || fail "gen-env.js falló o se canceló (revisa la frase: mínimo 10 caracteres)"
   [[ -f "$PROJECT_DIR/.env" ]] || fail "no se creó .env"
   chmod 600 "$PROJECT_DIR/.env"
-  ok ".env creado con permisos 600"
+  ok ".env creado con permisos 600 (las rutas y el cupo ya se preguntaron al crearlo)"
+  ASK_PATHS=0
 fi
 if [[ -f "$PROJECT_DIR/.env" ]]; then
   PORT="$(env_get PORT 3000)"
@@ -133,9 +139,9 @@ fi
 DATA_DIR_RAW="$(env_get DATA_DIR ./data)"
 FILES_DIR_RAW="$(env_get FILES_DIR ./data/files)"
 FILE_QUOTA_MB="$(env_get FILE_QUOTA_MB 4096)"
-if [[ -f "$PROJECT_DIR/.env" ]] && [[ $DRY_RUN -eq 0 ]] && [[ -t 0 ]]; then
+if [[ ${ASK_PATHS:-0} -eq 1 ]] && [[ $DRY_RUN -eq 0 ]] && [[ -t 0 ]]; then
   echo
-  echo "   Donde se guarda todo (Enter para mantener lo que hay):"
+  echo "   Donde se guarda todo (Enter para mantener lo que hay en .env):"
   printf "   DATA_DIR  (base de datos; mejor en el disco del servidor) [%s]: " "$DATA_DIR_RAW"; read -r d
   [[ -n "$d" ]] && DATA_DIR_RAW="$d"
   printf "   FILES_DIR (archivos cifrados; admite un disco externo) [%s]: " "$FILES_DIR_RAW"; read -r f
