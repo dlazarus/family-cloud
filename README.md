@@ -22,11 +22,14 @@ Tras iniciar sesión se abre un **hub** con tarjetas de servicios:
 
 ## Puesta en marcha (primera vez)
 
+Copia el proyecto al servidor y ejecuta el instalador: es la vía recomendada y la
+única necesaria (Node 22 si falta, `.env` con la frase maestra, usuario de servicio,
+systemd, permisos de las carpetas y firewall — detalle en «Instalación en el servidor
+de casa» más abajo):
+
 ```bash
 cd family-cloud
-npm install                 # solo la primera vez, requiere internet una vez
-node scripts/gen-env.js     # genera .env (pide la frase maestra; guárdala a salvo)
-npm start                   # o ./scripts/server-manual-test.sh (pruebas: arranque en primer plano)
+sudo ./scripts/install.sh
 ```
 
 Por defecto escucha en **http://0.0.0.0:3000** (configurable en `.env`).
@@ -34,6 +37,18 @@ Por defecto escucha en **http://0.0.0.0:3000** (configurable en `.env`).
 > ⚠️ La frase maestra de `.env` cifra los datos (eventos, contraseñas y archivos). Si
 > se pierde, no se pueden recuperar. Haz copias de `.env`, de la base de datos y de la
 > carpeta de archivos juntas.
+
+### Probar sin instalar (desarrollo o ensayo)
+
+Para ver la web en marcha en cualquier máquina, sin tocar el sistema (no crea usuario
+ de servicio ni systemd; NO es una instalación):
+
+```bash
+cd family-cloud
+npm install                 # solo la primera vez, requiere internet una vez
+node scripts/gen-env.js     # genera .env (pide la frase maestra; guárdala a salvo)
+npm start                   # o ./scripts/server-manual-test.sh (arranque en primer plano)
+```
 
 ## Primer acceso
 

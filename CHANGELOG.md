@@ -8,6 +8,12 @@
   defecto (doble pregunta en toda instalación de cero). Ahora esa ronda solo se muestra
   para RE-ajustar un `.env` que ya existía.
 
+- **README: la puesta en marcha empieza por `sudo ./scripts/install.sh`**. Antes el
+  bloque «Puesta en marcha (primera vez)」listaba los pasos manuales (`npm install`,
+  `gen-env.js`, `npm start`), que el instalador ya hace y que además parecen LA
+  instalacion al estar los primeros. La secuencia manual se queda como subapartado
+  explicito «Probar sin instalar (desarrollo o ensayo)».
+
 ## v0.2.2 — 2026-10-24
 
 - **`start.sh` renombrado y movido**: el arranque manual de pruebas vive ahora en
