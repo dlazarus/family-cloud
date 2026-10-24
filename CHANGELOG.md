@@ -5,10 +5,15 @@
 Nueva tarjeta **📁 Archivos**: nube de archivos familiar con cifrado individual por
 archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
 
-- **Archivos por cuenta**: subir (botón o arrastrar y soltar), crear carpetas,
-  renombrar, mover arrastrando una fila sobre otra carpeta, descargar, borrar en
-  cascade y descargar una carpeta entera como **ZIP** generado al vuelo
-  (`src/zip.js`, sin dependencias ni temporeros en disco).
+- **Archivos por cuenta**: subir (botón o arrastrar casi sobre toda la página, con
+  un aviso grande que dice a qué carpeta van), crear carpetas (ENTER guarda),
+  renombrar, descargar, borrar en cascade y descargar una carpeta entera como **ZIP**
+  generado al vuelo (`src/zip.js`, sin dependencias ni temporeros en disco).
+- **Manejo tipo Drive**: clic en un archivo lo selecciona (ya no lo descarga) y doble
+  clic lo abre; selección múltiple con `Ctrl+clic`, `Shift+clic`, `Ctrl+A` o
+  arrastrando el ratón sobre el hueco libre; barra flotante con «Mover a…» y
+  «Eliminar»; y **mover arrastrando** una fila o la selección entera sobre otra
+  carpeta, sobre un tramo del camino o sobre el hueco libre (= carpeta actual).
 - **Cifrado en streaming**: cada archivo se cifra con AES-256-GCM al subir y se
   descifra al bajar, por trozos — un archivo de 3 GB no necesita 3 GB de RAM. La
   llave va ligada al id del archivo (AAD), así que copiar un blob a otra parte no
@@ -16,8 +21,12 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
 - **CARPETA-COMPARTIDA**: cada cuenta tiene una carpeta compartida claramente
   diferenciada (borde de color, icono de familia y subtítulo) y una segunda vista
   «👥 Lo que comparte la familia» con lo de los demás en **solo lectura** (no se
-  puede crear, subir ni borrar dentro de lo ajeno). El nombre lo cambia el admin de
+  puede crear, subir ni borrar dentro de lo ajeno). Tu propia compartida aparece en
+  las dos vistas y se comporta igual desde ambas. El nombre lo cambia el admin de
   un golpe y aplica a todas las cuentas; nadie puede crear un archivo con ese nombre.
+- **Compartir arrastrando**: mover algo a la carpeta compartida (o sacarlo de ella)
+  cambia el **alcance** de ese nodo y de todo su subárbol de una vez — deja de ser
+  privado y lo ve la familia, o vuelve a ser privado. Los blobs no se reescriben.
 - **Cupos**: 4 GB por cuenta por defecto, editables por el admin en global o por
   cuenta (0 = sin límite); se comprueban al empezar y al terminar la subida. Al
   borrar una cuenta se borran también sus archivos del disco.
@@ -39,8 +48,9 @@ archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
   `LPT1-9`, también con extensión: `CON.txt`), para que los ZIP se puedan extraer en
   cualquier sistema operativo.
 - **API nueva**: `/api/files*` (lista, carpeta, subida, descarga, ZIP, mover,
-  renombrar, borrar) y `GET /api/users/usage` + `PUT /api/users/settings` para los
-  cupos y el nombre de la carpeta compartida.
+  renombrar, borrar — mover admite cambiar el alcance privado↔compartido) y
+  `GET /api/users/usage` + `PUT /api/users/settings` para los cupos y el nombre de
+  la carpeta compartida.
 
 ## v0.1.0 — 2026-10-22
 

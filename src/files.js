@@ -498,19 +498,27 @@ filesRouter.post('/:id/move', (req, res) => {
   }
   const rawDest = req.body?.parent_id;
   const destId = rawDest === null || rawDest === undefined || rawDest === '' ? null : Number(rawDest);
+  let destScope = 'private'; // destId = null es la raiz privada
   if (destId !== null) {
     const dest = requireNode(u, destId, { write: true });
     if (dest.error) return res.status(dest.error.code).json({ error: dest.error.msg });
     if (dest.row.kind !== 'folder') return res.status(400).json({ error: 'El destino no es una carpeta.' });
-    if (dest.row.scope !== row.scope) return res.status(400).json({ error: 'No se puede mover entre lo privado y lo compartido.' });
     if (dest.row.id === row.id || isDescendant(row.id, dest.row.id)) {
       return res.status(400).json({ error: 'No puedes mover una carpeta dentro de si misma.' });
     }
     if (depthOf(dest.row) + depthOf(row) + 1 > MAX_DEPTH) return res.status(400).json({ error: `Ese moveria algo mas alla de ${MAX_DEPTH} niveles.` });
-  } else if (row.scope === 'shared') {
-    return res.status(400).json({ error: 'Dentro de la carpeta compartida si que puedes mover elementos (a la raiz: elige «CARPETA-COMPARTIDA»).' });
+    destScope = dest.row.scope;
   }
-  getDb().prepare("UPDATE fs_nodes SET parent_id = ?, updated_at = datetime('now') WHERE id = ?").run(destId, row.id);
+  // Mover dentro/fuera de la carpeta compartida cambia el ALCANCE de todo el subarbol:
+  // una carpeta privada que arrastras a la compartida se comparte con la familia (y al
+  // reves). Los blobs no se tocan: el cifrado va por id de nodo, no por alcance.
+  const db = getDb();
+  const ids = subtree(row.id).map((n) => n.id);
+  db.prepare("UPDATE fs_nodes SET parent_id = ?, scope = ?, updated_at = datetime('now') WHERE id = ?").run(destId, destScope, ids[0]);
+  if (ids.length > 1) {
+    const upd = db.prepare("UPDATE fs_nodes SET scope = ?, updated_at = datetime('now') WHERE id = ?");
+    for (const id of ids.slice(1)) upd.run(destScope, id);
+  }
   res.json(rowToPublic(u, findNode(row.id), { shared: cfg().sharedName }));
 });
 

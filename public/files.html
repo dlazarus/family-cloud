@@ -44,6 +44,13 @@
 
       <nav id="crumbs" class="crumbs"></nav>
 
+      <div id="sel-bar" class="sel-bar hidden">
+        <span id="sel-count" class="sel-count"></span>
+        <button id="sel-move" class="btn">📦 Mover a…</button>
+        <button id="sel-del" class="btn danger">🗑 Eliminar</button>
+        <button id="sel-clear" class="btn ghost">✕ Deseleccionar</button>
+      </div>
+
       <div id="dropzone" class="dropzone">
         <div id="files-list" class="files-list"></div>
         <p id="files-empty" class="muted hidden"></p>
@@ -88,6 +95,11 @@
   </div>
 
   <div id="ctx-menu" class="ctx-menu hidden"></div>
+
+  <!-- aviso de "suelta para subir" sobre toda la pagina -->
+  <div id="drop-overlay" class="drop-overlay hidden">
+    <div class="drop-overlay-card" id="drop-overlay-text"></div>
+  </div>
 
   <script src="/common.js"></script>
   <script src="/files.js"></script>

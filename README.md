@@ -70,17 +70,33 @@ base de datos está preparado para migrar en el futuro a una clave por usuario
 
 ### 📁 Archivos
 
-Cada miembro tiene su espacio de archivos, como un Drive pequeño pero en tu casa:
-subir (botón o arrastrando), crear carpetas, renombrar, mover arrastrando una fila
-sobre otra carpeta, descargar, borrar (con todo su contenido) y descargar una
-carpeta entera como **ZIP** (se genera al vuelo, sin temporeros en disco).
+Cada miembro tiene su espacio de archivos, como un Drive pequeño pero en tu casa.
+
+**Cómo se maneja** (ratón y teclado, como en un Drive):
+
+- **Clic en un archivo** lo selecciona (no lo descarga); **doble clic** lo abre o lo
+  descarga. **Clic en una carpeta** entra en ella.
+- **Selección múltiple**: `Ctrl+clic`, `Shift+clic`, `Ctrl+A`, o arrastrar el ratón
+  sobre el hueco libre de la página. `Supr` borra la selección, `Esc` la limpia.
+- **Mover arrastrando**: arrastra una fila (o toda la selección) encima de otra
+  carpeta, sobre un tramo del camino de arriba, o suéltala en el hueco libre para
+  dejarla en la carpeta actual. También existe «📦 Mover a…» en el menú `⋯`.
+- **Compartir al momento**: arrastra un archivo o una carpeta a la
+  **CARPETA-COMPARTIDA** y pasa a ser visible para toda la familia (con todo su
+  contenido); arrástralo fuera para dejar de compartirlo.
+- **Subir arrastrando**: casi toda la página es zona de soltado, con un aviso
+  grande que dice a qué carpeta van los archivos.
+- Descargar una carpeta entera como **ZIP** (se genera al vuelo, sin temporeros en
+  disco), renombrar y borrar con todo su contenido desde el menú `⋯`.
 
 - **CARPETA-COMPARTIDA**: cada cuenta tiene una, marcada a propósito (borde de
-  color, icono de familia y subtítulo «compartida con la familia») para que no haya
+  color, icono de familia y subtítulo «tuya · la editas tu») para que no haya
   duda de lo que ven los demás. Su nombre lo decide el admin en ⚙️ Administración y
   aplica a todas las cuentas; nadie puede crear un archivo con ese nombre.
 - **👥 Lo que comparte la familia**: segunda vista con lo que compartieron los demás,
-  en **solo lectura** (se puede descargar y navegar, no modificar).
+  en **solo lectura** (se puede descargar y navegar, no modificar). Tu propia
+  carpeta compartida también aparece ahí, marcada como tuya y editable igual que
+  desde «Mis archivos».
 - **Cupo**: 4 GB por cuenta por defecto, ajustables por el admin globalmente o
   cuenta por cuenta (0 = sin límite), con la ocupación visible en la tarjeta.
 - **Cifrado**: cada archivo se cifra individualmente (AES-256-GCM) mientras sube y
