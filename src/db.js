@@ -122,6 +122,9 @@ function seedSettings() {
   const defaults = {
     file_quota_mb: String(Math.max(0, Number(process.env.FILE_QUOTA_MB ?? 4096) || 4096)),
     shared_folder_name: process.env.SHARED_FOLDER_NAME || 'CARPETA-COMPARTIDA',
+    // por defecto la raiz compartida de la cuenta del sistema (admin) no sale en
+    // «Lo que comparte la familia»: la familia espera ver a los demás, no al admin
+    hide_admin_shared: '1',
   };
   const ins = db.prepare('INSERT OR IGNORE INTO app_settings (key, value) VALUES (?, ?)');
   for (const [k, v] of Object.entries(defaults)) ins.run(k, String(v));

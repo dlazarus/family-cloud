@@ -120,6 +120,7 @@ async function renderUsage() {
   const info = await api('/users/usage');
   $('#g-quota').value = mb2gb(info.global_quota_mb);
   $('#g-shared').value = info.shared_folder_name;
+  $('#g-hide-admin').checked = !!info.hide_admin_shared;
   $('#usage-rows').innerHTML = info.users
     .map((u) => {
       // porcentaje sobre el cupo EN VIGOR (el propio o el defecto); sin limite no hay %
@@ -176,7 +177,7 @@ $('#g-save').addEventListener('click', async () => {
   try {
     await api('/users/settings', {
       method: 'PUT',
-      body: { file_quota_mb: gb2mb($('#g-quota').value), shared_folder_name: $('#g-shared').value },
+      body: { file_quota_mb: gb2mb($('#g-quota').value), shared_folder_name: $('#g-shared').value, hide_admin_shared: $('#g-hide-admin').checked },
     });
     adminMsg('Ajustes de archivos guardados ✓');
     renderUsage();

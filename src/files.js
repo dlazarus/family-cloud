@@ -237,7 +237,11 @@ filesRouter.get('/', (req, res) => {
     .prepare("SELECT id, username FROM users WHERE active = 1 AND id <> ? ORDER BY username")
     .all(u.id);
   const sharedRoots = [];
+  // la raiz compartida de la cuenta del sistema (admin) puede ocultarse al resto:
+  // la familia espera ver las carpetas de los demas, no la del administrador
+  const hideAdminShared = getSetting('hide_admin_shared', '1') === '1';
   for (const other of otherUsers) {
+    if (hideAdminShared && String(other.username).toLowerCase() === 'admin') continue;
     const root = getDb()
       .prepare("SELECT * FROM fs_nodes WHERE user_id = ? AND scope = 'shared' AND parent_id IS NULL")
       .get(other.id);

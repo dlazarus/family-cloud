@@ -2,6 +2,15 @@
 
 ## Sin publicar (sobre v0.2.5)
 
+- **Archivos — la carpeta compartida del admin, opcionalmente invisible**: en
+  Administración → Archivos de la familia hay una casilla nueva, «Ocultar al resto la
+  carpeta compartida de la cuenta del sistema (admin)», **activa por defecto**: cuando un
+  familiar abre «Lo que comparte la familia」」 solo ve las carpetas de los demás, no la del
+  administrador. Al desactivarla vuelve a verse para todos. Es la cuenta del sistema
+  (usuario `admin`) la que se oculta, no «las cuentas con rol admin」」: un familiar al que
+  ascendáis a admin sigue visible para los demás, como cualquier usuario. La carpeta del
+  admin nunca se borra ni deja de funcionar: solo cambia si aparece en la lista.
+
 - **Archivos — vista familiar con nombre y dueño juntos**: la carpeta compartida de cada
   familiar se lista ahora con el nombre del dueño DENTRO del rótulo grande
   («CARPETA-COMPARTIDA-DANI») en vez del nombre genérico repetido con un «de dani» en

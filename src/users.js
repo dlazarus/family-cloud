@@ -43,6 +43,7 @@ usersRouter.get('/usage', (_req, res) => {
   res.json({
     global_quota_mb: globalMb,
     shared_folder_name: getSetting('shared_folder_name', 'CARPETA-COMPARTIDA'),
+    hide_admin_shared: getSetting('hide_admin_shared', '1') === '1',
     total: {
       users: rows.length,
       used_bytes: usedBytes,
@@ -82,6 +83,10 @@ usersRouter.put('/settings', (req, res) => {
     const r = renameSharedFolder(b.shared_folder_name);
     if (r.error) return res.status(400).json({ error: r.error });
     out.shared_folder_name = r.value;
+  }
+  if (b.hide_admin_shared !== undefined) {
+    setSetting('hide_admin_shared', b.hide_admin_shared ? '1' : '0');
+    out.hide_admin_shared = b.hide_admin_shared;
   }
   if (!Object.keys(out).length) return res.status(400).json({ error: 'Nada que actualizar' });
   res.json({ ok: true, ...out });
