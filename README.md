@@ -69,9 +69,11 @@ Tras iniciar sesión se abre un **hub** con tarjetas de los servicios disponible
 Eventos compartidos por toda la familia: crear, editar y eliminar eventos con fecha
 (opcionalmente rango), categoría y notas; filtros por categoría y vista mensual.
 Las categorías son 🎂 Cumpleaños, 🍝 Comida, ✈️ Viaje, 🔧 Tarea, 🩺 Salud, 🎉 Ocio
-(quedadas, cine, conciertos…), 🎓 Cole y 📌 Otro, cada una con su color. Todos los
-usuarios autenticados pueden ver y editar los eventos. Incluye una sección
-«Próximos eventos» bajo la vista mensual.
+(quedadas, cine, conciertos…), 🎓 Cole y 📌 Otro, cada una con su color.
+Todos los usuarios autenticados ven todos los eventos y pueden crear nuevos; cada
+evento guarda su autoría (se muestra al pie de la tarjeta de edición) y solo quien lo
+creó puede editarlo o borrarlo. Incluye una sección «Próximos eventos» bajo la vista
+mensual.
 
 ### 🔑 Gestor de contraseñas
 
@@ -289,7 +291,7 @@ En **Mi cuenta**, arriba del todo, está el apartado **Tema de colores**:
 
 - **En reposo**: títulos y descripciones de eventos cifrados con AES-256-GCM
   (clave derivada con scrypt de la frase maestra). Contraseñas con bcrypt
-  (coste 12). Fechas y categorías quedan en claro para poder indexar.
+  (coste 12). Fechas, categorías y autoría quedan en claro para poder indexar y controlar permisos.
 - **Archivos**: cada archivo se cifra individualmente (AES-256-GCM, con el id del
   archivo como dato asociado) y se guarda como un blob opaco; los nombres cifrados
   viven en la base de datos. Sin la frase maestra, lo robado del disco es ilegible.

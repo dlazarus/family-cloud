@@ -94,11 +94,12 @@
         <div class="row">
           <label>Notas <textarea id="ev-desc" rows="4" maxlength="2000"></textarea></label>
         </div>
+        <p id="ev-author" class="event-author hidden"></p>
         <div class="modal-actions">
           <button type="button" id="ev-delete" class="btn danger hidden">Eliminar</button>
           <span class="spacer"></span>
           <button type="button" id="ev-cancel" class="btn ghost">Cancelar</button>
-          <button type="submit" class="btn primary">Guardar</button>
+          <button type="submit" id="ev-save" class="btn primary">Guardar</button>
         </div>
         <p id="modal-error" class="error hidden"></p>
       </form>

@@ -182,7 +182,15 @@ function openModal(ev, date) {
   $('#ev-end-time').value = ev?.end_time || '';
   $('#ev-cat').value = ev?.category || 'otro';
   $('#ev-desc').value = ev?.description || '';
-  $('#ev-delete').classList.toggle('hidden', !ev);
+  // autoría: solo indicativa (no editable); quien creo el evento es el unico que puede cambiarlo
+  const authorEl = $('#ev-author');
+  if (ev?.author) { authorEl.textContent = `autoría: ${ev.author}`; authorEl.classList.remove('hidden'); }
+  else authorEl.classList.add('hidden');
+  const mine = !ev || ev.created_by == null || ev.created_by === state.me.id;
+  const saveBtn = $('#ev-save');
+  saveBtn.disabled = !!ev && !mine;
+  saveBtn.title = mine ? '' : 'Solo quien creo este evento puede editarlo';
+  $('#ev-delete').classList.toggle('hidden', !ev || !mine);
   $('#modal-error').classList.add('hidden');
   $('#modal').classList.remove('hidden');
   $('#ev-title').focus();

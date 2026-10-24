@@ -209,6 +209,7 @@ h1, h2, h3 { font-weight: 650; letter-spacing: -0.01em; }
 }
 .btn:hover { box-shadow: var(--shadow); }
 .btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--btn-ink, #fff); }
 .btn.primary:hover { background: var(--accent-ink); }
 .btn.ghost { background: transparent; }
@@ -371,6 +372,8 @@ input:focus, select:focus, textarea:focus {
 .row { display: flex; gap: 12px; }
 .row label { flex: 1; }
 .modal-actions { display: flex; gap: 8px; margin-top: 6px; }
+/* linea de autoria en la tarjeta de evento: indicativa, con aire sobre los botones */
+.event-author { font-size: 0.8rem; color: var(--muted); margin: 10px 0 16px; }
 
 /* campo de contraseña con boton ojo */
 .pw-wrap { position: relative; display: flex; align-items: center; }

@@ -20,11 +20,21 @@ function toPublic(row) {
     category: row.category,
     title: decryptField(row.title_enc),
     description: decryptField(row.description_enc),
+    author: row.author ?? null,
     created_by: row.created_by,
     updated_by: row.updated_by,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };
+}
+
+// seleccion con el nombre de quien creo el evento (autoría, en claro: es un id de usuario)
+const SEL = `SELECT e.*, au.username AS author FROM events e
+             LEFT JOIN users au ON au.id = e.created_by`;
+
+// solo quien creo el evento puede modificarlo (los heredados sin autor, cualquiera)
+function ownedBy(row, user) {
+  return row.created_by == null || row.created_by === user.id;
 }
 
 function validateBody(body) {
@@ -52,8 +62,8 @@ function validateBody(body) {
 eventsRouter.get('/', (req, res) => {
   const { from, to } = req.query;
   const rows = from && to && DATE_RE.test(from) && DATE_RE.test(to)
-    ? getDb().prepare('SELECT * FROM events WHERE date BETWEEN ? AND ? ORDER BY date, id').all(from, to)
-    : getDb().prepare('SELECT * FROM events ORDER BY date, id').all();
+    ? getDb().prepare(`${SEL} WHERE e.date BETWEEN ? AND ? ORDER BY e.date, e.id`).all(from, to)
+    : getDb().prepare(`${SEL} ORDER BY e.date, e.id`).all();
   res.json(rows.map(toPublic));
 });
 
@@ -65,7 +75,7 @@ eventsRouter.post('/', (req, res) => {
     .prepare(`INSERT INTO events (date, end_date, start_time, end_time, category, title_enc, description_enc, created_by, updated_by)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .run(date, end_date, start_time, end_time, category, encryptField(title), encryptField(description), req.session.user.id, req.session.user.id);
-  const row = getDb().prepare('SELECT * FROM events WHERE id = ?').get(Number(info.lastInsertRowid));
+  const row = getDb().prepare(`${SEL} WHERE e.id = ?`).get(Number(info.lastInsertRowid));
   res.status(201).json(toPublic(row));
 });
 
@@ -73,6 +83,7 @@ eventsRouter.put('/:id', (req, res) => {
   const id = Number(req.params.id);
   const row = getDb().prepare('SELECT * FROM events WHERE id = ?').get(id);
   if (!row) return res.status(404).json({ error: 'Evento no encontrado' });
+  if (!ownedBy(row, req.session.user)) return res.status(403).json({ error: 'Solo quien creo este evento puede editarlo.' });
   const v = validateBody(req.body);
   if (v.error) return res.status(400).json({ error: v.error });
   const { date, end_date, start_time, end_time, title, description, category } = v.value;
@@ -80,11 +91,14 @@ eventsRouter.put('/:id', (req, res) => {
     .prepare(`UPDATE events SET date = ?, end_date = ?, start_time = ?, end_time = ?, category = ?, title_enc = ?, description_enc = ?,
               updated_by = ?, updated_at = datetime('now') WHERE id = ?`)
     .run(date, end_date, start_time, end_time, category, encryptField(title), encryptField(description), req.session.user.id, id);
-  res.json(toPublic(getDb().prepare('SELECT * FROM events WHERE id = ?').get(id)));
+  res.json(toPublic(getDb().prepare(`${SEL} WHERE e.id = ?`).get(id)));
 });
 
 eventsRouter.delete('/:id', (req, res) => {
   const id = Number(req.params.id);
+  const row = getDb().prepare('SELECT * FROM events WHERE id = ?').get(id);
+  if (!row) return res.status(404).json({ error: 'Evento no encontrado' });
+  if (!ownedBy(row, req.session.user)) return res.status(403).json({ error: 'Solo quien creo este evento puede borrarlo.' });
   const info = getDb().prepare('DELETE FROM events WHERE id = ?').run(id);
   if (!info.changes) return res.status(404).json({ error: 'Evento no encontrado' });
   res.json({ ok: true });

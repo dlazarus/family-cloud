@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.2.11 — 2026-10-25
+
+- **Calendario — solo el autor puede editar o borrar sus eventos**: cada evento guarda
+  su autoría (quien lo colgó) y el servidor rechaza (403) ediciones o borrados ajenos.
+  En la tarjeta de edición aparece al pie, bajo las notas y sobre los botones, la línea
+  「autoría: <usuario>」 (informativa, no editable); a los no autores se les oculta el botón
+  「Eliminar」 y se les desactiva 「Guardar」. Los eventos sin autor registrado (de antes de
+  esta versión) siguen editables por cualquiera.
+
 ## v0.2.10 — 2026-10-25
 
 - **Calendario — dos categorías nuevas**: 「Ocio」 (🎉 quedadas con amigos, cine, conciertos…)
