@@ -33,18 +33,18 @@
   --accent-ink: #eb9a80;
   --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
-/* chips de categoría: en tema oscuro se usan los mismos pasteles que en claro */
+/* chips de categoría: en tema oscuro, los mismos matices pero atenuados */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
-    --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
-    --c-ocio: #ded7f2; --c-cole: #d8eccf;
+    --c-cumple: #7b3d4f; --c-comida: #7b723d; --c-viaje: #42756f;
+    --c-tarea: #3d587b; --c-salud: #7b4a3d; --c-otro: #6a624e;
+    --c-ocio: #4d3d7b; --c-cole: #507a3e;
   }
 }
 :root.dark {
-  --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
-  --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
-  --c-ocio: #ded7f2; --c-cole: #d8eccf;
+  --c-cumple: #7b3d4f; --c-comida: #7b723d; --c-viaje: #42756f;
+  --c-tarea: #3d587b; --c-salud: #7b4a3d; --c-otro: #6a624e;
+  --c-ocio: #4d3d7b; --c-cole: #507a3e;
 }
 :root { --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
         --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
@@ -341,9 +341,13 @@ input:focus, select:focus, textarea:focus {
 .cat-ocio   { background: var(--c-ocio); }
 .cat-cole   { background: var(--c-cole); }
 .cat-otro   { background: var(--c-otro); }
-/* los fondos de categoria son pasteles en ambos temas: el texto sobre ellos
-   usa siempre tinta oscura (con la tinta clara del tema oscuro no se leeria) */
+/* el texto sobre los fondos de categoría: claro en el tema oscuro (fondos
+   atenuados), oscuro en el claro (fondos pastel) */
 [class*="cat-"] { color: #2b2620; }
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) [class*="cat-"] { color: #e9e4da; }
+}
+:root.dark [class*="cat-"] { color: #e9e4da; }
 
 /* ====== modal ====== */
 .modal {

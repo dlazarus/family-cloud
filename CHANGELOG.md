@@ -9,7 +9,7 @@
   reparten ahora por el círculo cromático (cumple rosa, salud coral, comida mantequilla,
   tarea azul acero, viaje aqua, cole verde hoja, ocio violeta, otro gris), bien
   distinguibles entre sí sin perder la suavidad. En tema oscuro se usan los mismos
-  pasteles (el texto oscuro sobre chip claro ya contrasta bien sobre el fondo oscuro).
+  matices pero atenuados (fondo medio con texto claro), para no deslumbrar.
 
 ## v0.2.9 — 2026-10-26
 
