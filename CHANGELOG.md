@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.7)
+## v0.2.8 — 2026-10-26
 
 - **El tema por defecto ahora es 「Mar」**: quien entra sin haber elegido paleta (o
   navegador nuevo) ve directamente el tema mar (verde+azul), en claro y oscuro. El tema
