@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v0.2.0 — 2026-10-23
+## v0.2.0 — 2026-10-24
 
 Nueva tarjeta **📁 Archivos**: nube de archivos familiar con cifrado individual por
 archivo y cupo por cuenta. Sin dependencias nuevas (el ZIP también es propio).
