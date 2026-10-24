@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.8)
+
+- **Hub — tarjetas cuadradas**: las tarjetas de servicios ahora son cuadrados del mismo
+  tamaño que las grandes de miweb.lan (grid de 900 px en 3 columnas de ~284 px), con
+  el icono, el nombre y la descripción centrados.
+
 ## v0.2.8 — 2026-10-26
 
 - **El tema por defecto ahora es 「Mar」**: quien entra sin haber elegido paleta (o

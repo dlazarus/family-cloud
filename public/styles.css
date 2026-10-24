@@ -447,17 +447,23 @@ input:focus, select:focus, textarea:focus {
 .user-table tfoot .sum-note { color: var(--muted); font-weight: 400; font-size: 0.8rem; }
 
 /* ====== hub de servicios ====== */
+/* mismo tamano que las tarjetas grandes de miweb.lan (grid de 900px con 3
+   columnas de ~284px y hueco de 24px): cuadradas y centradas */
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
   padding: 28px 20px;
-  max-width: 980px;
+  max-width: 900px;
   margin: 0 auto;
 }
 .service-card {
+  aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 6px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -474,7 +480,7 @@ input:focus, select:focus, textarea:focus {
 .service-card p { margin: 0; font-size: 0.85rem; }
 .service-card.disabled { opacity: 0.55; box-shadow: none; cursor: default; }
 .soon-badge {
-  align-self: flex-start;
+  align-self: center;
   margin-top: 8px;
   font-size: 0.7rem;
   color: var(--muted);
