@@ -497,6 +497,8 @@ a.tab { text-decoration: none; display: inline-flex; align-items: center; }
 .vault-main { flex: 1; min-width: 0; }
 .vault-site { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .vault-login { font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* boton mini de copiar el acceso, en la misma linea del nombre */
+.icon-btn.mini { width: 22px; height: 22px; font-size: 0.75rem; vertical-align: -3px; }
 .vault-pass {
   font-family: ui-monospace, monospace; font-size: 0.85rem; color: var(--muted);
   background: var(--bg); border: 1px solid var(--line); border-radius: 8px;

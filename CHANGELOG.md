@@ -2,6 +2,10 @@
 
 ## Sin publicar (sobre v0.2.6)
 
+- **Contraseñas — copiar también el nombre de acceso**: junto al usuario de cada entrada
+  hay ahora un 📋 mini que copia el nombre de acceso al portapapeles (se vuelve ✓ un
+  instante), igual que el de la contraseña.
+
 - **Calendario — X para cerrar la tarjeta de evento**: la tarjeta de nuevo evento y de
   edición tiene ahora una ✕ en la esquina superior derecha, con el mismo efecto que
   Cancelar (cerrar sin tocar nada). También siguen valiendo Esc y clic fuera de la

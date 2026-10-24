@@ -35,7 +35,7 @@ function render() {
     <div class="vault-item" data-id="${e.id}">
       <div class="vault-main">
         <div class="vault-site">${escapeHtml(e.site)}</div>
-        <div class="vault-login muted">${escapeHtml(e.login)}</div>
+        <div class="vault-login muted">${escapeHtml(e.login)} <button data-act="copy-login" class="icon-btn mini" title="Copiar nombre de acceso">📋</button></div>
       </div>
       <code class="vault-pass" data-pass="${escapeHtml(e.password)}">••••••••</code>
       <div class="vault-actions">
@@ -80,6 +80,11 @@ $('#vault-list').addEventListener('click', async (e) => {
     code.textContent = shown ? entry.password : '••••••••';
   } else if (act === 'copy') {
     if (await copyText(entry.password)) {
+      btn.textContent = '✓';
+      setTimeout(() => { btn.textContent = '📋'; }, 1200);
+    }
+  } else if (act === 'copy-login') {
+    if (await copyText(entry.login)) {
       btn.textContent = '✓';
       setTimeout(() => { btn.textContent = '📋'; }, 1200);
     }
