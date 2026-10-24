@@ -8,7 +8,8 @@
 - **Calendario — colores de categoría más diferenciados**: los ocho tonos pastel se
   reparten ahora por el círculo cromático (cumple rosa, salud coral, comida mantequilla,
   tarea azul acero, viaje aqua, cole verde hoja, ocio violeta, otro gris), bien
-  distinguibles entre sí sin perder la suavidad, tanto en claro como en oscuro.
+  distinguibles entre sí sin perder la suavidad. En tema oscuro se usan los mismos
+  pasteles (el texto oscuro sobre chip claro ya contrasta bien sobre el fondo oscuro).
 
 ## v0.2.9 — 2026-10-26
 

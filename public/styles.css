@@ -33,18 +33,18 @@
   --accent-ink: #eb9a80;
   --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
-/* chips de categoría en versión tenue para tema oscuro */
+/* chips de categoría: en tema oscuro se usan los mismos pasteles que en claro */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --c-cumple: #4a3540; --c-comida: #45402a; --c-viaje: #2c4442;
-    --c-tarea: #333d4d; --c-salud: #4a3531; --c-otro: #3a3731;
-    --c-ocio: #3b3450; --c-cole: #35452e;
+    --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
+    --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
+    --c-ocio: #ded7f2; --c-cole: #d8eccf;
   }
 }
 :root.dark {
-  --c-cumple: #4a3540; --c-comida: #45402a; --c-viaje: #2c4442;
-  --c-tarea: #333d4d; --c-salud: #4a3531; --c-otro: #3a3731;
-  --c-ocio: #3b3450; --c-cole: #35452e;
+  --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
+  --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
+  --c-ocio: #ded7f2; --c-cole: #d8eccf;
 }
 :root { --c-cumple: #f6d8e1; --c-comida: #f6eec0; --c-viaje: #cfe9e6;
         --c-tarea: #d7e2f0; --c-salud: #f6d8d0; --c-otro: #e9e6de;
@@ -341,6 +341,9 @@ input:focus, select:focus, textarea:focus {
 .cat-ocio   { background: var(--c-ocio); }
 .cat-cole   { background: var(--c-cole); }
 .cat-otro   { background: var(--c-otro); }
+/* los fondos de categoria son pasteles en ambos temas: el texto sobre ellos
+   usa siempre tinta oscura (con la tinta clara del tema oscuro no se leeria) */
+[class*="cat-"] { color: #2b2620; }
 
 /* ====== modal ====== */
 .modal {
