@@ -265,13 +265,17 @@ function row(n) {
 
   const icon = isSharedRoot ? '👥' : n.kind === 'folder' ? '📁' : '📄';
   let sub = '';
-  if (isSharedRoot) sub = mine ? 'tuya · la editas tu' : `de ${escapeHtml(n.owner || '')}`;
+  // en la vista familiar, la raiz compartida de otro se rotula con su nombre DENTRO
+  // del nombre grande (CARPETA-COMPARTIDA-DANI) para no repetir el nombre generico
+  const foreignRoot = isSharedRoot && state.view === 'family' && !mine;
+  const title = foreignRoot ? `${n.name}-${(n.owner || '').toUpperCase()}` : n.name;
+  if (isSharedRoot) sub = foreignRoot ? '' : (mine ? 'tuya · la editas tu' : `de ${escapeHtml(n.owner || '')}`);
   else if (state.view === 'family') sub = `de ${escapeHtml(n.owner || '')}`;
   else if (mine && n.scope === 'shared') sub = 'visible para la familia';
 
   el.innerHTML = `
     <span class="ficon">${icon}</span>
-    <span class="fname"><span class="ftitle">${escapeHtml(n.name)}</span>${sub ? `<span class="fsub">${sub}</span>` : ''}</span>
+    <span class="fname"><span class="ftitle">${escapeHtml(title)}</span>${sub ? `<span class="fsub">${sub}</span>` : ''}</span>
     <span class="fmeta">${n.kind === 'file' ? fmtSize(n.size) : ''} <span class="fdate">${fmtDate(n.updated_at)}</span></span>
     <button class="icon-btn fmenu" title="Acciones">⋯</button>`;
 

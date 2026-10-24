@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.5)
+
+- **Archivos — vista familiar con nombre y dueño juntos**: la carpeta compartida de cada
+  familiar se lista ahora con el nombre del dueño DENTRO del rótulo grande
+  («CARPETA-COMPARTIDA-DANI») en vez del nombre genérico repetido con un «de dani» en
+  pequeñito debajo. La tuya sigue como estaba («CARPETA-COMPARTIDA · tuya · la editas
+  tu»). Es solo visual: el nombre global editable y los datos no cambian.
+
 ## v0.2.5 — 2026-10-24
 
 - **Archivos — el «atrás» del ratón no expulsa del servicio**: al entrar en carpetas y
