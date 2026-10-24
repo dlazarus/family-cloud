@@ -698,8 +698,8 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 /* casilla: checkbox + texto en la misma linea (el grid de arriba los apilaria) */
 .files-settings label.check { display: flex; flex-direction: row; align-items: center; gap: 8px; font-size: 0.85rem; }
 .files-settings label.check input { min-width: 0; width: auto; accent-color: var(--accent); }
-/* el boton de guardar, centrado y en su propia linea al final de la tarjeta */
-#g-save { flex-basis: 100%; width: max-content; margin: 4px auto 0; }
+/* boton de guardar: boton normal, centrado, en su propia linea al final de la tarjeta */
+.save-row { display: flex; justify-content: center; margin-top: 18px; }
 .files-usage { margin-top: 6px; }
 .quota-input { width: 110px; padding: 6px 8px; }
 .small-note { font-size: 0.78rem; margin-top: 10px; }
