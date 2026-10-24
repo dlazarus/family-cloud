@@ -3,7 +3,7 @@
 ## v0.2.10 — 2026-10-24
 
 - **Calendario — dos categorías nuevas**: 「Ocio」 (🎉 quedadas con amigos, cine, conciertos…)
-  y 「Cole」 (🎒 todo lo relacionado con los estudios). Disponibles al crear y editar
+  y 「Cole」 (📚 todo lo relacionado con los estudios). Disponibles al crear y editar
   eventos, en los filtros y con su color propio en claro y oscuro.
 
 ## v0.2.9 — 2026-10-26
