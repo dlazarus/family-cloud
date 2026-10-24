@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Sin publicar (sobre v0.2.4)
+## v0.2.5 — 2026-10-24
 
 - **Archivos — el «atrás» del ratón no expulsa del servicio**: al entrar en carpetas y
   pulsar el botón atrás (o Alt+flecha) del navegador, ahora se retrocede por la ruta de
