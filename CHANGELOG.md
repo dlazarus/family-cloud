@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Sin publicar (sobre v0.2.6)
+
+- **Calendario — X para cerrar la tarjeta de evento**: la tarjeta de nuevo evento y de
+  edición tiene ahora una ✕ en la esquina superior derecha, con el mismo efecto que
+  Cancelar (cerrar sin tocar nada). También siguen valiendo Esc y clic fuera de la
+  tarjeta.
+
 ## v0.2.6 — 2026-10-25
 
 - **Administración — icono en 「Cuentas」**: el título ahora lleva el 👤 del hub
