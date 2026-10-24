@@ -53,6 +53,19 @@ export function initDb(dataDir) {
     );
     CREATE INDEX IF NOT EXISTS idx_vault_user ON vault_entries(user_id);
 
+    -- Tablero familiar de notas (el corcho): todos ven todas las notas; solo el
+    -- autor (y el admin) puede editarlas o borrarlas. El texto va cifrado como el
+    -- resto de datos personales; el color es una etiqueta en claro (paleta fija).
+    CREATE TABLE IF NOT EXISTS notes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      text_enc TEXT NOT NULL,                 -- AES-256-GCM
+      color TEXT NOT NULL DEFAULT 'amarillo', -- en claro: paleta validada en el backend
+      created_by INTEGER REFERENCES users(id),
+      updated_by INTEGER REFERENCES users(id),
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
     -- Arbol de archivos de cada usuario. La estructura (carpetas, nombres) vive AQUI;
     -- en el disco solo hay blobs con nombre opaco (blob_rel). Los nombres se guardan
     -- cifrados como el resto de datos personales.
