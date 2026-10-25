@@ -144,7 +144,11 @@ y recordatorios en post-its de colores.
 - **Quién puede tocar qué**: solo el autor (y el admin) puede editar o borrar una nota;
   a los no autores no se les muestra ni el botón «Eliminar». El borrado pide confirmación
   a dos clics.
-- **Hasta 500 caracteres** por nota (es un post-it, no un ensayo).
+- **Hasta 500 caracteres** por nota (es un post-it, no un ensayo), con **selector de
+  emojis** por categorías al escribir y vista previa en vivo: la caja se pinta con el
+  color elegido.
+- **«Gestionar mis notas»**: lista de tus notas (de vieja a nueva) para borrar varias de
+  golpe; los admin gestionan todas las del corcho.
 - **Ambiente**: corcho con marco de madera, chinches, rotaciones suaves y letra
   manuscrita (*Patrick Hand*, servida localmente: sin CDNs ni dependencias externas).
 

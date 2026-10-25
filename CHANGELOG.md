@@ -1,5 +1,35 @@
 # CHANGELOG
 
+## v0.4.0 — 2026-10-25
+
+- **📌 Notas — selector de emojis**: botón «😀 Emojis» al crear o editar una nota; se
+  despliega una cuadrícula con unos 760 emojis repartidos en 9 categorías (caras, gestos,
+  gente, animales, comida, actividades, lugares, objetos y símbolos). El emoji se inserta
+  donde esté el cursor. Todo embebido en la propia web: sin dependencias ni CDNs.
+- **📌 Notas — «Gestionar mis notas»**: nuevo botón junto a «Nueva nota» que abre la
+  lista de tus notas (de más vieja a más nueva, con un fragmento y la fecha) para
+  marcar varias con casillas y borrarlas de golpe. Los administradores ven ahí
+  «Gestionar todas las notas» (con el autor de cada una) y pueden limpiar el corcho
+  entero.
+- **📌 Notas — ocho colores y vista previa**: se añaden coral y menta a la paleta, y los
+  ocho tonos quedan algo más vivos. Además, la caja de escritura se pinta con el color
+  elegido, para ver cómo quedará la nota antes de colgarla.
+- **📌 Notas — letra más grande**: el texto del corcho y de la caja de escritura suben de
+  tamaño (≈21 px), más cómodo de leer.
+- **📌 Notas — la hora de colgado**: se guarda la hora además del día. Se ve en la
+  tarjeta de edición («Autoría: lucia · 5 mar, 18:42») y al dejar el ratón encima de
+  una nota («Colgada el 5 mar, 18:42 / Clic para editar»). En la nota en sí sigue
+  saliendo solo el día, para que la firma quede limpia.
+- **⚙️ Administración — hacer y quitar administradores**: cada cuenta (salvo la tuya y la
+  del sistema) tiene ahora un botón «Hacer admin / Quitar admin», con confirmación.
+  Se siguen respetando los guardas: nadie puede quitarse el rol a sí mismo y el corcho
+  no se queda sin ningún admin. La columna de rol se muestra en español: «miembro».
+- **🏠 Hub — tarjetas centradas**: la rejilla de servicios se centra verticalmente en la
+  pantalla en vez de quedarse pegada arriba.
+- **Sello de versión**: en todas las páginas (incluido el acceso) aparece la versión del
+  servicio, pequeñita y tenue, en la esquina inferior derecha. Se lee de una única
+  fuente (el `package.json`), así que nunca desentona.
+
 ## v0.3.0 — 2026-10-25
 
 - **📌 Notas — el corcho de la familia (funcionalidad nueva)**: una página más en el hub,
