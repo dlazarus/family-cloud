@@ -815,7 +815,7 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
   z-index: -1; box-shadow: 0 8px 10px rgba(30, 18, 6, 0.35); transform: skewX(-4deg) rotate(1.2deg);
 }
 .nota-pin { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 1.15rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
-.nota-text { margin: 0; font-size: 1.18rem; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; }
+.nota-text { margin: 0; font-size: 1.32rem; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; }
 .nota-sign {
   display: block; text-align: right; margin-top: 12px;
   font-size: 0.85rem; color: rgba(34, 29, 16, 0.72);
@@ -833,7 +833,7 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .note-text {
   width: 100%; padding: 12px 14px; border-radius: 10px; resize: vertical;
   border: 1px solid var(--line); background: #fff9e6; color: #221d10;
-  font-size: 1.2rem; line-height: 1.35;
+  font-size: 1.35rem; line-height: 1.35;
 }
 .char-hint { margin: 4px 2px 0; font-size: 0.75rem; color: var(--muted); text-align: right; }
 .swatch-label { display: grid; gap: 8px; font-size: 0.85rem; color: var(--muted); }
