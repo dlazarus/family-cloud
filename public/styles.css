@@ -851,6 +851,29 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .swatch-azul { background: #cfe9f7; }     .swatch-verde { background: #d8f0c8; }
 .swatch-naranja { background: #ffdcbb; }  .swatch-lavanda { background: #e6d9ff; }
 
+/* ---------- selector de emojis en la tarjeta de nota ---------- */
+.emoji-toggle { align-self: end; }
+.emoji-panel {
+  margin: 10px 0 2px; padding: 10px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--card);
+}
+.emoji-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.emoji-cat {
+  border: 1px solid var(--line); background: transparent; color: var(--ink);
+  border-radius: 999px; padding: 4px 10px; font-size: 0.82rem; cursor: pointer;
+}
+.emoji-cat.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.emoji-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 2px; max-height: 230px; overflow: auto;
+}
+.emoji-grid .emoji {
+  border: 0; background: transparent; cursor: pointer;
+  font-size: 1.45rem; line-height: 1; padding: 6px 2px; border-radius: 8px;
+}
+.emoji-grid .emoji:hover { background: rgba(127, 127, 127, 0.15); }
+
 /* ---------- gestionar mis notas ---------- */
 .manage-hint { margin: 2px 0 10px; font-size: 0.9rem; }
 .manage-list {

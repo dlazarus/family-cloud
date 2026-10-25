@@ -132,6 +132,8 @@ function openModal(note) {
 
 function closeModal() {
   $('#modal').classList.add('hidden');
+  $('#emoji-panel').classList.add('hidden');
+  $('#btn-emoji').textContent = '😀 Emojis';
   editing = null;
 }
 
@@ -139,6 +141,59 @@ function modalError(err) {
   const el = $('#modal-error');
   el.textContent = err.message;
   el.classList.remove('hidden');
+}
+
+// ---------- selector de emojis (curado, sin dependencias ni CDNs) ----------
+const EMOJI_CATS = {
+  '😊 Caras': '😀😃😄😁😆😅🤣😂🙂🙃🫠😉😊😇🥰😍🤩😘😗☺️😚😙🥲😋😛😜🤪😝🤑🤗🤭🫢🫣🤫🤔🫡🤐🤨😐😑😶🫥😏😒🙄😬🤥😌😔😪🤤😴😷🤒🤕🤢🤮🤧🥵🥶🥴😵🤯🤠🥳🥸😎🤓🧐😕🫤😟🙁😮😯😲😳🥺🥹😦😧😨😰😥😢😭😱😖😣😞😓😩😫🥱😤😡😠🤬😈👿💀☠️💩🤡👹👺👻👽👾🤖',
+  '👋 Gestos y cuerpo': '👋🤚🖐️✋🖖🫱🫲🫳🫴👌🤌🤏✌️🤞🫰🤟🤘🤙👈👉👆🖕👇☝️🫵👍👎✊👊🤛🤜👏🙌🫶👐🤲🤝🙏💅👀👁️👂👃🧠🦷👅👄🦴👣💪🦵🦶🫀🫁',
+  '🧑 Gente': '👶🧒👦👧🧑👩👨🧓👵👴👮🕵️💂👷🤴👸👳👲🧕🤵👰🫅🤰🫃🤱👼🎅🤶🦸🦹🧙🧚🧛🧜🧝🧞🧟💃🕺🕴️🚶🏃🧍🧎👭👫👬👨‍👩‍👧‍👦👨‍👩‍👧👩‍👦👨‍👦👪🫂👯',
+  '🐶 Animales': '🐶🐱🐭🐹🐰🦊🐻🐼🐻‍❄️🐨🐯🦁🐮🐷🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🦆🦅🦉🦇🐺🐗🐴🦄🐝🪱🐛🦋🐌🐞🐜🪰🪲🪳🕷️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦀🐡🐠🐟🐬🐳🐋🦈🦭🐊🦥🦦🦨🦡🦔🐇🐁🦘🦙🦛🦬',
+  '🍝 Comida': '🍏🍎🍐🍊🍋🍌🍉🍇🫐🍓🫒🍒🍑🥭🍍🥥🥝🍅🍆🥑🥦🥬🥒🌶️🫑🌽🥕🧄🧅🥔🍠🥐🍞🥖🥨🧀🥚🍳🥞🧇🥓🍗🍖🌭🍔🍟🍕🫓🌮🌯🥗🍝🍜🍲🍛🍣🍱🥟🦪🍤🍦🍧🍨🍩🍪🎂🍰🧁🥧🍫🍬🍭🍮🍯🍼🥛☕🫖🍵🍺🍻🥂🍷🥃🍸🍹🍾',
+  '🎉 Actividades': '⚽🏀🏈⚾🥎🎾🏐🏉🥏🎱🪀🏓🏸🏒🏑🥍🏏🥅⛳🪁🏹🎣🤿🥊🥋🎽🛹🛼🛷⛸️🥌🎿⛷️🏂🪂🏋️🤼🤸🤺⛹️🤾🏌️🏇🧘🏄🏊🚣🧗🚴🚵🏆🥇🥈🥉🏅🎖️🎯🎮🕹️🎲🧩♟️🎰🎳🎨🎭🎪🎤🎧🎼🎹🥁🪘🎷🎺🪕🎸',
+  '🚗 Lugares y viajes': '🚗🚕🚙🚌🚎🏎️🚓🚑🚒🚐🛻🚚🚜🛴🚲🛵🏍️🛩️✈️🛫🚀🛸🛶⛵🚤🚢🚂🚊🚉🚦🚧🗺️🧭🏔️⛰️🌋🏕️⛺🏖️🏝️🏜️🗻🏠🏡🏘️🏚️🏗️🏭🏢🏬🏣🏥🏦🏨🏪🏫🏩💒⛪🕌🕍🕋⛩️🗼🗽🗿🌆🌃🎑🌅🌄',
+  '📦 Objetos': '⌚📱💻🖥️🖨️⌨️🖱️💽💾💿📀📷📸📹🎥📞☎️📟📠🔋🔌💡🔦🕯️🧯🛢️💰💎🔧🔨⚒️🛠️⛏️🔩⚙️🧱⛓️🧲🔫💣🧨🔪🗡️⚔️🛡️🚬⚰️🪦🔮📿🧿💈⚗️🔬🔭📡🕳️🛋️🛏️🛌🚪🪟🛎️🧳⌛⏳⏰🧸🪄🪅🖼️🧵🪡🧶🪢🛒🏷️📦📮📬✉️📥📤📩📨📫📪🗳️✏️✒️🖊️🖋️📝📁📂🗂️📅📆🗒️🗓️📇📈📉📊📌📍📎🖇️📏📐✂️🗃️🗄️🗑️🔒🔓🔏🔐🔑🗝️',
+  '🔣 Símbolos': '❤️🧡💛💚💙💜🖤🤍🤎💔❣️💕💞💓💗💖💘💝💟☮️✝️☪️🕉️☸️✡️🔯🕎☯️☦️⛎♈♉♊♋♌♍♎♏♐♑♒♓🆔⚛️🉑☢️☣️📴📳✴️🆚💮🉐✔️☑️🔘🔴🟠🟡🟢🔵⚫⚪🟤🟣🟥🟧🟨🟩🟦🟪🔶🔷🔸🔹🔺🔻⚠️🔕🔔🔗💬💭🗯️♠️♣️♥️♦️🃏🎴🀄🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛✅❌⛔🚫💯🔞™️©️®️🆗🆕🆒🆓🆙🔝',
+};
+
+function buildEmojiPanel() {
+  if ($('#emoji-grid').childElementCount) return;   // se construye una sola vez
+  const cats = Object.keys(EMOJI_CATS);
+  $('#emoji-cats').innerHTML = cats
+    .map((c, i) => `<button type="button" class="emoji-cat${i === 0 ? ' on' : ''}" data-cat="${i}">${c}</button>`)
+    .join('');
+  const paint = (i) => {
+    // segmentar por grafemas: no romper los emojis con VS16 (☺️) ni familias ZWJ (👨‍👩‍👧‍👦)
+    const graf = [...new Intl.Segmenter('es', { granularity: 'grapheme' }).segment(EMOJI_CATS[cats[i]])]
+      .map((s) => s.segment);
+    $('#emoji-grid').innerHTML = graf
+      .map((e) => `<button type="button" class="emoji">${e}</button>`)
+      .join('');
+    $('#emoji-cats').querySelectorAll('.emoji-cat').forEach((b, j) => b.classList.toggle('on', i === j));
+  };
+  paint(0);
+  $('#emoji-cats').addEventListener('click', (e) => {
+    const b = e.target.closest('.emoji-cat');
+    if (b) paint(Number(b.dataset.cat));
+  });
+  $('#emoji-grid').addEventListener('click', (e) => {
+    const b = e.target.closest('.emoji');
+    if (!b) return;
+    const ta = $('#note-text');
+    const s = ta.selectionStart ?? ta.value.length;
+    const en = ta.selectionEnd ?? ta.value.length;
+    ta.setRangeText(b.textContent, s, en, 'end');
+    ta.dispatchEvent(new Event('input'));   // refresca el contador 0/500
+    ta.focus();
+  });
+}
+
+function toggleEmojiPanel() {
+  const p = $('#emoji-panel');
+  const show = p.classList.contains('hidden');
+  p.classList.toggle('hidden', !show);
+  $('#btn-emoji').textContent = show ? '😀 Emojis (ocultar)' : '😀 Emojis';
+  if (show) buildEmojiPanel();
 }
 
 // ---------- gestionar mis notas (lista ordenada de vieja a nueva, con casillas) ----------
@@ -231,6 +286,8 @@ function bindUI() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal();
   });
+
+  $('#btn-emoji').addEventListener('click', toggleEmojiPanel);
 
   // ----- gestionar notas -----
   if (me.role === 'admin') $('#btn-manage').textContent = '🗂️ Gestionar todas las notas';
