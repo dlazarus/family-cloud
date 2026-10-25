@@ -19,6 +19,7 @@ async function renderUsers() {
     .map((u) => {
       const self = u.id === me.id;
       const system = u.username.toLowerCase() === 'admin';
+      const roleLabel = u.role === 'admin' ? 'admin' : 'miembro';
       let actions;
       if (self) {
         actions = '<span class="muted">tu cuenta</span>';
@@ -26,12 +27,13 @@ async function renderUsers() {
         actions = '<span class="muted">cuenta del sistema · solo ella cambia su contraseña</span>';
       } else {
         actions = `<button data-act="pass" class="btn ghost">Nueva contraseña</button>
+                   <button data-act="role" class="btn ghost">${u.role === 'admin' ? 'Quitar admin' : 'Hacer admin'}</button>
                    <button data-act="toggle" class="btn ghost">${u.active ? 'Desactivar' : 'Activar'}</button>
                    <button data-act="del" class="btn danger">Eliminar</button>`;
       }
       return `<tr data-id="${u.id}">
         <td>${escapeHtml(u.username)}</td>
-        <td>${u.role}</td>
+        <td>${roleLabel}</td>
         <td>${u.active ? 'activa' : 'desactivada'}</td>
         <td class="actions">${actions}</td>
       </tr>`;
@@ -95,6 +97,16 @@ $('#user-rows').addEventListener('click', async (e) => {
   try {
     if (act === 'pass') {
       openPwModal(Number(id), row.children[0].textContent);
+    } else if (act === 'role') {
+      const nowAdmin = row.children[1].textContent === 'admin';
+      const to = nowAdmin ? 'member' : 'admin';
+      const name = row.children[0].textContent;
+      if (!confirm(nowAdmin
+        ? `¿Quitar a ${name} los permisos de administrador?`
+        : `¿Hacer administrador a ${name}? Podrá gestionar cuentas, cupos y cualquier nota o evento.`)) return;
+      await api(`/users/${id}`, { method: 'PUT', body: { role: to } });
+      adminMsg(to === 'admin' ? 'Ya es admin ✓' : 'Ya es miembro ✓');
+      refreshAdmin();
     } else if (act === 'toggle') {
       await api(`/users/${id}`, { method: 'PUT', body: { active: row.children[2].textContent === 'desactivada' } });
       adminMsg('Estado actualizado ✓');
