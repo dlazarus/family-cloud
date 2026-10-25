@@ -129,6 +129,50 @@ function modalError(err) {
   el.classList.remove('hidden');
 }
 
+// ---------- gestionar mis notas (lista ordenada de vieja a nueva, con casillas) ----------
+function snippet(text, max = 70) {
+  const flat = String(text).replace(/\s+/g, ' ').trim();
+  return flat.length > max ? flat.slice(0, max).trimEnd() + '…' : flat;
+}
+
+function renderManage() {
+  const mine = notes
+    .filter((n) => n.created_by === me.id)
+    .sort((a, b) => a.id - b.id);           // de mas vieja a mas nueva
+  $('#manage-empty').classList.toggle('hidden', mine.length > 0);
+  $('#manage-list').innerHTML = mine
+    .map(
+      (n) => `<li class="manage-item">
+        <input type="checkbox" id="msel-${n.id}" data-id="${n.id}" aria-label="Seleccionar nota" />
+        <label class="manage-snip" for="msel-${n.id}">${escapeHtml(snippet(n.text))}</label>
+        <span class="manage-date">${shortDate(n.created_at)}</span>
+      </li>`
+    )
+    .join('');
+  updateManageDelete();
+}
+
+function selectedManage() {
+  return [...$('#manage-list').querySelectorAll('input:checked')].map((i) => Number(i.dataset.id));
+}
+
+function updateManageDelete() {
+  const n = selectedManage().length;
+  const btn = $('#manage-delete');
+  btn.disabled = n === 0;
+  btn.textContent = n ? `Eliminar seleccionadas (${n})` : 'Eliminar seleccionadas';
+}
+
+function openManage() {
+  $('#manage-error').classList.add('hidden');
+  renderManage();
+  $('#manage-modal').classList.remove('hidden');
+}
+
+function closeManage() {
+  $('#manage-modal').classList.add('hidden');
+}
+
 // ---------- eventos UI ----------
 function bindUI() {
   $('#btn-new').addEventListener('click', () => openModal(null));
@@ -166,6 +210,27 @@ function bindUI() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal();
+  });
+
+  // ----- gestionar mis notas -----
+  $('#btn-manage').addEventListener('click', openManage);
+  $('#manage-close').addEventListener('click', closeManage);
+  $('#manage-cancel').addEventListener('click', closeManage);
+  $('#manage-list').addEventListener('change', updateManageDelete);
+  $('#manage-delete').addEventListener('click', async () => {
+    const ids = selectedManage();
+    if (!ids.length) return;
+    if (!confirm(`¿Eliminar ${ids.length} ${ids.length === 1 ? 'nota' : 'notas'} del corcho?`)) return;
+    try {
+      for (const id of ids) await api(`/notes/${id}`, { method: 'DELETE' });
+      await refresh();       // corcho al dia
+      renderManage();        // la lista se queda abierta, ya sin las borradas
+    } catch (err) {
+      const el = $('#manage-error');
+      el.textContent = err.message;
+      el.classList.remove('hidden');
+      await refresh().then(renderManage); // refrescar igualmente lo que haya cambiado
+    }
   });
 }
 

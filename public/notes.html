@@ -39,6 +39,7 @@
 
     <main id="board-wrap">
       <div class="board-toolbar">
+        <button id="btn-manage" class="btn">🗂️ Gestionar mis notas</button>
         <button id="btn-new" class="btn primary">✏️ Nueva nota</button>
       </div>
       <div id="corkboard" class="corkboard"></div>
@@ -71,6 +72,23 @@
         </div>
         <p id="modal-error" class="error hidden"></p>
       </form>
+    </div>
+  </div>
+
+  <!-- ===== Modal de gestión de mis notas ===== -->
+  <div id="manage-modal" class="modal hidden">
+    <div class="modal-card">
+      <button type="button" id="manage-close" class="modal-x" title="Cerrar" aria-label="Cerrar">✕</button>
+      <h3>🗂️ Mis notas</h3>
+      <p class="muted manage-hint">De más vieja a más nueva. Marca las que quieras quitar del corcho.</p>
+      <ul id="manage-list" class="manage-list"></ul>
+      <p id="manage-empty" class="muted hidden">No tienes ninguna nota colgada todavía.</p>
+      <div class="modal-actions">
+        <button type="button" id="manage-delete" class="btn danger" disabled>Eliminar seleccionadas</button>
+        <span class="spacer"></span>
+        <button type="button" id="manage-cancel" class="btn ghost">Volver al corcho</button>
+      </div>
+      <p id="manage-error" class="error hidden"></p>
     </div>
   </div>
 
