@@ -513,8 +513,10 @@ input:focus, select:focus, textarea:focus {
   flex: 1;
   align-content: safe center;
 }
-/* hub a pantalla completa: la barra arriba y el resto para la rejilla */
-#app:not(.hidden) { display: flex; flex-direction: column; min-height: 100dvh; }
+/* hub a pantalla completa: la barra arriba y el resto para la rejilla.
+   SOLO en el index (.hub-app): si se aplica al #app de las demas paginas,
+   los mains con margin:auto se encogen al ancho de su contenido */
+.hub-app:not(.hidden) { display: flex; flex-direction: column; min-height: 100dvh; }
 .service-card {
   aspect-ratio: 1 / 1;
   display: flex;
@@ -789,7 +791,9 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 /* sin titular de pagina: el nombre del servicio ya lo marca la pestana de arriba,
    como en las demas paginas. Mismos margenes que #view-vault/#view-cal y boton
    centrado, a la misma altura que las barras de herramientas de contraseñas/archivos */
-#board-wrap { padding: 18px 20px 30px; margin: 0 auto; }
+/* ojo: #board-wrap es hijo de #app (flex columna): NO ponerle margin:auto o
+   se encoje al ancho de su contenido (el corcho quedaria estrecho) */
+#board-wrap { padding: 18px 20px 30px; }
 .board-toolbar { display: flex; justify-content: center; gap: 12px; margin-bottom: 14px; }
 
 .corkboard {
