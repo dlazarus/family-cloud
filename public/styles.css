@@ -868,6 +868,7 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 }
 .manage-snip { flex: 1; min-width: 0; cursor: pointer; overflow-wrap: anywhere; }
 .manage-date { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
+.manage-by { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
 
 @media (max-width: 900px) { .corkboard { columns: 2; } }
 @media (max-width: 600px) {

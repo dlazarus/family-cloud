@@ -136,8 +136,15 @@ function snippet(text, max = 70) {
 }
 
 function renderManage() {
+  // el admin gestiona todas las notas del corcho; los demas, solo las suyas
+  const admin = me.role === 'admin';
+  $('#manage-title').textContent = admin ? '🗂️ Todas las notas' : '🗂️ Mis notas';
+  $('#manage-hint').textContent = admin
+    ? 'De mas vieja a mas nueva. Como admin puedes borrar cualquiera, la firme quien la firme.'
+    : 'De mas vieja a mas nueva. Marca las que quieras quitar del corcho.';
+  $('#manage-empty').textContent = admin ? 'El corcho esta vacio.' : 'No tienes ninguna nota colgada todavía.';
   const mine = notes
-    .filter((n) => n.created_by === me.id)
+    .filter((n) => admin || n.created_by === me.id)
     .sort((a, b) => a.id - b.id);           // de mas vieja a mas nueva
   $('#manage-empty').classList.toggle('hidden', mine.length > 0);
   $('#manage-list').innerHTML = mine
@@ -145,6 +152,7 @@ function renderManage() {
       (n) => `<li class="manage-item">
         <input type="checkbox" id="msel-${n.id}" data-id="${n.id}" aria-label="Seleccionar nota" />
         <label class="manage-snip" for="msel-${n.id}">${escapeHtml(snippet(n.text))}</label>
+        ${admin ? `<span class="manage-by">${escapeHtml(n.author)}</span>` : ''}
         <span class="manage-date">${shortDate(n.created_at)}</span>
       </li>`
     )
