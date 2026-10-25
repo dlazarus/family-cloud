@@ -488,12 +488,20 @@ input:focus, select:focus, textarea:focus {
    columnas de ~284px y hueco de 24px): cuadradas y centradas */
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  /* tarjetas de ancho fijo: si la ultima fila queda incompleta, se centra igual */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 284px));
   gap: 24px;
   padding: 28px 20px;
   max-width: 900px;
+  width: 100%;
   margin: 0 auto;
+  /* el bloque de tarjetas, centrado en el hueco que deja la barra superior */
+  flex: 1;
+  justify-content: center;
+  align-content: safe center;
 }
+/* hub a pantalla completa: la barra arriba y el resto para la rejilla */
+#app:not(.hidden) { display: flex; flex-direction: column; min-height: 100dvh; }
 .service-card {
   aspect-ratio: 1 / 1;
   display: flex;
