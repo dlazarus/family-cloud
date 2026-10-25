@@ -765,7 +765,9 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 /* el corcho es corcho: sus colores NO cambian con el tema ni con la paleta
    (la letra de las notas siempre es negra sobre papel pastel, como un post-it
    de verdad). En tema oscuro solo se oscurece un poco el tablero. */
-.board-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+/* sin titular de pagina: el nombre del servicio ya lo marca la pestana de arriba,
+   como en las demas paginas; solo queda el boton, alineado a la derecha */
+.board-toolbar { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 16px; }
 .board-toolbar h2 { margin: 0; }
 
 .corkboard {
@@ -851,5 +853,4 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 @media (max-width: 900px) { .corkboard { columns: 2; } }
 @media (max-width: 600px) {
   .corkboard { columns: 1; padding: 16px; border-width: 6px; }
-  .board-toolbar { flex-direction: column; align-items: stretch; }
 }
