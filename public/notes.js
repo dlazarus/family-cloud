@@ -105,7 +105,7 @@ function openModal(note) {
   pickColor(note ? note.color : COLORS[Math.floor(Math.random() * COLORS.length)]);
   const author = $('#note-author');
   if (note && note.author) {
-    author.textContent = `Cuelgue de ${note.author} · ${shortDate(note.created_at)}`;
+    author.textContent = `Autoría: ${note.author} · ${shortDate(note.created_at)}`;
     author.classList.remove('hidden');
   } else {
     author.classList.add('hidden');
