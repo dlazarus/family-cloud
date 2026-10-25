@@ -77,6 +77,7 @@ const PALETTES = [
   { id: 'azul', label: 'Azul' },
   { id: 'violeta', label: 'Violeta' },
   { id: 'mar', label: 'Mar (verde+azul)' },
+  { id: 'frambuesa', label: 'Frambuesa y lima' },
   { id: 'neon', label: 'Neon' },
   { id: 'bw', label: 'Blanco y negro' },
   { id: 'sepia', label: 'Sepia' },

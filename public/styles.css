@@ -171,6 +171,17 @@
   --btn-ink: #0c1a1e; --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
+/* --- frambuesa y lima: fucsia electrico + verde lima (la rara de la familia) --- */
+:root[data-palette="frambuesa"], .pal[data-palette="frambuesa"] {
+  --bg: #f9f4ec; --card: #ffffff; --ink: #33272e; --muted: #75606b; --line: #eadfdd;
+  --accent: #c02a7b; --accent-ink: #a02266; --accent2: #6f9c1f; --accent2-ink: #597f18;
+}
+:root.dark[data-palette="frambuesa"], .dark .pal[data-palette="frambuesa"] {
+  --bg: #191116; --card: #241a21; --ink: #f0dfe7; --muted: #a68b98; --line: #3a2b34;
+  --accent: #e3519f; --accent-ink: #f087bd; --accent2: #a9cc50; --accent2-ink: #c2dd82;
+  --btn-ink: #24101c; --shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
 /* --- neon: negro profundo + verde electrico y cyan --- */
 :root[data-palette="neon"], .pal[data-palette="neon"] {
   --bg: #e9fbf0; --card: #ffffff; --ink: #10302a; --muted: #4a7a6f; --line: #cfeee0;
