@@ -220,7 +220,8 @@ function bindUI() {
     if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal();
   });
 
-  // ----- gestionar mis notas -----
+  // ----- gestionar notas -----
+  if (me.role === 'admin') $('#btn-manage').textContent = '🗂️ Gestionar todas las notas';
   $('#btn-manage').addEventListener('click', openManage);
   $('#manage-close').addEventListener('click', closeManage);
   $('#manage-cancel').addEventListener('click', closeManage);
