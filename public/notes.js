@@ -38,6 +38,15 @@ function shortDate(iso) {
   return String(y.format(d)) === String(new Date().getFullYear()) ? txt : txt + ' ' + y.format(d);
 }
 
+function longDate(iso) {
+  // como shortDate pero con la hora de colgado: '5 mar, 18:42'
+  const d = new Date(iso.replace(' ', 'T') + 'Z');
+  const f = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  const y = new Intl.DateTimeFormat('es', { year: 'numeric' });
+  const txt = f.format(d);
+  return String(y.format(d)) === String(new Date().getFullYear()) ? txt : txt + ' ' + y.format(d);
+}
+
 function renderBoard() {
   const board = $('#corkboard');
   $('#board-empty').classList.toggle('hidden', notes.length > 0);
@@ -70,7 +79,13 @@ function renderBoard() {
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(n); }
       });
-      el.title = 'Clic para editar';
+      // la hora de colgado se ve al pasar el raton solo en notas ajenas;
+      // en las propias se enseña al editarlas
+      el.title = n.created_by === me.id
+        ? 'Clic para editar'
+        : `Colgada el ${longDate(n.created_at)} · clic para editar`;
+    } else {
+      el.title = `Colgada el ${longDate(n.created_at)}`;
     }
     board.appendChild(el);
   }
@@ -105,7 +120,8 @@ function openModal(note) {
   pickColor(note ? note.color : COLORS[Math.floor(Math.random() * COLORS.length)]);
   const author = $('#note-author');
   if (note && note.author) {
-    author.textContent = `Autoría: ${note.author} · ${shortDate(note.created_at)}`;
+    // la tarjeta de edicion solo la abre el autor o un admin: ahi si se muestra la hora
+    author.textContent = `Autoría: ${note.author} · ${longDate(note.created_at)}`;
     author.classList.remove('hidden');
   } else {
     author.classList.add('hidden');
