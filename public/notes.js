@@ -79,14 +79,10 @@ function renderBoard() {
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(n); }
       });
-      // la hora de colgado se ve al pasar el raton solo en notas ajenas;
-      // en las propias se enseña al editarlas
-      el.title = n.created_by === me.id
-        ? 'Clic para editar'
-        : `Colgada el ${longDate(n.created_at)} · clic para editar`;
-    } else {
-      el.title = `Colgada el ${longDate(n.created_at)}`;
     }
+    // la hora de colgado se ve al pasar el raton en todas las notas; el aviso de
+    // editar, en una segunda linea, solo donde procede
+    el.title = `Colgada el ${longDate(n.created_at)}` + (canEdit ? '\nClic para editar' : '');
     board.appendChild(el);
   }
 }
