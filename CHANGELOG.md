@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v0.5.0 — 2026-10-25
+
+- **📌 Notas — el corcho se adapta a tu pantalla**: hasta ahora el corcho tenía siempre
+  tres columnas, por muy grande que fuera la pantalla. Ahora se ajustan solas: con el
+  ancho de siempre, tres; en un escritorio a pantalla completa, cinco (y más si la
+  pantalla es ancha). Las notas mantienen un tamaño cómodo de leer.
+- **📌 Notas — el corcho aprovecha todo el ancho**: se corrigió un ajuste del hub que,
+  sin querer, encogía el tablero en las demás pantallas dejando huecos enormes a los
+  lados.
+- **🎨 Un tema de color nuevo: «Frambuesa y lima»**: fucsia eléctrico con verde lima,
+  la combinación más rara de la colección. Con la docena ya completa, la cuadrícula
+  de «Mi cuenta» queda sin huecos libres.
+
 ## v0.4.0 — 2026-10-25
 
 - **📌 Notas — selector de emojis**: botón «😀 Emojis» al crear o editar una nota; se
