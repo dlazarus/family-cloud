@@ -7,7 +7,7 @@ export const notesRouter = Router();
 notesRouter.use(requireAuth);
 
 // Paleta fija del corcho (en claro en la BD; el CSS define los mismos nombres).
-const NOTE_COLORS = ['amarillo', 'rosa', 'azul', 'verde', 'naranja', 'lavanda'];
+const NOTE_COLORS = ['amarillo', 'rosa', 'azul', 'verde', 'naranja', 'lavanda', 'coral', 'menta'];
 const MAX_LEN = 500;
 
 function toPublic(row) {

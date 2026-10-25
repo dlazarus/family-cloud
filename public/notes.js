@@ -1,7 +1,7 @@
 'use strict';
 
 // ---------- corcho de notas ----------
-const COLORS = ['amarillo', 'rosa', 'azul', 'verde', 'naranja', 'lavanda'];
+const COLORS = ['amarillo', 'rosa', 'azul', 'verde', 'naranja', 'lavanda', 'coral', 'menta'];
 
 let me = null;
 let notes = [];

@@ -824,12 +824,14 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
   font-size: 0.85rem; color: rgba(34, 29, 16, 0.72);
 }
 /* colores de post-it (los mismos nombres que valida src/notes.js) */
-.nota-amarillo { background: #fff3a1; }
-.nota-rosa     { background: #ffd6e0; }
-.nota-azul     { background: #cfe9f7; }
-.nota-verde    { background: #d8f0c8; }
-.nota-naranja  { background: #ffdcbb; }
-.nota-lavanda  { background: #e6d9ff; }
+.nota-amarillo { background: #ffe66d; }
+.nota-rosa     { background: #ffb3c6; }
+.nota-azul     { background: #a8d8f0; }
+.nota-verde    { background: #b8eb9e; }
+.nota-naranja  { background: #ffc78f; }
+.nota-lavanda  { background: #d9c2ff; }
+.nota-coral    { background: #ffab91; }
+.nota-menta    { background: #8fe6c0; }
 
 /* modal de nota: el cuadro de texto parece papel, con la fuente manuscrita */
 .note-card-modal { max-width: 460px; }
@@ -847,9 +849,10 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 }
 .swatch:hover { transform: scale(1.12); }
 .swatch.active { box-shadow: 0 0 0 3px var(--accent); transform: scale(1.12); }
-.swatch-amarillo { background: #fff3a1; } .swatch-rosa { background: #ffd6e0; }
-.swatch-azul { background: #cfe9f7; }     .swatch-verde { background: #d8f0c8; }
-.swatch-naranja { background: #ffdcbb; }  .swatch-lavanda { background: #e6d9ff; }
+.swatch-amarillo { background: #ffe66d; } .swatch-rosa { background: #ffb3c6; }
+.swatch-azul { background: #a8d8f0; }     .swatch-verde { background: #b8eb9e; }
+.swatch-naranja { background: #ffc78f; }  .swatch-lavanda { background: #d9c2ff; }
+.swatch-coral { background: #ffab91; }    .swatch-menta { background: #8fe6c0; }
 
 /* ---------- selector de emojis en la tarjeta de nota ---------- */
 .emoji-toggle { align-self: end; }

@@ -135,8 +135,8 @@ y recordatorios en post-its de colores.
 
 - **Un solo corcho familiar**: todos ven todas las notas (es lo contrario del gestor de
   contraseñas, que es íntimo de cada uno).
-- **Colores a elegir**: seis tonos de post-it (amarillo, rosa, azul, verde, naranja y
-  lavanda) con la letra siempre oscura, fácil de leer también en tema oscuro. Se elige
+- **Colores a elegir**: ocho tonos de post-it (amarillo, rosa, azul, verde, naranja,
+  lavanda, coral y menta) con la letra siempre oscura, fácil de leer también en tema oscuro. Se elige
   color al colgar la nota y **se puede cambiar cuando quieras** desde la propia nota;
   si no eliges ninguno, el corcho lo sortea.
 - **Firma en la esquina**: cada nota muestra quién la escribió y cuándo; si se editó,
