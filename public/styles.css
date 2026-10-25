@@ -797,7 +797,9 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .board-toolbar { display: flex; justify-content: center; gap: 12px; margin-bottom: 14px; }
 
 .corkboard {
-  columns: 3;
+  /* en vez de un numero fijo de columnas, decimos el ancho objetivo: el
+     navegador metrá tantas como quepan (mas pantalla = mas columnas) */
+  column-width: 320px;
   column-gap: 22px;
   padding: 26px;
   border-radius: var(--radius);
@@ -926,7 +928,6 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
 .manage-date { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
 .manage-by { color: var(--muted); font-size: 0.82rem; white-space: nowrap; }
 
-@media (max-width: 900px) { .corkboard { columns: 2; } }
 @media (max-width: 600px) {
-  .corkboard { columns: 1; padding: 16px; border-width: 6px; }
+  .corkboard { padding: 16px; border-width: 6px; }
 }
