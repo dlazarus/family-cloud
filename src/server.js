@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,6 +17,13 @@ import { notesRouter } from './notes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
+
+// version del servicio (la mismo del package.json): la ensena common.js
+// en una esquinita de todas las paginas, via GET /api/version
+let VERSION = 'dev';
+try {
+  VERSION = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version || VERSION;
+} catch { /* paquete raro: seguimos con 'dev' */ }
 
 // Cargar .env (passphrase maestra, puerto, etc.)
 try {
@@ -78,6 +86,8 @@ app.use(
 // Rutas públicas
 app.use('/api', statusRouter);
 app.use('/api', authRouter);
+// version del servicio, publica: la pinta common.js en un rincon de cada pagina
+app.get('/api/version', (_req, res) => res.json({ version: VERSION }));
 
 // Rutas protegidas
 app.use('/api/events', eventsRouter);

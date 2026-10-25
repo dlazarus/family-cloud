@@ -146,3 +146,15 @@ function initTopbar(me) {
     location.replace('/');
   });
 }
+
+// ---------- sello de version: esquineta inferior derecha, en todas las paginas ----------
+(async () => {
+  try {
+    const { version } = await api('/version');
+    const el = document.createElement('span');
+    el.id = 'version-stamp';
+    el.textContent = `v${version}`;
+    el.title = 'Family Cloud';
+    document.body.append(el);
+  } catch { /* sin version, no pasa nada */ }
+})();

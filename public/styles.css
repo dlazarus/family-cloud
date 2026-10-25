@@ -486,6 +486,20 @@ input:focus, select:focus, textarea:focus {
 /* ====== hub de servicios ====== */
 /* mismo tamano que las tarjetas grandes de miweb.lan (grid de 900px con 3
    columnas de ~284px y hueco de 24px): cuadradas y centradas */
+/* sello de version: fijo abajo a la derecha, tenue y sin interferir */
+#version-stamp {
+  position: fixed;
+  right: 12px;
+  bottom: 8px;
+  z-index: 5;
+  font-size: 0.7rem;
+  line-height: 1;
+  color: var(--muted);
+  opacity: 0.55;
+  pointer-events: none; /* no tapa clics de lo que haya debajo */
+  user-select: none;
+}
+
 .hub-grid {
   display: grid;
   /* columnas elásticas 1fr: 3 en escritorio, menos en pantallas estrechas */
