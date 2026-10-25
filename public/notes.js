@@ -105,6 +105,10 @@ function pickColor(c) {
     b.classList.toggle('active', on);
     b.setAttribute('aria-pressed', String(on));
   }
+  // el cuadro de edicion se pinta con el color elegido: vista previa de la nota
+  const ta = $('#note-text');
+  for (const cc of COLORS) ta.classList.remove(`nota-${cc}`);
+  ta.classList.add(`nota-${pickedColor}`);
 }
 
 function openModal(note) {

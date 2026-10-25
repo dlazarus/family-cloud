@@ -824,14 +824,14 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
   font-size: 0.85rem; color: rgba(34, 29, 16, 0.72);
 }
 /* colores de post-it (los mismos nombres que valida src/notes.js) */
-.nota-amarillo { background: #ffe66d; }
-.nota-rosa     { background: #ffb3c6; }
-.nota-azul     { background: #a8d8f0; }
-.nota-verde    { background: #b8eb9e; }
-.nota-naranja  { background: #ffc78f; }
-.nota-lavanda  { background: #d9c2ff; }
-.nota-coral    { background: #ffab91; }
-.nota-menta    { background: #8fe6c0; }
+.nota-amarillo { --nota-bg: #ffe66d; background: var(--nota-bg); }
+.nota-rosa     { --nota-bg: #ffb3c6; background: var(--nota-bg); }
+.nota-azul     { --nota-bg: #a8d8f0; background: var(--nota-bg); }
+.nota-verde    { --nota-bg: #b8eb9e; background: var(--nota-bg); }
+.nota-naranja  { --nota-bg: #ffc78f; background: var(--nota-bg); }
+.nota-lavanda  { --nota-bg: #d9c2ff; background: var(--nota-bg); }
+.nota-coral    { --nota-bg: #ffab91; background: var(--nota-bg); }
+.nota-menta    { --nota-bg: #8fe6c0; background: var(--nota-bg); }
 
 /* modal de nota: el cuadro de texto parece papel, con la fuente manuscrita */
 .note-card-modal { max-width: 460px; }
@@ -840,6 +840,11 @@ button.crumb:hover { background: color-mix(in srgb, var(--line) 60%, var(--card)
   border: 1px solid var(--line); background: #fff9e6; color: #221d10;
   font-size: 1.35rem; line-height: 1.35;
 }
+/* vista previa en vivo: el cuadro se pinta con la clase nota-<color> que pone
+   pickColor; la letra se mantiene oscura sobre los ocho tonos pastel */
+.note-text.nota-amarillo, .note-text.nota-rosa, .note-text.nota-azul,
+.note-text.nota-verde, .note-text.nota-naranja, .note-text.nota-lavanda,
+.note-text.nota-coral, .note-text.nota-menta { background: var(--nota-bg, #fff9e6); color: #221d10; }
 .char-hint { margin: 4px 2px 0; font-size: 0.75rem; color: var(--muted); text-align: right; }
 .swatch-label { display: grid; gap: 8px; font-size: 0.85rem; color: var(--muted); }
 .swatches { display: flex; gap: 10px; flex-wrap: wrap; }
