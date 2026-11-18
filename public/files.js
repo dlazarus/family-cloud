@@ -143,6 +143,7 @@ function render() {
   const writable = currentFolderWritable();
   $('#btn-mkdir').classList.toggle('hidden', !writable);
   $('#btn-upload').classList.toggle('hidden', !writable);
+  $('#btn-upload-folder').classList.toggle('hidden', !writable);
   document.querySelector('.files-actions').classList.toggle('hidden', !writable);
 
   renderCrumbs();
@@ -315,7 +316,7 @@ function row(n) {
       e.stopPropagation();
       el.classList.remove('dropping');
       hideOverlay();
-      if (files.length) { uploadFiles(files, n.id); return; }
+      if (files.length) { collectDroppedItems(e.dataTransfer).then((items) => uploadItems(items, n.id)); return; }
       moveIds(ids, n.id);
     });
   }
@@ -595,33 +596,144 @@ function moveModal(nodes) {
 }
 
 // ---------- subir ----------
+// Cada item lleva una ruta relativa con «/» ("proyecto/src/leeme.md") y un `file`,
+// o bien solo `dirPath` para crear una carpeta (aunque este vacia). Los tramos
+// intermedios de la ruta se crean como carpetas antes de subir el archivo.
+function fileItemsFromList(fileList) {
+  const out = [];
+  for (const f of fileList) {
+    const rel = (f.webkitRelativePath || f.name).replace(/\\/g, '/');
+    out.push({ file: f, relPath: rel });
+  }
+  return out;
+}
+
+// Lo que se suelta del escritorio: el navegador entrega las carpetas como
+// "archivos" vacios en dataTransfer.files; hay que bajar por ellas con
+// webkitGetAsEntry() (llamada SIEMPRE sincrona, antes de cualquier await).
+function collectDroppedItems(dt) {
+  const entries = [];
+  const plain = [];
+  for (const it of [...(dt.items || [])]) {
+    if (it.kind !== 'file') continue;
+    const en = typeof it.webkitGetAsEntry === 'function' ? it.webkitGetAsEntry() : null;
+    if (en) entries.push(en);
+    else { const f = it.getAsFile(); if (f) plain.push({ file: f, relPath: f.name }); }
+  }
+  if (!entries.length) return Promise.resolve(plain);
+
+  const readDir = (dir) => new Promise((resolve) => {
+    const reader = dir.createReader();
+    const all = [];
+    const step = () => reader.readEntries(
+      (batch) => { if (!batch.length) return resolve(all); all.push(...batch); step(); },
+      () => resolve(all) // algunos navegadores lanzan al leer carpetas vacias
+    );
+    step();
+  });
+  const fileOf = (en) => new Promise((resolve) => en.file((f) => resolve(f), () => resolve(null)));
+
+  const out = [];
+  const walk = async (en, prefix) => {
+    if (en.isFile) {
+      const f = await fileOf(en);
+      if (f) out.push({ file: f, relPath: prefix + en.name });
+    } else if (en.isDirectory) {
+      out.push({ dirPath: prefix + en.name }); // la carpeta se crea, vacia o no
+      const kids = await readDir(en);
+      for (const k of kids) await walk(k, `${prefix + en.name}/`);
+    }
+  };
+  return Promise.resolve().then(async () => {
+    for (const en of entries) await walk(en, '');
+    return out.length ? out : plain;
+  });
+}
+
 async function uploadFiles(files, parentId = state.cwd) {
+  await uploadItems(fileItemsFromList(files), parentId);
+}
+
+async function uploadItems(items, parentId = state.cwd) {
   if (!currentFolderWritable() && parentId === state.cwd) return;
   const scope = targetScope(parentId);
   const box = $('#upload-progress');
-  for (const f of files) {
-    box.classList.remove('hidden');
-    $('#upload-label').textContent = `Subiendo ${f.name} (${fmtSize(f.size)})…`;
+  box.classList.remove('hidden');
+
+  // cache de carpetas ya creadas en esta subida: '' -> carpeta destino
+  const folderIds = new Map([['', parentId]]);
+
+  async function ensureFolder(relPath) {
+    if (folderIds.has(relPath)) return folderIds.get(relPath);
+    const i = relPath.lastIndexOf('/');
+    const name = i < 0 ? relPath : relPath.slice(i + 1);
+    const parentFolderId = await ensureFolder(i < 0 ? '' : relPath.slice(0, i));
+    if (parentFolderId === undefined) return undefined; // el fallo se propaga hacia abajo
+    const body = { name, scope };
+    if (parentFolderId) body.parent_id = parentFolderId;
+    try {
+      const node = await api('/files/folder', { method: 'POST', body });
+      folderIds.set(relPath, node.id);
+      return node.id;
+    } catch (err) {
+      // si la carpeta ya existe, se reutiliza en vez de abortar la subida
+      if (/Ya existe/i.test(err.message)) {
+        await load();
+        const ex = pool().find((n) => n.parent_id === parentFolderId && n.kind === 'folder' &&
+          n.name.localeCompare(name, 'es', { sensitivity: 'base' }) === 0);
+        if (ex) { folderIds.set(relPath, ex.id); return ex.id; }
+      }
+      toast(`Carpeta «${name}»: ${err.message}`, true);
+      folderIds.set(relPath, undefined);
+      return undefined;
+    }
+  }
+
+  // 1) crear la estructura de carpetas (los dirPath van antes que sus hijos)
+  let madeFolders = 0;
+  for (const it of items) {
+    if (!it.dirPath) continue;
+    $('#upload-label').textContent = `Creando ${it.dirPath}…`;
+    const id = await ensureFolder(it.dirPath);
+    if (id !== undefined) madeFolders++;
+  }
+
+  // 2) subir los archivos a su carpeta
+  let ok = 0, fail = 0;
+  for (const it of items) {
+    if (!it.file) continue;
+    const i = it.relPath.lastIndexOf('/');
+    const name = it.relPath.slice(i + 1);
+    let parent = parentId;
+    if (i >= 0) {
+      parent = await ensureFolder(it.relPath.slice(0, i));
+      if (parent === undefined) { fail++; continue; } // carpeta fallida: no intentes el archivo
+    }
+    const f = it.file;
+    $('#upload-label').textContent = `Subiendo ${it.relPath} (${fmtSize(f.size)})…`;
     const okk = await new Promise((resolve) => {
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', `/api/files/upload?scope=${scope}` + (parentId ? `&parent=${parentId}` : ''));
-      xhr.setRequestHeader('X-File-Name', encodeURIComponent(f.name));
+      xhr.open('POST', `/api/files/upload?scope=${scope}` + (parent ? `&parent=${parent}` : ''));
+      xhr.setRequestHeader('X-File-Name', encodeURIComponent(name));
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) $('#upload-fill').style.width = `${(e.loaded / e.total) * 100}%`;
       };
       xhr.onload = () => {
         let msg = '';
         try { msg = JSON.parse(xhr.responseText).error || ''; } catch { /* html */ }
-        if (xhr.status >= 400) toast(`${f.name}: ${msg || 'error ' + xhr.status}`, true);
+        if (xhr.status >= 400) { toast(`${it.relPath}: ${msg || 'error ' + xhr.status}`, true); fail++; }
+        else ok++;
         resolve(xhr.status < 400);
       };
-      xhr.onerror = () => { toast(`${f.name}: fallo de red`, true); resolve(false); };
+      xhr.onerror = () => { toast(`${it.relPath}: fallo de red`, true); fail++; resolve(false); };
       xhr.send(f);
     });
-    if (okk) toast(`Subido ${f.name}`);
+    if (okk) toast(`Subido ${name}`);
   }
+
   box.classList.add('hidden');
   $('#upload-fill').style.width = '0%';
+  if (madeFolders) toast(`📁 ${madeFolders} carpeta${madeFolders > 1 ? 's' : ''} creada${madeFolders > 1 ? 's' : ''}${ok ? `, ${ok} archivo${ok > 1 ? 's' : ''} subido${ok > 1 ? 's' : ''}` : ''}`);
   await load();
 }
 
@@ -636,6 +748,12 @@ $('#btn-mkdir').addEventListener('click', mkdirModal);
 $('#btn-upload').addEventListener('click', () => $('#file-picker').click());
 $('#file-picker').addEventListener('change', async (e) => {
   const fs = [...e.target.files];
+  e.target.value = '';
+  if (fs.length) await uploadFiles(fs);
+});
+$('#btn-upload-folder').addEventListener('click', () => $('#folder-picker').click());
+$('#folder-picker').addEventListener('change', async (e) => {
+  const fs = [...e.target.files]; // con webkitdirectory cada File trae webkitRelativePath
   e.target.value = '';
   if (fs.length) await uploadFiles(fs);
 });
@@ -698,7 +816,7 @@ document.addEventListener('drop', (e) => {
     if (state.view === 'family' && !currentFolderWritable()) return;
     e.preventDefault();
     hideOverlay();
-    uploadFiles(files);
+    collectDroppedItems(e.dataTransfer).then((items) => uploadItems(items));
     return;
   }
   // arrastre interno soltado en el vacio -> mover a la carpeta actual
