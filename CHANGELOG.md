@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v0.5.1 — 2026-11-18
+
+- **📁 Archivos — las carpetas arrastradas son carpetas de verdad**: al arrastrar una
+  carpeta desde el escritorio, hasta ahora sus archivos se guardaban bien pero las
+  carpetas se guardaban como archivos vacíos. Ahora la estructura completa se recrea
+  en la nube: subcarpetas anidadas, de cualquier profundidad razonable, y también las
+  carpetas vacías. Si una carpeta ya existe (por ejemplo, al subir dos veces la
+  misma), se reutiliza en vez de dar error.
+- **📁 Archivos — botón «Subir carpeta»**: además de arrastrar, el selector de archivos
+  puede abrir una carpeta entera de una vez.
+
 ## v0.5.0 — 2026-10-25
 
 - **📌 Notas — el corcho se adapta a tu pantalla**: hasta ahora el corcho tenía siempre

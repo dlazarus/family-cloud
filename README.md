@@ -104,7 +104,9 @@ Cada miembro tiene su espacio de archivos, como un Drive pequeño pero en tu cas
   **CARPETA-COMPARTIDA** y pasa a ser visible para toda la familia (con todo su
   contenido); arrástralo fuera para dejar de compartirlo.
 - **Subir arrastrando**: casi toda la página es zona de soltado, con un aviso
-  grande que dice a qué carpeta van los archivos.
+  grande que dice a qué carpeta van los archivos. Si sueltas una **carpeta**, se
+  recrea entera con sus subcarpetas (vacías incluidas); si alguna ya existe, se
+  reutiliza. También puedes subir una carpeta entera con el botón «📁 Subir carpeta».
 - **Descargar la selección**: un archivo suelto se baja directo; si hay varios
   elementos o hay carpetas, se bajan en **un único .zip** (generado al vuelo, sin
   temporeros en disco). Si dos elementos elegidos se llaman igual, dentro del .zip el
